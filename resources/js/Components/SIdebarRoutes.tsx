@@ -2,6 +2,7 @@ import { SharedInertiaData } from "@/types/inertia";
 import { usePage } from "@inertiajs/react";
 import {
     ClipboardList,
+    Dot,
     Layout,
     ListRestart,
     Newspaper,
@@ -31,6 +32,25 @@ const Routes = [
                 label: "Pengajuan Judul",
                 href: "/admin/research-proposals",
                 requiredRoles: ["Admin"],
+            },
+        ],
+    },
+
+    {
+        icon: ListRestart,
+        label: "Pengaturan",
+        children: [
+            {
+                icon: Dot,
+                label: "Users",
+                href: "/admin/research-proposals",
+                requiredRoles: ["Admin", "Finance"],
+            },
+            {
+                icon: Dot,
+                label: "Roles",
+                href: "/roles",
+                requiredRoles: ["Admin", "Finance"],
             },
         ],
     },

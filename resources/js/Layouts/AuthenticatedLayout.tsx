@@ -1,18 +1,12 @@
-import { useState, PropsWithChildren, ReactNode } from "react";
-import ApplicationLogo from "@/Components/ApplicationLogo";
-import { User } from "@/types";
 import { Toaster } from "sonner";
 import { Navbar } from "@/Components/Navbar";
 import Sidebar from "@/Components/Sidebar";
 
 export default function Authenticated({
-    user,
-    header,
     children,
-}: PropsWithChildren<{ user: User; header?: ReactNode }>) {
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =
-        useState(false);
-
+}: {
+    children: React.ReactNode;
+}) {
     return (
         <div className="min-h-screen bg-gray-100 font-albert">
             <Toaster />

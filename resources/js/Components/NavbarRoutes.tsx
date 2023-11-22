@@ -6,7 +6,7 @@ import {
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { router, usePage } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import { PageProps } from "@/types";
 
 export const NavbarRoutes = () => {
@@ -25,7 +25,9 @@ export const NavbarRoutes = () => {
                     <DropdownMenuLabel>
                         <div>{auth.user ? auth.user.name : "Guest"}</div>
                     </DropdownMenuLabel>
-                    <DropdownMenuItem>Profile</DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href="/profile">Profile</Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem
                         onClick={() => {
                             router.post("/logout");
