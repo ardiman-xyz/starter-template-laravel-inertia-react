@@ -13,6 +13,7 @@ import {
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import { Edit, Trash } from "lucide-react";
+import CreateModal from "./_components/create-modal";
 
 const Index = () => {
     return (
@@ -22,7 +23,7 @@ const Index = () => {
                 <Heading title="Roles" description="Manage role user" />
 
                 <div className="mt-6 mb-2">
-                    <Button>Tambah</Button>
+                    <CreateModal />
                 </div>
 
                 <Table className="bg-white p-4 shadow rounded">
@@ -62,9 +63,6 @@ const Index = () => {
                     </TableBody>
                 </Table>
             </div>
-            {/* <Modal onClose={() => {}} show={true} closeable={true}>
-                My Modal
-            </Modal> */}
         </Authenticated>
     );
 };

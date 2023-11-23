@@ -9,7 +9,7 @@ export default function Authenticated({
 }) {
     return (
         <div className="min-h-screen bg-gray-100 font-albert">
-            <Toaster />
+            <Toaster richColors />
             <div className="w-full h-[80px] md:pl-72 fixed inset-y-0 bg-white">
                 <Navbar />
             </div>
