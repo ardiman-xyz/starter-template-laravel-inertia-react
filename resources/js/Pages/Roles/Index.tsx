@@ -1,6 +1,5 @@
 import Heading from "@/Components/Heading";
 import { Hint } from "@/Components/Hint";
-import Modal from "@/Components/Modal";
 import { Button } from "@/Components/ui/button";
 import {
     Table,
@@ -14,8 +13,16 @@ import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import { Edit, Trash } from "lucide-react";
 import CreateModal from "./_components/create-modal";
+import TableItem from "./_components/table-item";
 
-const Index = () => {
+interface indexProps {
+    roles: {
+        id: string;
+        name: string;
+    }[];
+}
+
+const Index = ({ roles }: indexProps) => {
     return (
         <Authenticated>
             <Head title="Roles" />
@@ -35,31 +42,14 @@ const Index = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow>
-                            <TableCell className="font-medium">1</TableCell>
-                            <TableCell>Admin</TableCell>
-                            <TableCell className="flex items-center gap-x-2">
-                                <Hint
-                                    description="Edit"
-                                    side="top"
-                                    sideOffset={4}
-                                >
-                                    <Button size="sm" variant="outline">
-                                        <Edit className="h-4 w-4" />
-                                    </Button>
-                                </Hint>
-
-                                <Hint
-                                    description="Hapus"
-                                    side="top"
-                                    sideOffset={4}
-                                >
-                                    <Button size="sm">
-                                        <Trash className="h-4 w-4" />
-                                    </Button>
-                                </Hint>
-                            </TableCell>
-                        </TableRow>
+                        {roles.length > 0 &&
+                            roles.map((role, index) => (
+                                <TableItem
+                                    id={role.id}
+                                    name={role.name}
+                                    index={index}
+                                />
+                            ))}
                     </TableBody>
                 </Table>
             </div>

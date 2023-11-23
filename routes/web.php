@@ -29,7 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::prefix("/roles")->group(function () {
         Route::get("/", [\App\Http\Controllers\RoleController::class, 'index']);
         Route::post("/", [\App\Http\Controllers\RoleController::class, 'create']);
-
+        Route::delete("{id}", [\App\Http\Controllers\RoleController::class, 'destroy']);
+        Route::put("{id}", [\App\Http\Controllers\RoleController::class, 'update']);
     });
 
 });

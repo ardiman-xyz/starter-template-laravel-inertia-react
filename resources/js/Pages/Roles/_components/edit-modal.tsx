@@ -1,12 +1,12 @@
-import { useState } from "react";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { AlertCircle, RotateCw } from "lucide-react";
+import { toast } from "sonner";
+import { router } from "@inertiajs/react";
+import { useState } from "react";
 
-import Modal from "@/Components/Modal";
-import { Button } from "@/Components/ui/button";
-import { Input } from "@/Components/ui/input";
 import {
     Form,
     FormControl,
@@ -14,49 +14,52 @@ import {
     FormItem,
     FormMessage,
 } from "@/Components/ui/form";
-import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
-import { AlertCircle, RotateCw } from "lucide-react";
-import { toast } from "sonner";
-import { router } from "@inertiajs/react";
 
+import Modal from "@/Components/Modal";
+import { Button } from "@/Components/ui/button";
+import { Input } from "@/Components/ui/input";
+import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
+
+interface EditModalProps {
+    id: string;
+    name: string;
+    onClose: () => void;
+}
 const formSchema = z.object({
     name: z.string().min(2, {
         message: "Role name must be at least 2 characters.",
     }),
 });
 
-const CreateModal = () => {
+const EditModal = ({ id, name, onClose }: EditModalProps) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isOpenModalAdd, setIsOpenModalAdd] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
+            name,
         },
     });
 
-    const toggleModalAdd = () => {
-        setIsOpenModalAdd(!isOpenModalAdd);
-        form.reset();
-        setError(null);
-    };
-
     async function onSubmit(values: z.infer<typeof formSchema>) {
+        console.info(values);
         setError(null);
         setIsLoading(true);
         await axios
-            .post("/roles", values)
+            .put(`roles/${id}`, values)
             .then((data) => {
                 const { message } = data.data;
                 toast.success(`${message}`);
-                toggleModalAdd();
                 form.reset();
+                onClose();
                 router.reload();
             })
             .catch((err) => {
-                setError(`Role ${values.name} sudah ada!`);
+                const { data, status, statusText } = err.response;
+                toast.error(`${statusText} ${status}`, {
+                    description: `${data.message}`,
+                });
             })
             .finally(() => {
                 setIsLoading(false);
@@ -65,10 +68,9 @@ const CreateModal = () => {
 
     return (
         <div>
-            <Button onClick={toggleModalAdd}>Tambah</Button>
             <Modal
-                onClose={toggleModalAdd}
-                show={isOpenModalAdd}
+                onClose={onClose}
+                show={true}
                 closeable={!isLoading}
                 maxWidth="md"
             >
@@ -128,4 +130,4 @@ const CreateModal = () => {
     );
 };
 
-export default CreateModal;
+export default EditModal;

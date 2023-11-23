@@ -2,12 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Auth;
 
-class CreateRoleRequest extends FormRequest
+class UpdateRoleRequest extends FormRequest
 {
 
     public function authorize(): bool
@@ -19,8 +17,7 @@ class CreateRoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => "required|unique:roles"
+            "name" => "required"
         ];
     }
-
 }
