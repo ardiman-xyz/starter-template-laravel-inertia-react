@@ -43,7 +43,7 @@ const Routes = [
             {
                 icon: Dot,
                 label: "Users",
-                href: "/admin/research-proposals",
+                href: "/users",
                 requiredRoles: ["Admin", "Finance"],
             },
             {

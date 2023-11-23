@@ -33,6 +33,13 @@ Route::middleware('auth')->group(function () {
         Route::put("{id}", [\App\Http\Controllers\RoleController::class, 'update']);
     });
 
+    Route::prefix("/users")->group(function () {
+        Route::get("/", [\App\Http\Controllers\UserController::class, 'index']);
+        Route::post("/", [\App\Http\Controllers\UserController::class, 'store']);
+        Route::delete("{id}", [\App\Http\Controllers\UserController::class, 'destroy']);
+        Route::put("{id}", [\App\Http\Controllers\UserController::class, 'update']);
+    });
+
 });
 
 

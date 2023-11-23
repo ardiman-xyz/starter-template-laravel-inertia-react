@@ -27,7 +27,7 @@ const Index = ({ roles }: indexProps) => {
         <Authenticated>
             <Head title="Roles" />
             <div>
-                <Heading title="Roles" description="Manage role user" />
+                <Heading title="Roles" description="Manage role" />
 
                 <div className="mt-6 mb-2">
                     <CreateModal />
