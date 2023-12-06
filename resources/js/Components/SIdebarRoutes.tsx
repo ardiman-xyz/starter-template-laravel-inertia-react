@@ -5,7 +5,6 @@ import {
     Dot,
     Layout,
     ListRestart,
-    Newspaper,
     Settings,
 } from "lucide-react";
 import SidebarItem from "./SIdebarItem";
@@ -15,13 +14,13 @@ const Routes = [
         icon: Layout,
         label: "Dasbor",
         href: "/dashboard",
-        requiredRoles: ["Admin", "Student", "Finance"],
+        requiredRoles: ["Headmaster", "Student", "Finance"],
     },
     {
         icon: Settings,
         label: "RAB Ujian",
         href: "/faculty/rab",
-        requiredRoles: ["Finance"],
+        requiredRoles: ["Headmaster"],
     },
     {
         icon: ListRestart,
@@ -31,7 +30,7 @@ const Routes = [
                 icon: ClipboardList,
                 label: "Pengajuan Judul",
                 href: "/admin/research-proposals",
-                requiredRoles: ["Admin"],
+                requiredRoles: ["Headmaster"],
             },
         ],
     },
@@ -44,13 +43,13 @@ const Routes = [
                 icon: Dot,
                 label: "Users",
                 href: "/users",
-                requiredRoles: ["Admin", "Finance"],
+                requiredRoles: ["Headmaster", "Finance"],
             },
             {
                 icon: Dot,
                 label: "Roles",
                 href: "/roles",
-                requiredRoles: ["Admin", "Finance"],
+                requiredRoles: ["Headmaster", "Finance"],
             },
         ],
     },

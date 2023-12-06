@@ -4,36 +4,14 @@ namespace App\DTO;
 
 class UserDTO
 {
-    private string $name;
-    private string $email;
-    private string $password;
-    private ?string $role;
+    public string $name;
+    public string $email;
+    public ?string $emailVerifiedAt = null;
+    public string $password;
+    public ?string $gender = null;
+    public ?string $nip = null;
+    public ?string $address = null;
+    public ?string $profilePicture = null;
+    public ?string $rememberToken = null;
 
-    public function __construct($name, $email, $password, ?string $role)
-    {
-        $this->name = $name;
-        $this->email = $email;
-        $this->password = $password;
-        $this->role = $role;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    public function getRole(): ?string
-    {
-        return $this->role;
-    }
 }

@@ -5,7 +5,9 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
+use Illuminate\Support\Facades\Cookie;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -17,9 +19,17 @@ Route::get('/', function () {
 });
 
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware("cekCookie")->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+});
+
+    Route::get('/logout', function () {
+        Cookie::queue(Cookie::forget('vistoken'));
+        return redirect('/auth');
+    })->name('logout');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -42,6 +52,11 @@ Route::middleware('auth')->group(function () {
 
 });
 
+Route::prefix("auth")->middleware("guest")->group(function () {
+    Route::get("/", [\App\Http\Controllers\Auth\Social\AuthController::class, 'create'])->name("social.auth.google");
+    Route::get("social/redirect", [\App\Http\Controllers\Auth\Social\AuthController::class, 'redirect'])->name("social.auth.redirect");
+    Route::get("social/callback", [\App\Http\Controllers\Auth\Social\AuthController::class, 'callback'])->name("social.auth.callback");
+});
 
 
-require __DIR__.'/auth.php';
+//require __DIR__.'/auth.php';

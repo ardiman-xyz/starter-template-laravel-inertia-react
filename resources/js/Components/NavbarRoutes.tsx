@@ -30,7 +30,7 @@ export const NavbarRoutes = () => {
                     </DropdownMenuItem>
                     <DropdownMenuItem
                         onClick={() => {
-                            router.post("/logout");
+                            router.get("/logout");
                         }}
                     >
                         Logout
