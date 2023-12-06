@@ -31,7 +31,8 @@ Route::middleware("cekCookie")->group(function () {
    Route::get("/dashboard", [\App\Http\Controllers\DashboardController::class, "index"])->name("dashboard")->middleware("schoolData");
 
    Route::prefix("school")->group(function () {
-      Route::get("new", [\App\Http\Controllers\SchoolController::class, "create"])->name("school.create");
+       Route::get("new", [\App\Http\Controllers\SchoolController::class, "create"])->name("school.create");
+       Route::post("/", [\App\Http\Controllers\SchoolController::class, "store"])->name("school.store");
    });
 });
 
