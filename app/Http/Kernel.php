@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\CekCookie;
+use App\Http\Middleware\CheckSchoolData;
 use App\Http\Middleware\Guest;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -72,6 +73,7 @@ class Kernel extends HttpKernel
         'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         'cekCookie' => CekCookie::class,
-        'guest' => Guest::class
+        'guest' => Guest::class,
+        'schoolData' => CheckSchoolData::class,
     ];
 }

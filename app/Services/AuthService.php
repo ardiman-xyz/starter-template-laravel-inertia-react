@@ -40,6 +40,7 @@ class AuthService
         if (!password_verify($password, $user->password)) throw new Exception("Email or password wrong asdfasdf!");
 
         $newPayload = new CreateTokenDTO();
+        $newPayload->id     = $user->id;
         $newPayload->email  = $email;
         $newPayload->name   = $user->name;
 
@@ -50,7 +51,7 @@ class AuthService
     /**
      * @throws Exception
      */
-    public function authenticateWithGoogle(AuthDTO $DTO): array
+    public function authenticateWithGoogle(AuthDTO $DTO)
     {
         $isExistUser = $this->accountRepository->getByProviderId($DTO->providerAccountId);
 
@@ -77,6 +78,7 @@ class AuthService
            }
 
             $newPayload = new CreateTokenDTO();
+            $newPayload->id    = $isExistUser->user->id;
             $newPayload->email = $DTO->email;
             $newPayload->name = $DTO->name;
 
@@ -115,6 +117,7 @@ class AuthService
             $response->assignRole("Headmaster");
 
             $newPayload = new CreateTokenDTO();
+            $newPayload->id     = $response->id;
             $newPayload->email = $DTO->email;
             $newPayload->name = $DTO->name;
 

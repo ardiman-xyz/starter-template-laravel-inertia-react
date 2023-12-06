@@ -21,6 +21,7 @@ class TokenService
     {
         $payload['name']    = $data->name;
         $payload['email']   = $data->email;
+        $payload['id']      = $data->id;
 
         return JWT::encode($payload, $this->key, 'HS256');
     }
@@ -50,5 +51,12 @@ class TokenService
     public function checkToken()
     {
         return Cookie::get('vistoken');
+    }
+
+    public function userId()
+    {
+        $decoded = JWT::decode(Cookie::get('vistoken'), new Key($this->key, 'HS256'));
+
+        return $decoded->id;
     }
 }

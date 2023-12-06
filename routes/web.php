@@ -28,15 +28,17 @@ Route::prefix("auth")->middleware("guest")->group(function () {
 
 
 Route::middleware("cekCookie")->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+   Route::get("/dashboard", [\App\Http\Controllers\DashboardController::class, "index"])->name("dashboard")->middleware("schoolData");
+
+   Route::prefix("school")->group(function () {
+      Route::get("new", [\App\Http\Controllers\SchoolController::class, "create"])->name("school.create");
+   });
 });
 
-    Route::get('/logout', function () {
-        Cookie::queue(Cookie::forget('vistoken'));
-        return redirect('/auth');
-    })->name('logout');
+Route::get('/logout', function () {
+    Cookie::queue(Cookie::forget('vistoken'));
+    return redirect('/auth');
+})->name('logout');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
