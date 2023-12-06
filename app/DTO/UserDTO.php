@@ -7,7 +7,7 @@ class UserDTO
     public string $name;
     public string $email;
     public ?string $emailVerifiedAt = null;
-    public string $password;
+    public ?string $password = null;
     public ?string $gender = null;
     public ?string $nip = null;
     public ?string $address = null;

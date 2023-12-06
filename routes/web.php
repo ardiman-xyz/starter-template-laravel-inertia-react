@@ -18,6 +18,13 @@ Route::get('/', function () {
     ]);
 });
 
+Route::prefix("auth")->middleware("guest")->group(function () {
+    Route::get("/", [\App\Http\Controllers\Auth\Social\AuthController::class, 'create'])->name("social.auth.google");
+    Route::get("social/redirect", [\App\Http\Controllers\Auth\Social\AuthController::class, 'redirect'])->name("social.auth.redirect");
+    Route::get("social/callback", [\App\Http\Controllers\Auth\Social\AuthController::class, 'callback'])->name("social.auth.callback");
+    Route::post("login", [\App\Http\Controllers\Auth\Social\AuthController::class, "login"]);
+    Route::post("register", [\App\Http\Controllers\Auth\Social\AuthController::class, "register"]);
+});
 
 
 Route::middleware("cekCookie")->group(function () {
@@ -50,12 +57,6 @@ Route::middleware('auth')->group(function () {
         Route::put("{id}", [\App\Http\Controllers\UserController::class, 'update']);
     });
 
-});
-
-Route::prefix("auth")->middleware("guest")->group(function () {
-    Route::get("/", [\App\Http\Controllers\Auth\Social\AuthController::class, 'create'])->name("social.auth.google");
-    Route::get("social/redirect", [\App\Http\Controllers\Auth\Social\AuthController::class, 'redirect'])->name("social.auth.redirect");
-    Route::get("social/callback", [\App\Http\Controllers\Auth\Social\AuthController::class, 'callback'])->name("social.auth.callback");
 });
 
 

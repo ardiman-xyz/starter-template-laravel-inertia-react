@@ -6,6 +6,7 @@ use App\DTO\AccountDTO;
 use App\DTO\AuthDTO;
 use App\DTO\CreateTokenDTO;
 use App\DTO\UserDTO;
+use App\DTO\UserRegisterDTO;
 use App\Entities\AccountEntity;
 use App\Repositories\AccountRepository;
 use App\Repositories\UserRepository;
@@ -30,6 +31,25 @@ class AuthService
     /**
      * @throws Exception
      */
+    public function authenticateWithCredential(string $email, string $password): void
+    {
+        $user = $this->userRepository->getByEmail($email);
+
+        if(!$user) throw new Exception("Username or password wrong!");
+
+        if (!password_verify($password, $user->password)) throw new Exception("Email or password wrong asdfasdf!");
+
+        $newPayload = new CreateTokenDTO();
+        $newPayload->email  = $email;
+        $newPayload->name   = $user->name;
+
+        $token = $this->tokenService->generate($newPayload);
+        Cookie::queue("vistoken", $token, 1440);
+    }
+
+    /**
+     * @throws Exception
+     */
     public function authenticateWithGoogle(AuthDTO $DTO): array
     {
         $isExistUser = $this->accountRepository->getByProviderId($DTO->providerAccountId);
@@ -43,7 +63,6 @@ class AuthService
                $user = new UserDTO();
                $user->name = $DTO->name;
                $user->email = $DTO->email;
-               $user->password = bcrypt($DTO->name);
                $user->profilePicture = $DTO->avatar;
 
                $response = $this->userRepository->create($user);
@@ -75,4 +94,41 @@ class AuthService
             throw new $exception;
         }
     }
+
+    /**
+     * @throws Exception
+     */
+    public function userRegister(UserRegisterDTO $DTO): void
+    {
+        $isEmailExist = $this->userRepository->getByEmail($DTO->email);
+        if($isEmailExist) throw new Exception("Email exist");
+
+        DB::beginTransaction();
+
+        try {
+            $user = new UserDTO();
+            $user->name = $DTO->name;
+            $user->email = $DTO->email;
+            $user->password = bcrypt($DTO->password);
+
+            $response = $this->userRepository->create($user);
+            $response->assignRole("Headmaster");
+
+            $newPayload = new CreateTokenDTO();
+            $newPayload->email = $DTO->email;
+            $newPayload->name = $DTO->name;
+
+            $token = $this->tokenService->generate($newPayload);
+            Cookie::queue("vistoken", $token, 1440);
+
+            DB::commit();
+
+        }catch (Exception $exception)
+        {
+            DB::rollBack();
+            throw new $exception;
+        }
+
+    }
+
 }

@@ -22,37 +22,6 @@ const Routes = [
         href: "/faculty/rab",
         requiredRoles: ["Headmaster"],
     },
-    {
-        icon: ListRestart,
-        label: "Transaksi",
-        children: [
-            {
-                icon: ClipboardList,
-                label: "Pengajuan Judul",
-                href: "/admin/research-proposals",
-                requiredRoles: ["Headmaster"],
-            },
-        ],
-    },
-
-    {
-        icon: ListRestart,
-        label: "Pengaturan",
-        children: [
-            {
-                icon: Dot,
-                label: "Users",
-                href: "/users",
-                requiredRoles: ["Headmaster", "Finance"],
-            },
-            {
-                icon: Dot,
-                label: "Roles",
-                href: "/roles",
-                requiredRoles: ["Headmaster", "Finance"],
-            },
-        ],
-    },
 ];
 
 const SidebarRoutes = () => {
@@ -72,7 +41,7 @@ const SidebarRoutes = () => {
                             icon={route.icon}
                             href={route.href}
                             label={route.label}
-                            children={route.children}
+                            // children={route.children}
                             requiredRoles={route.requiredRoles}
                         />
                     )

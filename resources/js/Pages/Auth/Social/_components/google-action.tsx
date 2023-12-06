@@ -1,5 +1,6 @@
+
 import {FcGoogle} from "react-icons/fc";
-import {Link} from "@inertiajs/react";
+
 
 const GoogleActionLogin = () => {
 

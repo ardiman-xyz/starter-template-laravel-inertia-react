@@ -10,15 +10,15 @@ export default function Authenticated({
     children: React.ReactNode;
 }) {
     return (
-        <div className="min-h-screen bg-gray-100 font-albert">
+        <div className="min-h-screen font-albert">
             <Toaster richColors />
-            <div className="w-full h-[80px] md:pl-72 fixed inset-y-0 bg-white">
+            <div className="w-full h-[80px] md:pl-64 fixed inset-y-0 bg-white">
                 <Navbar />
             </div>
-            <div className="hidden md:flex h-full w-72 flex-col fixed inset-y-0 z-50">
+            <div className="hidden md:flex h-full w-64 flex-col fixed inset-y-0 z-50">
                 <Sidebar />
             </div>
-            <main className="md:pl-72 h-full pt-24 container mx-auto max-w-screen-2xl">
+            <main className="md:pl-64 h-full pt-24 container mx-auto max-w-screen-2xl">
                 {children}
             </main>
         </div>

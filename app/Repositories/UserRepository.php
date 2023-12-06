@@ -21,4 +21,9 @@ class UserRepository
             "remember_token"    => $data->rememberToken
         ]);
     }
+
+    public function getByEmail(string $email)
+    {
+        return Model::where("email", $email)->first();
+    }
 }
