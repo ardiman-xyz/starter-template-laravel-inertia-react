@@ -1,6 +1,7 @@
 import React from "react";
 import Logo from "./Logo";
 import SidebarRoutes from "./SIdebarRoutes";
+import SideBarBottom from "@/Components/SideBarBottom";
 
 const Sidebar = () => {
     return (
@@ -8,8 +9,9 @@ const Sidebar = () => {
             <div className="p-6">
                 <Logo />
             </div>
-            <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full h-full justify-between overflow-y-auto relative">
                 <SidebarRoutes />
+                <SideBarBottom />
             </div>
         </div>
     );

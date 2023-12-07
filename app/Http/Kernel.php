@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\CekCookie;
 use App\Http\Middleware\CheckSchoolData;
 use App\Http\Middleware\Guest;
+use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -69,11 +70,12 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+//        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         'cekCookie' => CekCookie::class,
         'guest' => Guest::class,
         'schoolData' => CheckSchoolData::class,
+        'role'  => RoleMiddleware::class
     ];
 }

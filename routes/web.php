@@ -18,6 +18,9 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get("invitation", [\App\Http\Controllers\InvitationController::class, "validateInvitation"]);
+Route::post("invitations/reset-password", [\App\Http\Controllers\InvitationController::class, "resetPassword"]);
+
 Route::prefix("auth")->middleware("guest")->group(function () {
     Route::get("/", [\App\Http\Controllers\Auth\Social\AuthController::class, 'create'])->name("social.auth.google");
     Route::get("social/redirect", [\App\Http\Controllers\Auth\Social\AuthController::class, 'redirect'])->name("social.auth.redirect");
@@ -27,14 +30,31 @@ Route::prefix("auth")->middleware("guest")->group(function () {
 });
 
 
-Route::middleware("cekCookie")->group(function () {
-   Route::get("/dashboard", [\App\Http\Controllers\DashboardController::class, "index"])->name("dashboard")->middleware("schoolData");
+Route::middleware(["cekCookie"])->group(function () {
+    Route::middleware(["role:Headmaster"])->group(function () {
+        Route::get("/dashboard", [\App\Http\Controllers\DashboardController::class, "index"])->name("dashboard")->middleware("schoolData");
 
-   Route::prefix("school")->group(function () {
-       Route::get("new", [\App\Http\Controllers\SchoolController::class, "create"])->name("school.create");
-       Route::post("/", [\App\Http\Controllers\SchoolController::class, "store"])->name("school.store");
-   });
+        Route::prefix("school")->group(function () {
+            Route::get("new", [\App\Http\Controllers\SchoolController::class, "create"])->name("school.create");
+            Route::post("/", [\App\Http\Controllers\SchoolController::class, "store"])->name("school.store");
+        });
+
+        Route::prefix("teacher")->group(function () {
+            Route::get("/", [\App\Http\Controllers\TeacherController::class, "index"])->name("teacher.index");
+            Route::post("/", [\App\Http\Controllers\TeacherController::class, "store"])->name("teacher.store");
+            Route::get("invitations/{id}", [\App\Http\Controllers\TeacherController::class, "invitations"]);
+        });
+    });
+
+    Route::middleware(["role:Teacher"])->group(function () {
+
+        Route::prefix("teacher")->group(function () {
+            Route::get("dashboard", [\App\Http\Controllers\DashboardController::class, "index"])->name("dashboard.teacher");
+        });
+
+    });
 });
+
 
 Route::get('/logout', function () {
     Cookie::queue(Cookie::forget('vistoken'));

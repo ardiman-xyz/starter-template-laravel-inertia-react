@@ -13,5 +13,7 @@ class UserDTO
     public ?string $address = null;
     public ?string $profilePicture = null;
     public ?string $rememberToken = null;
+    public ?string $linkInvite = null;
+    public ?string $isPasswordChanged = null;
 
 }

@@ -59,4 +59,29 @@ class TokenService
 
         return $decoded->id;
     }
+
+    public function verifyJWT(string $token): bool
+    {
+        try {
+            JWT::decode($token, new Key($this->key, 'HS256'));
+            return true;
+
+        } catch (Exception $e) {
+
+            return false;
+
+        }
+    }
+
+    public function validateJWT(string $token): bool|\stdClass
+    {
+        try {
+            return JWT::decode($token, new Key($this->key, 'HS256'));
+
+        } catch (Exception $e) {
+
+            return false;
+
+        }
+    }
 }

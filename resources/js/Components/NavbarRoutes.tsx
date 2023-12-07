@@ -11,7 +11,6 @@ import { PageProps } from "@/types";
 
 export const NavbarRoutes = () => {
     const { auth } = usePage<PageProps>().props;
-
     return (
         <div className="flex gap-x-2 ml-auto">
             <DropdownMenu>

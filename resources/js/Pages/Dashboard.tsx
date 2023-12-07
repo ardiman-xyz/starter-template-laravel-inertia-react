@@ -9,7 +9,7 @@ export default function Dashboard({ auth }: PageProps) {
 
             <div className="">
                 <div className="">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div className="bg-white overflow-hidden">
                         <div className="p-6 text-gray-900">
                             You're logged in!
                         </div>

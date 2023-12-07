@@ -26,4 +26,37 @@ class UserRepository
     {
         return Model::where("email", $email)->first();
     }
+
+    public function getByRoleTeacher()
+    {
+        return Model::whereHas('roles', function($q){
+            $q->where('name', 'Teacher');
+        })->orderBy("id", "desc")->get();
+    }
+
+    public function getById(string $id)
+    {
+        return Model::where("id", $id)->first();
+    }
+
+    public function update(string $id, $data)
+    {
+        $user = $this->getById($id);
+
+        $user->name = $data->name;
+        $user->email = $data->email;
+        $user->email_verified_at = $data->emailVerifiedAt;
+        $user->password = $data->password;
+        $user->gender = $data->gender;
+        $user->nip = $data->nip;
+        $user->address = $data->address;
+        $user->profile_picture = $data->profilePicture;
+        $user->remember_token = $data->rememberToken;
+        $user->is_password_changed = $data->isPasswordChanged;
+        $user->link_invite = $data->linkInvite;
+
+        $user->save();
+
+        return $user;
+    }
 }

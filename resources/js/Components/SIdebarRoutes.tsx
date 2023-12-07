@@ -1,11 +1,9 @@
 import { SharedInertiaData } from "@/types/inertia";
 import { usePage } from "@inertiajs/react";
 import {
-    ClipboardList,
-    Dot,
-    Layout,
-    ListRestart,
-    Settings,
+    BookLock,
+    Layout, LibraryBig,
+    Users,
 } from "lucide-react";
 import SidebarItem from "./SIdebarItem";
 
@@ -14,12 +12,24 @@ const Routes = [
         icon: Layout,
         label: "Dasbor",
         href: "/dashboard",
-        requiredRoles: ["Headmaster", "Student", "Finance"],
+        requiredRoles: ["Headmaster", "Teacher"],
     },
     {
-        icon: Settings,
-        label: "RAB Ujian",
-        href: "/faculty/rab",
+        icon: Users,
+        label: "Guru",
+        href: "/teacher",
+        requiredRoles: ["Headmaster"],
+    },
+    {
+        icon: BookLock,
+        label: "Instrumen & nilai",
+        href: "/instrumental",
+        requiredRoles: ["Headmaster"],
+    },
+    {
+        icon: LibraryBig,
+        label: "Visitasi",
+        href: "/visitation",
         requiredRoles: ["Headmaster"],
     },
 ];
