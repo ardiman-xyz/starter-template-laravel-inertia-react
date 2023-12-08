@@ -30,9 +30,17 @@ class InvitationController extends Controller
            return Inertia::render("InviteNotValid");
        }
 
-       return Inertia::render("Invitation", [
-           "user" => $data
-       ]);
+       $user = User::find($data->id);
+
+       if($user->is_password_changed !== 1)
+       {
+           return Inertia::render("Invitation", [
+               "user"   => $data,
+               "school" => $user->school
+           ]);
+       }
+
+       return redirect()->route("dashboard.teacher");
     }
 
     public function resetPassword(ResetPasswordRequest $request)

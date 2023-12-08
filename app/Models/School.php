@@ -14,6 +14,7 @@ class School extends Model
     protected $table = "schools";
     public $guarded = [];
     public $timestamps = true;
+    public $keyType = "string";
 
     protected static function boot(): void
     {
@@ -27,5 +28,10 @@ class School extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, "user_id", "id");
+    }
+
+    public function teachers()
+    {
+        return $this->hasMany(User::class)->role('Teacher');
     }
 }

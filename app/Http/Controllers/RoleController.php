@@ -65,6 +65,7 @@ class RoleController extends Controller
                 'message'   => $exception->getMessage()
             ], 400);
         }
+
     }
 
     public function update(UpdateRoleRequest $request, string $id): JsonResponse

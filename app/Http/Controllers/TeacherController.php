@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DTO\TeacherDTO;
 use App\Http\Requests\StoreTeacherRequest;
+use App\Repositories\SchoolRepository;
 use App\Repositories\UserRepository;
 use App\Services\TeacherService;
 use App\Services\TokenService;
@@ -20,7 +21,8 @@ class TeacherController extends Controller
     {
         $userRepository = new UserRepository();
         $tokenService = new TokenService();
-        $this->teacherService = new TeacherService($userRepository, $tokenService);
+        $schoolRepository = new SchoolRepository();
+        $this->teacherService = new TeacherService($userRepository, $tokenService, $schoolRepository);
     }
 
     public function index(): \Inertia\Response

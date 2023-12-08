@@ -2,7 +2,6 @@ import {Head} from "@inertiajs/react";
 
 import Heading from "@/Components/Heading";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-import CreateModal from "./_components/create-modal";
 import {User} from "@/types/app";
 import {DataTable} from "./_components/data-table";
 import { columns } from "./_components/columns"

@@ -11,6 +11,7 @@ class UserRepository
     {
         return Model::create([
             "name"              => $data->name,
+            "school_id"         => $data->schoolId,
             "email"             => $data->email,
             "email_verified_at" => $data->emailVerifiedAt,
             "password"          => $data->password,
@@ -18,7 +19,7 @@ class UserRepository
             "nip"               => $data->nip,
             "address"           => $data->address,
             "profile_picture"   => $data->profilePicture,
-            "remember_token"    => $data->rememberToken
+            "remember_token"    => $data->rememberToken,
         ]);
     }
 
@@ -33,6 +34,12 @@ class UserRepository
             $q->where('name', 'Teacher');
         })->orderBy("id", "desc")->get();
     }
+
+    public function getTeacherBySchoolId(string $schoolId)
+    {
+        return Model::where('school_id', $schoolId)->role('Teacher')->get();
+    }
+
 
     public function getById(string $id)
     {

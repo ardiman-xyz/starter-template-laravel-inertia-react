@@ -17,6 +17,7 @@ import {useState} from "react";
 const ActionMenu = ({ data }: { data: User }) => {
 
     const [isModalInviteOpen, setIsModalInviteOpen] = useState<boolean>(false);
+    const [isModalEditOpen, setIsModalEditOpen] = useState<boolean>(false)
 
     const toggleModalInvite = () => setIsModalInviteOpen(!isModalInviteOpen);
 

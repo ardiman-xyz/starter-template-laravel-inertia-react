@@ -10,9 +10,12 @@ interface  IProps {
         name: string;
         id: string;
         email: string
+    };
+    school : {
+        name: string;
     }
 }
-const Invitation = ({user}: IProps) => {
+const Invitation = ({user, school}: IProps) => {
 
     const [modalResetPasswordOpen, setModalResetPasswordOpen] = useState<boolean>(false);
 
@@ -31,7 +34,7 @@ const Invitation = ({user}: IProps) => {
                     Email: {user.email}
                 </p>
                 <p className="mt-4 text-gray-700 text-md text-center">
-                    Anda telah diundang oleh Sekolah SMA 15 KONSEL.
+                    Anda telah diundang oleh Sekolah {school.name}.
                 </p>
 
             </div>

@@ -6,6 +6,7 @@ use App\DTO\CreateTokenDTO;
 use App\DTO\TeacherDTO;
 use App\DTO\UserDTO;
 use App\Models\User;
+use App\Repositories\SchoolRepository;
 use App\Repositories\UserRepository;
 use Exception;
 
@@ -13,16 +14,27 @@ class TeacherService
 {
     private UserRepository $userRepository;
     private TokenService $tokenService;
+    private SchoolRepository $schoolRepository;
 
-    public function __construct(UserRepository $userRepository, TokenService $tokenService)
+    public function __construct(UserRepository $userRepository, TokenService $tokenService, SchoolRepository $schoolRepository)
     {
         $this->userRepository = $userRepository;
         $this->tokenService = $tokenService;
+        $this->schoolRepository = $schoolRepository;
     }
 
+    /**
+     * @throws Exception
+     */
     public function getAll()
     {
-        return $this->userRepository->getByRoleTeacher();
+        $school = $this->schoolRepository->getByUserId($this->tokenService->userId());
+        if(!$school)
+        {
+            throw new Exception("School not found");
+        }
+
+        return $this->userRepository->getTeacherBySchoolId($school->id);
     }
 
     /**
@@ -30,6 +42,13 @@ class TeacherService
      */
     public function create(TeacherDTO $dto)
     {
+        $school = $this->schoolRepository->getByUserId($this->tokenService->userId());
+        if(!$school)
+        {
+            throw new Exception("School not found");
+            return;
+        }
+
         $email = $dto->email;
 
         $isEmailExist = $this->userRepository->getByEmail($email);
@@ -39,6 +58,7 @@ class TeacherService
         $entity->name       = $dto->name;
         $entity->email      = $email;
         $entity->password   = bcrypt($dto->password);
+        $entity->schoolId   = $school->id;
 
         try {
 

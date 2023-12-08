@@ -37,7 +37,7 @@ class AuthService
 
         if(!$user) throw new Exception("Username or password wrong!");
 
-        if (!password_verify($password, $user->password)) throw new Exception("Email or password wrong asdfasdf!");
+        if (!password_verify($password, $user->password)) throw new Exception("Email or password wrong!");
 
         $newPayload = new CreateTokenDTO();
         $newPayload->id     = $user->id;
