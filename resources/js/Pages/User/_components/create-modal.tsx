@@ -85,7 +85,6 @@ const CreateModal = ({ roles }: CreateModalProps) => {
     };
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        console.info(values);
         setIsLoading(true);
         await axios
             .post("/users", values)

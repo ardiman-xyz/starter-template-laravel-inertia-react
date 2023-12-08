@@ -46,10 +46,17 @@ Route::middleware(["cekCookie"])->group(function () {
             Route::put("{id}", [\App\Http\Controllers\TeacherController::class, "update"]);
             Route::delete("{id}", [\App\Http\Controllers\TeacherController::class, "destroy"]);
         });
+
+        Route::prefix("instrumental")->group(function () {
+            Route::get("/", [\App\Http\Controllers\InstrumentalController::class, "index"])->name("instrumental.index");
+            Route::get("{step_id}/stage", [\App\Http\Controllers\InstrumentalController::class, "instrument"])->name("instrumental.stage");
+            Route::post("{stage_id}/instrument", [\App\Http\Controllers\InstrumentalController::class, "store"]);
+            Route::put("{stage_id}/instrument", [\App\Http\Controllers\InstrumentalController::class, "update"]);
+        });
+
     });
 
     Route::middleware(["role:Teacher"])->group(function () {
-
         Route::prefix("teacher")->group(function () {
             Route::get("dashboard", [\App\Http\Controllers\DashboardController::class, "index"])->name("dashboard.teacher");
         });
