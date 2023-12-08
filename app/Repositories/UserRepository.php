@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\DTO\UserDTO;
+use App\Models\User;
 use App\Models\User as Model;
 
 class UserRepository
@@ -28,6 +29,13 @@ class UserRepository
         return Model::where("email", $email)->first();
     }
 
+    public function isDuplicateEmail(string $email, int $userId)
+    {
+        return Model::where('email', $email)
+            ->where('id', '!=', $userId)
+            ->exists();
+    }
+
     public function getByRoleTeacher()
     {
         return Model::whereHas('roles', function($q){
@@ -46,22 +54,9 @@ class UserRepository
         return Model::where("id", $id)->first();
     }
 
-    public function update(string $id, $data)
+    public function update(string $id, User $user)
     {
-        $user = $this->getById($id);
-
-        $user->name = $data->name;
-        $user->email = $data->email;
-        $user->email_verified_at = $data->emailVerifiedAt;
-        $user->password = $data->password;
-        $user->gender = $data->gender;
-        $user->nip = $data->nip;
-        $user->address = $data->address;
-        $user->profile_picture = $data->profilePicture;
-        $user->remember_token = $data->rememberToken;
-        $user->is_password_changed = $data->isPasswordChanged;
-        $user->link_invite = $data->linkInvite;
-
+        $user->id = $id;
         $user->save();
 
         return $user;

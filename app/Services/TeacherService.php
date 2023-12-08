@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\DTO\CreateTokenDTO;
 use App\DTO\TeacherDTO;
+use App\DTO\UpdateTeacherDTO;
 use App\DTO\UserDTO;
 use App\Models\User;
 use App\Repositories\SchoolRepository;
@@ -116,6 +117,37 @@ class TeacherService
     private function generateLinkInvite(string $token)
     {
         return url('/invitation?token='. $token);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function update(TeacherDTO $dto, string $id): User
+    {
+        $teacher = $this->userRepository->getById($id);
+
+        if(!$teacher) throw new Exception("Data not found");
+
+        $isDuplicateEmail = $this->userRepository->isDuplicateEmail($dto->email, $teacher->id);
+        if($isDuplicateEmail)  throw new Exception("Email used another user");
+
+        $teacher->name      = $dto->name;
+        $teacher->email     = $dto->email;
+        $teacher->password  = $dto->password ? bcrypt($dto->password) : $teacher->password;
+
+        return $this->userRepository->update($teacher->id, $teacher);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function delete(string $id): void
+    {
+        $teacher = $this->userRepository->getById($id);
+
+        if(!$teacher) throw new Exception("Data not found");
+
+        $teacher->delete();
     }
 
 }

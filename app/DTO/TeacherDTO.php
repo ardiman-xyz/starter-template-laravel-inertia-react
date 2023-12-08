@@ -6,5 +6,5 @@ class TeacherDTO
 {
     public string $name;
     public string $email;
-    public string $password;
+    public ?string $password = null;
 }

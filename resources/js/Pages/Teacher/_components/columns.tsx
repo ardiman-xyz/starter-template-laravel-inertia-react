@@ -10,14 +10,17 @@ import {
     DropdownMenuTrigger
 } from "@/Components/ui/dropdown-menu";
 import {Button} from "@/Components/ui/button";
-import InviteLinkModal from "@/Pages/Teacher/_components/invite-link-modal";
+import InviteLinkModal from "./invite-link-modal";
 import {useState} from "react";
+import EditModal from "./edit-modal";
+import DeleteConfirm from "./delete-confirm";
 
 
 const ActionMenu = ({ data }: { data: User }) => {
 
     const [isModalInviteOpen, setIsModalInviteOpen] = useState<boolean>(false);
     const [isModalEditOpen, setIsModalEditOpen] = useState<boolean>(false)
+    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState<boolean>(false)
 
     const toggleModalInvite = () => setIsModalInviteOpen(!isModalInviteOpen);
 
@@ -40,6 +43,7 @@ const ActionMenu = ({ data }: { data: User }) => {
                     </DropdownMenuItem>
                     <DropdownMenuItem
                         className="cursor-pointer"
+                        onClick={() => setIsModalEditOpen(true)}
                     >
                         <ClipboardEdit className="h-4 w-4 mr-2" />
                         Edit
@@ -47,6 +51,7 @@ const ActionMenu = ({ data }: { data: User }) => {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                         className="cursor-pointer"
+                        onClick={()=> setIsModalDeleteOpen(true)}
                     >
                         <Trash2 className="h-4 w-4 mr-2" />
                         Delete
@@ -59,6 +64,18 @@ const ActionMenu = ({ data }: { data: User }) => {
                     <InviteLinkModal teacherId={data.id} onClose={toggleModalInvite}  />
                 )
             }
+
+            {
+                isModalEditOpen && (
+                    <EditModal user={data} onClose={() => setIsModalEditOpen(false)}  />
+                )
+            }
+            {
+                isModalDeleteOpen && (
+                    <DeleteConfirm user={data} onClose={() => setIsModalDeleteOpen(false)}  />
+                )
+            }
+
         </div>
     );
 };

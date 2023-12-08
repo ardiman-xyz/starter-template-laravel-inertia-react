@@ -43,6 +43,8 @@ Route::middleware(["cekCookie"])->group(function () {
             Route::get("/", [\App\Http\Controllers\TeacherController::class, "index"])->name("teacher.index");
             Route::post("/", [\App\Http\Controllers\TeacherController::class, "store"])->name("teacher.store");
             Route::get("invitations/{id}", [\App\Http\Controllers\TeacherController::class, "invitations"]);
+            Route::put("{id}", [\App\Http\Controllers\TeacherController::class, "update"]);
+            Route::delete("{id}", [\App\Http\Controllers\TeacherController::class, "destroy"]);
         });
     });
 

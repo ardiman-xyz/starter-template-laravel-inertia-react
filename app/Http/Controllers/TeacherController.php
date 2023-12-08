@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DTO\TeacherDTO;
 use App\Http\Requests\StoreTeacherRequest;
+use App\Http\Requests\UpdateTeacherRequest;
 use App\Repositories\SchoolRepository;
 use App\Repositories\UserRepository;
 use App\Services\TeacherService;
@@ -70,6 +71,51 @@ class TeacherController extends Controller
                     "link" => $response
                 ]
             ], 201);
+        }catch (Exception $exception)
+        {
+            return response()->json([
+                'success'    => false,
+                'message'   => $exception->getMessage()
+            ], 400);
+        }
+    }
+
+    public function update(UpdateTeacherRequest $request, string $id): JsonResponse
+    {
+        $data = $request->validationData();
+
+        $dto = new TeacherDTO();
+        $dto->name = $data['name'];
+        $dto->email = $data['email'];
+        $dto->password = $data['password'];
+
+        try {
+            $response = $this->teacherService->update($dto,$id);
+            return response()->json([
+                'status' => true,
+                'message' => 'Teacher successfully updated',
+                'data' => [
+                    "link" => $response
+                ]
+            ], 200);
+        }catch (Exception $exception)
+        {
+            return response()->json([
+                'success'    => false,
+                'message'   => $exception->getMessage()
+            ], 400);
+        }
+    }
+
+    public function destroy(string $id): JsonResponse
+    {
+        try {
+           $this->teacherService->delete($id);
+            return response()->json([
+                'status' => true,
+                'message' => 'Teacher successfully deleted',
+                'data' => []
+            ], 200);
         }catch (Exception $exception)
         {
             return response()->json([

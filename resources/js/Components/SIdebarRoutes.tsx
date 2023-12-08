@@ -12,7 +12,7 @@ const Routes = [
         icon: Layout,
         label: "Dasbor",
         href: "/dashboard",
-        requiredRoles: ["Headmaster", "Teacher"],
+        requiredRoles: ["Headmaster"],
     },
     {
         icon: Users,
@@ -31,6 +31,13 @@ const Routes = [
         label: "Visitasi",
         href: "/visitation",
         requiredRoles: ["Headmaster"],
+    },
+
+    {
+        icon: Layout,
+        label: "Dasbor",
+        href: "/teacher/dashboard",
+        requiredRoles: ["Teacher"],
     },
 ];
 
