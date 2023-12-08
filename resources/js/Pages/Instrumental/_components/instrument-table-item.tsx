@@ -70,6 +70,28 @@ const InstrumentTableItem = ({id, name, type, stageId, index}: IProps) => {
             });
     };
 
+    const handleDelete = async () => {
+        const confirmation = window.confirm("Apakah Anda yakin ingin menghapus?");
+        if (!confirmation) return;
+
+        await axios
+            .delete(`/instrumental/${id}/instrument`)
+            .then((data) => {
+                const { message } = data.data;
+                toast.success(`${message}`);
+                router.reload();
+            })
+            .catch((err) => {
+                const { data, status, statusText } = err.response;
+                toast.error(`${statusText} ${status}`, {
+                    description: `${data.message}`,
+                });
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    }
+
     return (
         <TableRow key={id}>
             <TableCell className="font-medium">{index + 1}</TableCell>
@@ -126,6 +148,7 @@ const InstrumentTableItem = ({id, name, type, stageId, index}: IProps) => {
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
                                     className="cursor-pointer"
+                                    onClick={handleDelete}
                                 >
                                     <Trash2 className="h-4 w-4 mr-2" />
                                     Delete

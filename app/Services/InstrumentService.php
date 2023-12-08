@@ -65,4 +65,15 @@ class InstrumentService
 
         return $this->instrumentRepository->update($instrument->id, $instrument);
     }
+
+    /**
+     * @throws Exception
+     */
+    public function delete(string $id): void
+    {
+        $instrument = $this->instrumentRepository->getById($id);
+        if(!$instrument) throw new Exception("Instrument not found");
+
+        $this->instrumentRepository->delete($id);
+    }
 }

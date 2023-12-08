@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DTO\UpdateInstrumentDTO;
 use App\Http\Requests\CreateInstrumentRequest;
+use App\Http\Requests\UpdateInstrumentRequest;
 use App\Models\AssessmentStage;
 use App\Repositories\AssessmentStageRepository;
 use App\Repositories\InstrumentRepository;
@@ -62,7 +63,7 @@ class InstrumentalController extends Controller
         }
     }
 
-    public function update(CreateInstrumentRequest $request, string $stage_id)
+    public function update(UpdateInstrumentRequest $request, string $stage_id): JsonResponse
     {
         $data = $request->validationData();
 
@@ -78,6 +79,23 @@ class InstrumentalController extends Controller
                 'status' => true,
                 'message' => 'Data berhasil di update',
                 'data' => $data
+            ], 201);
+        }catch (Exception $exception)
+        {
+            return response()->json([
+                'success'    => false,
+                'message'   => $exception->getMessage()
+            ], 400);
+        }
+    }
+    public function destroy(string $instrument_id): JsonResponse
+    {
+        try {
+            $this->instrumentService->delete($instrument_id);
+            return response()->json([
+                'status' => true,
+                'message' => 'Instrumen berhasil di hapus',
+                'data' => []
             ], 201);
         }catch (Exception $exception)
         {

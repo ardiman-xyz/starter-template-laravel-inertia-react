@@ -35,4 +35,9 @@ class InstrumentRepository
         return $instrument;
     }
 
+    public function delete(string $id): ?bool
+    {
+        return Model::find($id)->delete();
+    }
+
 }

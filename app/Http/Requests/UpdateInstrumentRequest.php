@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class CreateInstrumentRequest extends FormRequest
+class UpdateInstrumentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +22,9 @@ class CreateInstrumentRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id'      => ['required'],
             'name'      => ['required', 'string', 'max:255'],
-            'response_type'  => ['required', 'string']
+            'type'  => ['required', 'string']
         ];
     }
 }
