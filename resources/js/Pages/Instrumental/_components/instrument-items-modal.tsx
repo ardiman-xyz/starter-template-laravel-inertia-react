@@ -6,7 +6,6 @@ import Modal from "@/Components/Modal";
 import {
     Table,
     TableBody,
-    TableCell,
     TableHead,
     TableHeader,
     TableRow,
@@ -31,7 +30,7 @@ type ItemsType = {
 const InstrumentItemsModal = ({instrument, onClose}: IProps) => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [items, setItems] = useState<ItemsType[] | null>(null)
+    const [items, setItems] = useState<ItemsType[] | []>([])
 
     useEffect(() => {
         getInstrumentItems()
@@ -56,15 +55,15 @@ const InstrumentItemsModal = ({instrument, onClose}: IProps) => {
             closeable={!isLoading}
             maxWidth="xxl"
         >
-            <div className="px-6 py-4 md:min-h-[700px] min-h-max overflow-y-auto relative">
+            <div className="px-6 py-4 md:min-h-[700px] md:max-h-[700px] min-h-max overflow-y-auto relative">
                 <h2 className="text-md font-bold text-center">
-                   List instrumen upload data pra observasi
+                   List instrumen
                 </h2>
 
                     <div className="w-full flex items-center justify-center">
                         {
                             isLoading && (
-                                <RotateCw className="mr-2 h-4 w-4 animate-spin"/>
+                                <RotateCw className="mr-2 h-4 w-4 animate-spin mt-6"/>
                             )
                         }
                     </div>
@@ -94,6 +93,7 @@ const InstrumentItemsModal = ({instrument, onClose}: IProps) => {
                             <FooterModal
                                 getData={() => getInstrumentItems()}
                                 instrumentId={instrument.id}
+                                items={items}
                             />
                         </>
                     )

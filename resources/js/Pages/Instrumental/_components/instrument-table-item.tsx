@@ -16,9 +16,8 @@ import {Button} from "@/Components/ui/button";
 import {router} from "@inertiajs/react";
 
 import {Instrument} from "@/types/app";
-import EditInstrumentModal from "@/Pages/Instrumental/_components/edit-instrument-modal";
-import {flattenBy} from "@tanstack/react-table";
-import InstrumentItemsModal from "@/Pages/Instrumental/_components/instrument-items-modal";
+import EditInstrumentModal from "./edit-instrument-modal";
+import InstrumentItemsModal from "./instrument-items-modal";
 
 interface IProps {
     instrument: Instrument;
