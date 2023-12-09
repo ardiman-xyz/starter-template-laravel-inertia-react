@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 import {Instrument} from "@/types/app";
 
@@ -12,6 +12,9 @@ import {
     TableRow,
 } from "@/Components/ui/table"
 import FooterModal from "@/Pages/Instrumental/_components/footer-modal";
+import axios from "axios";
+import {RotateCw} from "lucide-react";
+import InstrumentItemsTable from "@/Pages/Instrumental/_components/instrument-items-table";
 
 
 interface IProps {
@@ -19,9 +22,32 @@ interface IProps {
     onClose : () => void
 }
 
+type ItemsType = {
+    id: number;
+    title: string;
+    max_score: number;
+}
+
 const InstrumentItemsModal = ({instrument, onClose}: IProps) => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [items, setItems] = useState<ItemsType[] | null>(null)
+
+    useEffect(() => {
+        getInstrumentItems()
+    }, []);
+
+    const getInstrumentItems = async () => {
+        setIsLoading(true)
+        await axios.get(`/instrumental/${instrument.id}/instrument/criteria`)
+            .then(({data}) => {
+                setItems(data.data)
+            }).catch(err => {
+                console.info(err)
+            }).finally(() => {
+                setIsLoading(false)
+            })
+    }
 
     return (
         <Modal
@@ -35,29 +61,47 @@ const InstrumentItemsModal = ({instrument, onClose}: IProps) => {
                    List instrumen upload data pra observasi
                 </h2>
 
-                <Table className="border mt-6">
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead className="w-[100px]">No.</TableHead>
-                            <TableHead>Judul</TableHead>
-                            <TableHead>Skor maks.</TableHead>
-                            <TableHead>Aksi</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell className="font-medium">1</TableCell>
-                            <TableCell>Paid</TableCell>
-                            <TableCell>Credit Card</TableCell>
-                            <TableCell>Edit</TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
+                    <div className="w-full flex items-center justify-center">
+                        {
+                            isLoading && (
+                                <RotateCw className="mr-2 h-4 w-4 animate-spin"/>
+                            )
+                        }
+                    </div>
 
-                <FooterModal />
+                {
+                    ! isLoading && (
+                        <>
+                            <Table className="border mt-6">
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead className="w-[100px]">No.</TableHead>
+                                        <TableHead>Judul</TableHead>
+                                        <TableHead className="text-center">Skor maks.</TableHead>
+                                        <TableHead>Aksi</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                </TableBody>
+                                {
+                                    items !== null &&
+                                    items.map((item,index) => (
+                                        <InstrumentItemsTable getData={getInstrumentItems}  items={item} index={index} />
+                                    ))
+                                }
+                            </Table>
+
+                            <FooterModal
+                                getData={() => getInstrumentItems()}
+                                instrumentId={instrument.id}
+                            />
+                        </>
+                    )
+                }
             </div>
         </Modal>
     )
 }
 
 export default InstrumentItemsModal;
+

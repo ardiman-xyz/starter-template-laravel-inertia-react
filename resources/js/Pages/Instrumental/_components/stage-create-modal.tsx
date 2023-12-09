@@ -346,8 +346,6 @@ const StageCreateModal = ({stage}: IProps) => {
                                 )
                             }
 
-
-
                             <div className="w-full flex items-center gap-x-3">
                                 <Button
                                     type="button"

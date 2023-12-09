@@ -24,8 +24,6 @@ interface IProps {
 
 const SettingInstrumentPage = ({stage, instruments}: IProps) => {
 
-    console.info(instruments)
-
     return (
         <Authenticated>
             <Head title="Setting instrumen pra observasi"/>
