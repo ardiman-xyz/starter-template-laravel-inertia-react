@@ -45,6 +45,8 @@ const SettingInstrumentPage = ({stage, instruments}: IProps) => {
                             <TableHead className="w-[100px]">No.</TableHead>
                             <TableHead>Nama</TableHead>
                             <TableHead>Tipe respon</TableHead>
+                            <TableHead>Jumlah item</TableHead>
+                            <TableHead>Jumlah poin</TableHead>
                             <TableHead>Aksi</TableHead>
                         </TableRow>
                     </TableHeader>

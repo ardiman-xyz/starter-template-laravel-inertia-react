@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import axios from "axios";
 import {toast} from "sonner";
 
-import {ClipboardEdit, MoreHorizontal, Trash2} from "lucide-react";
+import {ClipboardEdit, ClipboardList, MoreHorizontal, Trash2} from "lucide-react";
 
 import {TableCell, TableRow} from "@/Components/ui/table";
 import {
@@ -18,6 +18,7 @@ import {router} from "@inertiajs/react";
 import {Instrument} from "@/types/app";
 import EditInstrumentModal from "@/Pages/Instrumental/_components/edit-instrument-modal";
 import {flattenBy} from "@tanstack/react-table";
+import InstrumentItemsModal from "@/Pages/Instrumental/_components/instrument-items-modal";
 
 interface IProps {
     instrument: Instrument;
@@ -27,7 +28,8 @@ interface IProps {
 const InstrumentTableItem = ({instrument, index}: IProps) => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isModalEditOpen, setIsModalEditOpen] = useState<boolean>(false)
+    const [isModalEditOpen, setIsModalEditOpen] = useState<boolean>(false);
+    const [modalInstrumentItems, setModalInstrumentItems] = useState<boolean>(false);
 
     const toggleEdit = () => setIsModalEditOpen(!isModalEditOpen);
 
@@ -64,6 +66,12 @@ const InstrumentTableItem = ({instrument, index}: IProps) => {
                     {instrument.type}
                 </TableCell>
                 <TableCell>
+                    5
+                </TableCell>
+                <TableCell>
+                   19
+                </TableCell>
+                <TableCell>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0">
@@ -72,6 +80,13 @@ const InstrumentTableItem = ({instrument, index}: IProps) => {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                                className="cursor-pointer"
+                                onClick={() => setModalInstrumentItems(true)}
+                            >
+                                <ClipboardList className="h-4 w-4 mr-2"/>
+                                Instrumen
+                            </DropdownMenuItem>
                             <DropdownMenuItem
                                 className="cursor-pointer"
                                 onClick={toggleEdit}
@@ -93,6 +108,9 @@ const InstrumentTableItem = ({instrument, index}: IProps) => {
             </TableRow>
             {
                 isModalEditOpen && <EditInstrumentModal onClose={() =>setIsModalEditOpen(false) } instrument={instrument} />
+            }
+            {
+                modalInstrumentItems && <InstrumentItemsModal instrument={instrument} onClose={() => setModalInstrumentItems(false)} />
             }
         </>
     )
