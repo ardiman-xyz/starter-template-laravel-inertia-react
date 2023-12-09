@@ -29,7 +29,6 @@ const SettingInstrumentPage = ({stage, instruments}: IProps) => {
             <Head title="Setting instrumen pra observasi"/>
             <Heading
                 title="Pengaturan step"
-                description="Manajemen pengaturan instrumen step pra observasi"
             />
 
             <div className="mt-6 mb-3">

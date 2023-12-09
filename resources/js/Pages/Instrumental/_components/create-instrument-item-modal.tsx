@@ -11,6 +11,7 @@ import {Button} from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/Components/ui/form";
 import {RotateCw} from "lucide-react";
+import {Textarea} from "@/Components/ui/textarea";
 
 interface IProps {
     onClose : () => void;
@@ -94,7 +95,7 @@ const CreateInstrumentItemModal = ({onClose, instrumentId, getData}: IProps) => 
                                 <FormItem>
                                     <FormLabel>Judul</FormLabel>
                                     <FormControl>
-                                        <Input
+                                        <Textarea
                                             placeholder="Masukkan judul..."
                                             {...field}
                                             disabled={isLoading}

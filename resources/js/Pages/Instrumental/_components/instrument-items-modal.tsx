@@ -55,7 +55,7 @@ const InstrumentItemsModal = ({instrument, onClose}: IProps) => {
             closeable={!isLoading}
             maxWidth="xxl"
         >
-            <div className="px-6 py-4 md:min-h-[700px] md:max-h-[700px] min-h-max overflow-y-auto relative">
+            <div className="px-6 min-h-[700px] max-h-[700px] overflow-y-auto relative py-20">
                 <h2 className="text-md font-bold text-center">
                    List instrumen
                 </h2>

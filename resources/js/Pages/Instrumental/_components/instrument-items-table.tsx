@@ -14,6 +14,7 @@ import {Input} from "@/Components/ui/input";
 import axios from "axios";
 import {toast} from "sonner";
 import {router} from "@inertiajs/react";
+import {Textarea} from "@/Components/ui/textarea";
 
 interface IProps {
     items: {
@@ -101,9 +102,9 @@ const InstrumentItemsTable = ({items, index, getData}: IProps) => {
                 {! isEditing && items.title}
                 {
                     isEditing && (
-                        <Input
+                        <Textarea
                             disabled={isLoading}
-                            className="w-max"
+                            className="md:w-[500px] w-max"
                             name="title"
                             defaultValue={defaultData.title}
                             onChange={handleChange}

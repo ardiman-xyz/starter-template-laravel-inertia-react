@@ -61,6 +61,7 @@ Route::middleware(["cekCookie"])->group(function () {
 
         });
 
+
     });
 
     Route::middleware(["role:Teacher"])->group(function () {
@@ -100,3 +101,4 @@ Route::middleware('auth')->group(function () {
 
 
 //require __DIR__.'/auth.php';
+require __DIR__.'/visitation.php';
