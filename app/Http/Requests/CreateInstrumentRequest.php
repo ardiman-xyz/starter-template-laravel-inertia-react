@@ -22,9 +22,20 @@ class CreateInstrumentRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name'      => ['required', 'string', 'max:255'],
-            'response_type'  => ['required', 'string']
+        $rules = [
+            'name' => 'required|string|max:255',
+            'response_type' => 'required|string',
+            'description' => 'required|string'
         ];
+
+        if($this->response_type === 'upload') {
+
+            $rules['allowed_extensions'] = 'required';
+            $rules['max_size'] = 'required|integer';
+            $rules['is_multiple'] = 'required';
+
+        }
+
+        return $rules;
     }
 }

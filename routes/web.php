@@ -51,7 +51,7 @@ Route::middleware(["cekCookie"])->group(function () {
             Route::get("/", [\App\Http\Controllers\InstrumentalController::class, "index"])->name("instrumental.index");
             Route::get("{step_id}/stage", [\App\Http\Controllers\InstrumentalController::class, "instrument"])->name("instrumental.stage");
             Route::post("{stage_id}/instrument", [\App\Http\Controllers\InstrumentalController::class, "store"]);
-            Route::put("{stage_id}/instrument", [\App\Http\Controllers\InstrumentalController::class, "update"]);
+            Route::put("{instrument_id}/instrument", [\App\Http\Controllers\InstrumentalController::class, "update"]);
             Route::delete("{instrument_id}/instrument", [\App\Http\Controllers\InstrumentalController::class, "destroy"]);
         });
 

@@ -25,20 +25,35 @@ class InstrumentService
         return $this->instrumentRepository->getAll();
     }
 
+    public function getByAssessmentStageId(string $stageId)
+    {
+        $data = $this->instrumentRepository->getAssessmentStageId($stageId);
+        return $data->map(function ($item) {
+            $item->allowed_extension = $item->allowed_extension !== null ? explode(", ", $item->allowed_extension) : [];
+            return $item;
+        });
+    }
+
     /**
      * @throws Exception
      */
-    public function create(string $name, string $type, string $stageId)
+    public function create(CreateInstrumentDTO $data)
     {
-        $stage = $this->assessmentStageRepository->getById($stageId);
+        $stage = $this->assessmentStageRepository->getById($data->assessmentStageId);
         if(!$stage) throw new Exception("Stage not found");
+
+        $allowed_extensions_string = implode(", ", $data->allowedExtensions);
 
         try {
 
             $entity = new InstrumentEntity();
-            $entity->assessmentStageId = $stageId;
-            $entity->name = $name;
-            $entity->type = $type;
+            $entity->assessmentStageId = $data->assessmentStageId;
+            $entity->name = $data->name;
+            $entity->type = $data->type;
+            $entity->description = $data->description;
+            $entity->allowedExtensions = $allowed_extensions_string;
+            $entity->maxSize = $data->maxSize;
+            $entity->isMultiple = $data->maxSize === "yes" ? 1 : 0;
 
             return $this->instrumentRepository->create($entity);
 
@@ -51,17 +66,20 @@ class InstrumentService
     /**
      * @throws Exception
      */
-    public function update(UpdateInstrumentDTO $data): \App\Models\Instrument
+    public function update(CreateInstrumentDTO $data, string $id): \App\Models\Instrument
     {
-        $stage = $this->assessmentStageRepository->getById($data->stageId);
-        if(!$stage) throw new Exception("Stage not found");
-
-        $instrument = $this->instrumentRepository->getById($data->id);
+        $instrument = $this->instrumentRepository->getById($id);
 
         if(!$instrument) throw new Exception("Instrument not found");
 
+        $allowed_extensions_string = implode(", ", $data->allowedExtensions);
+
         $instrument->name = $data->name;
         $instrument->type = $data->type;
+        $instrument->description = $data->description;
+        $instrument->allowed_extension = $allowed_extensions_string;
+        $instrument->max_size = $data->maxSize;
+        $instrument->is_multiple = $data->maxSize === "yes" ? 1 : 0;
 
         return $this->instrumentRepository->update($instrument->id, $instrument);
     }

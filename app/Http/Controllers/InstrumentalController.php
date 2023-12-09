@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\CreateInstrumentDTO;
 use App\DTO\UpdateInstrumentDTO;
 use App\Http\Requests\CreateInstrumentRequest;
 use App\Http\Requests\UpdateInstrumentRequest;
@@ -10,7 +11,6 @@ use App\Repositories\AssessmentStageRepository;
 use App\Repositories\InstrumentRepository;
 use App\Services\InstrumentService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Exception;
 
@@ -35,7 +35,7 @@ class InstrumentalController extends Controller
     public function instrument(string $stageId): \Inertia\Response
     {
         $stage = AssessmentStage::findOrFail($stageId);
-        $instruments = $this->instrumentService->getAll();
+        $instruments = $this->instrumentService->getByAssessmentStageId($stageId);
 
         return Inertia::render("Instrumental/Instrument", [
             "stage" => $stage,
@@ -43,12 +43,21 @@ class InstrumentalController extends Controller
         ]);
     }
 
-    public function store(CreateInstrumentRequest $request, string $stage_id): JsonResponse
+    public function store(CreateInstrumentRequest $request, string $stage_id)
     {
         $data = $request->validationData();
 
+        $dto = new CreateInstrumentDTO();
+        $dto->assessmentStageId = $stage_id;
+        $dto->name = $data['name'];
+        $dto->type = $data['response_type'];
+        $dto->description = $data['description'];
+        $dto->allowedExtensions = $data["allowed_extensions"] ?? [];
+        $dto->maxSize = $data['max_size'] ?? null;
+        $dto->isMultiple = $data["is_multiple"] ?? null;
+
         try {
-            $data = $this->instrumentService->create($data['name'], $data["response_type"], $stage_id);
+            $data = $this->instrumentService->create($dto);
             return response()->json([
                 'status' => true,
                 'message' => 'Data berhasil di simpan',
@@ -63,18 +72,20 @@ class InstrumentalController extends Controller
         }
     }
 
-    public function update(UpdateInstrumentRequest $request, string $stage_id): JsonResponse
+    public function update(UpdateInstrumentRequest $request, string $instrument_id): JsonResponse
     {
         $data = $request->validationData();
 
-        $instrumentUpdate = new UpdateInstrumentDTO();
-        $instrumentUpdate->stageId = $stage_id;
-        $instrumentUpdate->id = $data['id'];
+        $instrumentUpdate = new CreateInstrumentDTO();
         $instrumentUpdate->name = $data['name'];
-        $instrumentUpdate->type = $data['type'];
+        $instrumentUpdate->type = $data['response_type'];
+        $instrumentUpdate->description = $data['description'];
+        $instrumentUpdate->allowedExtensions = $data["allowed_extensions"] ?? [];
+        $instrumentUpdate->maxSize = $data['max_size'] ?? null;
+        $instrumentUpdate->isMultiple = $data["is_multiple"] ?? null;
 
         try {
-            $data = $this->instrumentService->update($instrumentUpdate);
+            $data = $this->instrumentService->update($instrumentUpdate, $instrument_id);
             return response()->json([
                 'status' => true,
                 'message' => 'Data berhasil di update',

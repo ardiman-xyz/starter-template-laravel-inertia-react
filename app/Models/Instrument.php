@@ -19,7 +19,7 @@ class Instrument extends Model
         return $this->belongsTo(AssessmentStage::class, 'assessment_stage_id');
     }
 
-    public function instrumentCriterias(): HasMany
+    public function instrumentCriteria(): HasMany
     {
         return $this->hasMany(InstrumentCriteria::class, 'instrument_id');
     }

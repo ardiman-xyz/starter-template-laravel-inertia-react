@@ -79,11 +79,12 @@ class TeacherService
 
         if(!$teacher) throw new Exception("Teacher not found");
 
+
         if($teacher->link_invite === null)
         {
             $token = $this->generateTokenInvite($teacher);
 
-            $teacher->linkInvite = $token;
+            $teacher->link_invite = $token;
             $this->userRepository->update($teacherId, $teacher);
 
             return $this->generateLinkInvite($token);

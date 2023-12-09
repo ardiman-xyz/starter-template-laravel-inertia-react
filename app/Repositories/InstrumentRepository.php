@@ -18,13 +18,23 @@ class InstrumentRepository
         return Model::create([
             "assessment_stage_id" => $entity->assessmentStageId,
             "name"  => $entity->name,
-            "type"  => $entity->type
+            "type"  => $entity->type,
+            "description" => $entity->description,
+            "allowed_extension" => $entity->allowedExtensions,
+            "max_size"      => $entity->maxSize,
+            "is_multiple"   => $entity->isMultiple
         ]);
     }
 
     public function getById(string $id)
     {
         return Model::find($id);
+    }
+
+    public function getAssessmentStageId(string $stageId)
+    {
+        return Model::where("assessment_stage_id", $stageId)->get();
+
     }
 
     public function update(string $id, Model $instrument)

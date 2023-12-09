@@ -12,20 +12,20 @@ import {
 } from "@/Components/ui/table"
 import StageCreateModal from "./_components/stage-create-modal";
 import InstrumentTableItem from "@/Pages/Instrumental/_components/instrument-table-item";
+import {Instrument} from "@/types/app";
 
 interface IProps {
     stage: {
         id: number;
         name: string;
     },
-    instruments : {
-        id: number;
-        name: string;
-        type: string
-    }[]
+    instruments : Instrument[]
 }
 
 const SettingInstrumentPage = ({stage, instruments}: IProps) => {
+
+    console.info(instruments)
+
     return (
         <Authenticated>
             <Head title="Setting instrumen pra observasi"/>
@@ -52,11 +52,9 @@ const SettingInstrumentPage = ({stage, instruments}: IProps) => {
                         {
                             instruments.map((instrument, index) => (
                                 <InstrumentTableItem
-                                    id={instrument.id}
-                                    name={instrument.name}
-                                    type={instrument.type}
+                                    instrument={instrument}
                                     index={index}
-                                    stageId={stage.id}
+                                    key={index}
                                 />
                             ))
                         }

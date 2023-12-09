@@ -1,14 +1,17 @@
 import { useState } from "react";
 import axios from "axios";
-import { AlertCircle, RotateCw } from "lucide-react";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
 import * as z from "zod";
+import {router} from "@inertiajs/react";
+
+import { AlertCircle, RotateCw } from "lucide-react";
+
 import {Button} from "@/Components/ui/button";
 import Modal from "@/Components/Modal";
 import { Input } from "@/Components/ui/input";
+
 import {
     Form,
     FormControl,
@@ -18,7 +21,6 @@ import {
     FormLabel,
     FormMessage,
 } from "@/Components/ui/form";
-
 import {
     Select,
     SelectContent,
@@ -26,7 +28,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/Components/ui/select";
-import {router} from "@inertiajs/react";
+import {Textarea} from "@/Components/ui/textarea";
+import {Checkbox} from "@/Components/ui/checkbox";
+import {RadioGroup, RadioGroupItem} from "@/Components/ui/radio-group";
 
 const formSchema = z
     .object({
@@ -36,8 +40,45 @@ const formSchema = z
         response_type: z.string().min(2, {
             message: "Tipe jawab harus di isi",
         }),
+        description: z.string().min(2, {
+            message: "Deskripsi harus di isi",
+        }),
+
+        allowed_extensions: z.array(z.string()),
+        max_size: z.string().optional(),
+        is_multiple: z.enum(["yes", "no"], {
+            required_error: "You need to select a status type.",
+        }).optional(),
+    }).refine(data => {
+
+        if (data.response_type === 'upload') {
+            return data.max_size !== "" && data.is_multiple !== undefined;
+        }
+
+        return true;
+
+    }, {
+        message: 'Harus diisi jika tipe upload'
     })
 
+    const items = [
+        {
+            id: "pdf",
+            label: "PDF",
+        },
+        {
+            id: "image",
+            label: "image",
+        },
+        {
+            id: "docx",
+            label: "docx",
+        },
+        {
+            id: "xlsx",
+            label: "xlsx",
+        },
+    ] as const;
 
 interface IProps {
     stage: {
@@ -58,8 +99,16 @@ const StageCreateModal = ({stage}: IProps) => {
         defaultValues: {
             name: "",
             response_type: "",
+            description: "",
+            max_size: "",
+            allowed_extensions: [],
+
         },
     });
+
+    const {watch} = form;
+
+    const responseType = watch("response_type");
 
     const toggleModalAdd = () => {
         setIsOpenModalAdd(!isOpenModalAdd);
@@ -98,7 +147,7 @@ const StageCreateModal = ({stage}: IProps) => {
                 onClose={toggleModalAdd}
                 show={isOpenModalAdd}
                 closeable={!isLoading}
-                maxWidth="lg"
+                maxWidth="xl"
             >
                 <div className="px-6 py-4">
                     <div className="w-full flex items-center justify-center">
@@ -158,6 +207,146 @@ const StageCreateModal = ({stage}: IProps) => {
                                     </FormItem>
                                 )}
                             />
+
+
+
+                            <FormField
+                                control={form.control}
+                                name="description"
+                                render={({field}) => (
+                                    <FormItem>
+                                        <FormLabel>Deskripsi</FormLabel>
+                                        <FormControl>
+                                            <Textarea
+                                                placeholder="Masukkan deskripsi petunjuk step ini"
+                                                className="resize-none"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+
+                            {
+                                responseType === "upload" && (
+                                    <>
+                                        <FormField
+                                            control={form.control}
+                                            name="max_size"
+                                            render={({field}) => (
+                                                <FormItem>
+                                                    <FormLabel>Besar ukuran file</FormLabel>
+                                                    <FormControl>
+                                                        <Input
+                                                            placeholder="MB..."
+                                                            {...field}
+                                                            disabled={isLoading}
+                                                            type="number"
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage/>
+                                                    <FormDescription className="text-xs text-muted-foreground">
+                                                        contoh 1 MB
+                                                    </FormDescription>
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        <FormField
+                                            control={form.control}
+                                            name="allowed_extensions"
+                                            render={() => (
+                                                <FormItem>
+                                                    <div className="mb-4 mt-7">
+                                                        <FormLabel>Validasi</FormLabel>
+                                                        <FormDescription>
+                                                            Silahkan pilih validasi untuk dokumen
+                                                        </FormDescription>
+                                                    </div>
+
+                                                    <div className="flex items-center gap-x-4  border p-3 bg-gray-100">
+                                                        {items.map((item) => (
+                                                            <FormField
+                                                                key={item.id}
+                                                                control={form.control}
+                                                                name="allowed_extensions"
+                                                                render={({ field }) => {
+                                                                    return (
+                                                                        <FormItem
+                                                                            key={item.id}
+                                                                            className="flex flex-row items-center  space-x-2 space-y-0"
+                                                                        >
+                                                                            <FormControl>
+                                                                                <Checkbox
+                                                                                    checked={field.value?.includes(item.id)}
+                                                                                    onCheckedChange={(checked) => {
+                                                                                        return checked
+                                                                                            ? field.onChange([
+                                                                                                ...field.value,
+                                                                                                item.id,
+                                                                                            ])
+                                                                                            : field.onChange(
+                                                                                                field.value?.filter(
+                                                                                                    (value) => value !== item.id
+                                                                                                )
+                                                                                            );
+                                                                                    }}
+                                                                                />
+                                                                            </FormControl>
+                                                                            <FormLabel className="text-sm font-normal">
+                                                                                {item.label}
+                                                                            </FormLabel>
+                                                                        </FormItem>
+                                                                    );
+                                                                }}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        <FormField
+                                            control={form.control}
+                                            name="is_multiple"
+                                            render={({ field }) => (
+                                                <FormItem className="space-y-3">
+                                                    <FormLabel>Upload per instrumen</FormLabel>
+                                                    <FormControl>
+                                                        <RadioGroup
+                                                            onValueChange={field.onChange}
+                                                            defaultValue={field.value}
+                                                            className="flex flex-col space-y-1"
+                                                        >
+                                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                                <FormControl>
+                                                                    <RadioGroupItem value="yes" />
+                                                                </FormControl>
+                                                                <FormLabel className="font-normal">
+                                                                    Iya
+                                                                </FormLabel>
+                                                            </FormItem>
+                                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                                <FormControl>
+                                                                    <RadioGroupItem value="no" />
+                                                                </FormControl>
+                                                                <FormLabel className="font-normal">
+                                                                   Tidak
+                                                                </FormLabel>
+                                                            </FormItem>
+                                                        </RadioGroup>
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    </>
+                                )
+                            }
+
+
 
                             <div className="w-full flex items-center gap-x-3">
                                 <Button

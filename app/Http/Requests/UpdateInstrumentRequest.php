@@ -21,10 +21,20 @@ class UpdateInstrumentRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'id'      => ['required'],
-            'name'      => ['required', 'string', 'max:255'],
-            'type'  => ['required', 'string']
+        $rules = [
+            'name' => 'required|string|max:255',
+            'response_type' => 'required|string',
+            'description' => 'required|string'
         ];
+
+        if($this->response_type === 'upload') {
+
+            $rules['allowed_extensions'] = 'required';
+            $rules['max_size'] = 'required';
+            $rules['is_multiple'] = 'required';
+
+        }
+
+        return $rules;
     }
 }

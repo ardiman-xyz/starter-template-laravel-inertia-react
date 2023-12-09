@@ -15,3 +15,14 @@ export interface User {
     created_at: string;
     updated_at: string;
 }
+
+export interface Instrument {
+    id: number;
+    assessment_stage_id: number;
+    name: string;
+    type: string;
+    description: string;
+    allowed_extension: [];
+    max_size?: string
+    is_multiple?: number
+}
