@@ -7,7 +7,7 @@ Route::middleware(["cekCookie"])->group(function () {
 
         Route::prefix("visitation")->group(function () {
             Route::get("/", [\App\Http\Controllers\VisitationController::class, "index"]);
-            Route::get("filter/{academic_year_id}", [\App\Http\Controllers\VisitationController::class, "filter"])->name("visitation.filter");
+            Route::get("filter", [\App\Http\Controllers\VisitationController::class, "filter"])->name("visitation.filter");
         });
 
     });
