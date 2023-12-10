@@ -22,7 +22,7 @@ export default function Modal({
     const maxWidthClass = {
         sm: "sm:max-w-sm",
         md: "sm:max-w-md",
-        lg: "sm:max-w-lg",
+        lg: "sm:max-w-lg w-full",
         xl: "sm:max-w-xl",
         "2xl": "sm:max-w-2xl",
         xxl: "sm:max-w-5xl w-full"

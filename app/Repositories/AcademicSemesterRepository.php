@@ -17,6 +17,6 @@ class AcademicSemesterRepository
 
     public function getByYearSemester(string $year, string $semester)
     {
-        return Model::where("year", $year)->where("semester", $semester)->get();
+        return Model::where("year", $year)->where("semester", $semester)->first();
     }
 }

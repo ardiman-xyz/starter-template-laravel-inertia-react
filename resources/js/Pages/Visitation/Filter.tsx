@@ -5,8 +5,17 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/C
 import {Button} from "@/Components/ui/button";
 import {PlusCircle, Search} from "lucide-react";
 import FilterDataTable from "@/Pages/Visitation/_components/filter-data-table";
+import {CreateFormAssessment} from "@/Pages/Visitation/_components/create-form-assessment";
 
-const FilterPage = () => {
+
+interface FilterProps {
+    data: any[],
+    year: string;
+    semester: string;
+}
+
+const FilterPage = ({data, year, semester}: FilterProps) => {
+    console.info(data)
     return(
         <Authenticated>
             <Head title="Visitasi tahun 2023/2024 ganjil" />
@@ -44,15 +53,12 @@ const FilterPage = () => {
                                Filter
                            </Button>
                        </Link>
-                       <Button size={"lg"}>
-                           <PlusCircle className="w-4 h-4 mr-2" />
-                           Buat baru
-                       </Button>
+                      <CreateFormAssessment semester={semester} year={year} />
                 </div>
             </div>
 
             <div className="mt-10">
-                <FilterDataTable />
+                <FilterDataTable assessments={data} />
             </div>
 
         </Authenticated>

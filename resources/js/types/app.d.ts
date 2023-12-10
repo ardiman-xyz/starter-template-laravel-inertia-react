@@ -26,3 +26,5 @@ export interface Instrument {
     max_size?: string
     is_multiple?: number
 }
+
+// export interface A
