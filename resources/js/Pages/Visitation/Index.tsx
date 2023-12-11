@@ -16,7 +16,15 @@ interface IProps {
 const IndexPage = ({academic_year}: IProps) => {
 
     return(
-        <Authenticated>
+        <Authenticated breadCrumbs={
+            [
+                {
+                    title : "Filter",
+                    url: "",
+                    disabled: true,
+                },
+            ]
+        }>
             <Head title="Visitasi" />
 
             <Heading

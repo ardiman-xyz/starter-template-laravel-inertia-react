@@ -17,7 +17,22 @@ interface FilterProps {
 const FilterPage = ({data, year, semester}: FilterProps) => {
 
     return(
-        <Authenticated>
+        <Authenticated
+            breadCrumbs={
+                [
+                    {
+                        title : "Filter",
+                        url: "visitation.index",
+                        disabled: false
+                    },
+                    {
+                        title : "Supervisi",
+                        url: "",
+                        disabled: true,
+                    },
+                ]
+            }
+        >
             <Head title="Visitasi tahun 2023/2024 ganjil" />
 
             <div className="w-full flex items-center justify-between">

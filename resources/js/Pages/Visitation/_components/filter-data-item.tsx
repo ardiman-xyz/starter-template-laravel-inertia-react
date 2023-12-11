@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import {ClipboardEdit, ClipboardList, FileDown, MoreHorizontal, Trash2} from "lucide-react";
+import {Link, router} from "@inertiajs/react";
 
 import {Assessment} from "@/types/app";
 import {TableCell, TableRow} from "@/Components/ui/table";
@@ -61,12 +62,14 @@ const FilterDataItem = ({assessment, index}: IProps) => {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                                className="cursor-pointer"
-                            >
-                                <ClipboardList className="h-4 w-4 mr-2"/>
-                                Detail
-                            </DropdownMenuItem>
+                            <Link href={route("visitation.detail", assessment.id)} >
+                                <DropdownMenuItem
+                                    className="cursor-pointer"
+                                >
+                                    <ClipboardList className="h-4 w-4 mr-2"/>
+                                    Detail
+                                </DropdownMenuItem>
+                            </Link>
                             <DropdownMenuItem
                                 className="cursor-pointer"
                             >

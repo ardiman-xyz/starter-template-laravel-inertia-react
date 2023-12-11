@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DTO\CreateAssessmentDTO;
 use App\Http\Requests\CreateAssessmentRequest;
+use App\Models\Assessment;
 use App\Repositories\AcademicSemesterRepository;
 use App\Repositories\AssessmentRepository;
 use App\Repositories\AssessmentStageRepository;
@@ -133,5 +134,12 @@ class VisitationController extends Controller
                 'message'   => $exception->getMessage()
             ], 400);
         }
+    }
+
+    public function detail(string $assessment_id): \Inertia\Response
+    {
+        $assessment = Assessment::findOrFail($assessment_id);
+
+        return Inertia::render("Visitation/Detail");
     }
 }
