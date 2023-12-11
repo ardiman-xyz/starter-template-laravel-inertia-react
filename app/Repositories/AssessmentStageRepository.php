@@ -7,6 +7,11 @@ use App\Models\AssessmentStage as Model;
 class AssessmentStageRepository
 {
 
+    public function getAll()
+    {
+        return Model::all();
+    }
+
     public function create(string $name)
     {
         return Model::create([

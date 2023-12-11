@@ -4,11 +4,15 @@ namespace App\Services;
 
 use App\DTO\CreateAssessmentDTO;
 use App\Entities\AssessmentEntity;
+use App\Entities\AssessmentStepEntity;
 use App\Repositories\AcademicSemesterRepository;
 use App\Repositories\AssessmentRepository;
+use App\Repositories\AssessmentStageRepository;
+use App\Repositories\AssessmentStepRepository;
 use App\Repositories\SchoolRepository;
 use App\Repositories\UserRepository;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class VisitationService
 {
@@ -17,13 +21,17 @@ class VisitationService
     private TokenService $tokenService;
     private AssessmentRepository $assessmentRepository;
     private UserRepository $userRepository;
+    private AssessmentStepRepository $assessmentStepRepository;
+    private AssessmentStageRepository $assessmentStageRepository;
 
     public function __construct(
         AcademicSemesterRepository $academicSemesterRepository,
         SchoolRepository $schoolRepository,
         TokenService $tokenService,
         AssessmentRepository $assessmentRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        AssessmentStepRepository $assessmentStepRepository,
+        AssessmentStageRepository $assessmentStageRepository
     )
     {
         $this->academicSemesterRepository = $academicSemesterRepository;
@@ -31,6 +39,8 @@ class VisitationService
         $this->tokenService = $tokenService;
         $this->assessmentRepository = $assessmentRepository;
         $this->userRepository = $userRepository;
+        $this->assessmentStepRepository = $assessmentStepRepository;
+        $this->assessmentStageRepository = $assessmentStageRepository;
 
     }
 
@@ -74,18 +84,36 @@ class VisitationService
         $school = $this->schoolRepository->getByUserId($this->tokenService->userId());
         if(!$school) throw new Exception("School not found");
 
+        DB::beginTransaction();
+
         try {
 
             $createEntity = new AssessmentEntity();
             $createEntity->teacherId = $dto->teacherId;
             $createEntity->schoolId = $school->id;
             $createEntity->academicSemesterId = $academic->id;
+            $assessment = $this->assessmentRepository->create($createEntity);
 
-            return $this->assessmentRepository->create($createEntity);
+            // store in table assessment_steps
+            $stages = $this->assessmentStageRepository->getAll();
+
+
+            foreach ($stages as $stage) {
+                $stepsEntity = new AssessmentStepEntity();
+                $stepsEntity->assessmentId = $assessment->id;
+                $stepsEntity->assessmentStageId = $stage->id;
+                $this->assessmentStepRepository->create($stepsEntity);
+            }
+
+            DB::commit();
+
+            return $assessment;
+
 
         }catch (Exception $exception)
         {
-            throw new Exception("something wrong!");
+            DB::rollBack();
+            throw new $exception;
         }
     }
 
@@ -97,11 +125,24 @@ class VisitationService
         $assessment = $this->assessmentRepository->getById($id);
         if(!$assessment) throw new Exception("Assessment not found");
 
+        DB::beginTransaction();
+
         try {
+            $assessmentSteps = $this->assessmentStepRepository->getByAssessmentId($id);
+
+            if($assessmentSteps)
+            {
+                foreach($assessmentSteps as $assessmentStep) {
+                    $assessmentStep->delete();
+                }
+            }
+
             $this->assessmentRepository->deleteById($id);
+            DB::commit();
         }catch (Exception $exception)
         {
-            throw new Exception("Something wrong, try again");
+            DB::rollBack();
+            throw new $exception;
         }
     }
 }

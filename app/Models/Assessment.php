@@ -14,6 +14,7 @@ class Assessment extends Model
     protected $table = "assessments";
     protected $guarded = [];
     public $keyType = "string";
+    public $incrementing = false;
 
     protected static function boot(): void
     {

@@ -6,6 +6,8 @@ use App\DTO\CreateAssessmentDTO;
 use App\Http\Requests\CreateAssessmentRequest;
 use App\Repositories\AcademicSemesterRepository;
 use App\Repositories\AssessmentRepository;
+use App\Repositories\AssessmentStageRepository;
+use App\Repositories\AssessmentStepRepository;
 use App\Repositories\SchoolRepository;
 use App\Repositories\UserRepository;
 use App\Services\TokenService;
@@ -26,12 +28,17 @@ class VisitationController extends Controller
         $tokenService = new TokenService();
         $assessmentRepository = new AssessmentRepository();
         $userRepository = new UserRepository();
+        $assessmentStepsRepository = new AssessmentStepRepository();
+        $assessmentStageRepository = new AssessmentStageRepository();
+
         $this->visitationService = new VisitationService(
             $academicRepository,
             $schoolRepository,
             $tokenService,
             $assessmentRepository,
-            $userRepository
+            $userRepository,
+            $assessmentStepsRepository,
+            $assessmentStageRepository
         );
     }
 

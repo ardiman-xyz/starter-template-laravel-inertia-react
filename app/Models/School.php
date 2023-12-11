@@ -15,6 +15,7 @@ class School extends Model
     public $guarded = [];
     public $timestamps = true;
     public $keyType = "string";
+    public $incrementing = false;
 
     protected static function boot(): void
     {
