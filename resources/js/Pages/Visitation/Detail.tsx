@@ -1,7 +1,15 @@
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import {Head} from "@inertiajs/react";
+import {Assessment} from "@/types/app";
 
-const DetailVisitationPage = () => {
+interface DetailProps {
+    assessment: Assessment
+}
+
+const DetailVisitationPage = ({assessment}: DetailProps) => {
+
+    console.info(assessment)
+
     return(
         <Authenticated
             breadCrumbs={
@@ -16,8 +24,8 @@ const DetailVisitationPage = () => {
                         url: "visitation.filter",
                         disabled: false,
                         params: {
-                            year: "2023/2024",
-                            smt: "ganjil"
+                            year: assessment.academic_semester.year,
+                            smt: assessment.academic_semester.semester
                         }
                     },
                     {
@@ -30,7 +38,23 @@ const DetailVisitationPage = () => {
         >
             <Head title="Supervisi detail" />
             <div>
-                visitation detail page
+                <div className=" mx-auto py-8">
+                    <div className="flex items-center justify-between space-x-4">
+                        {
+                            assessment.assessment_steps.map((item, index) => (
+                                <>
+                                    <div className="flex items-center">
+                                        <span
+                                            className="bg-gray-300 rounded-full h-8 w-8 flex items-center justify-center">1</span>
+                                        <span className="ml-2 font-semibold">{item.assessment_stage.name}</span>
+                                    </div>
+
+                                    <div className="h-0.5 bg-gray-300 flex-1"></div>
+                                </>
+                            ))
+                        }
+                    </div>
+                </div>
             </div>
         </Authenticated>
     )

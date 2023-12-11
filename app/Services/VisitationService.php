@@ -120,6 +120,22 @@ class VisitationService
     /**
      * @throws Exception
      */
+    public function getById(string $id)
+    {
+        $assessment = $this->assessmentRepository->getById($id);
+        if(!$assessment) throw new Exception("Assessment not found");
+
+        $assessment->load(['assessmentSteps.assessmentStage' => function ($query) {
+            $query->select('id', 'name');
+        }]);
+
+        return $assessment;
+
+    }
+
+    /**
+     * @throws Exception
+     */
     public function delete(string $id): void
     {
         $assessment = $this->assessmentRepository->getById($id);

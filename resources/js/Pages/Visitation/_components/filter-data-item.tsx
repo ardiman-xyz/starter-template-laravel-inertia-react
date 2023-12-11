@@ -19,7 +19,7 @@ import {DeleteAction} from "@/Pages/Visitation/_components/delete-action";
 
 interface IProps {
     assessment: Assessment;
-    index: number
+    index: number;
 }
 
 const FilterDataItem = ({assessment, index}: IProps) => {

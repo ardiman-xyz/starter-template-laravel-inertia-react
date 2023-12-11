@@ -136,10 +136,18 @@ class VisitationController extends Controller
         }
     }
 
-    public function detail(string $assessment_id): \Inertia\Response
+    public function detail(string $assessment_id)
     {
-        $assessment = Assessment::findOrFail($assessment_id);
+        try {
+            $assessment = $this->visitationService->getById($assessment_id);
 
-        return Inertia::render("Visitation/Detail");
+            return Inertia::render("Visitation/Detail", [
+                "assessment" => $assessment
+            ]);
+        }catch (Exception $exception)
+        {
+            return  $exception->getMessage();
+        }
+
     }
 }
