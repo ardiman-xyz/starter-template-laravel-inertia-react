@@ -109,4 +109,22 @@ class VisitationController extends Controller
             ], 400);
         }
     }
+
+    public function destroy(string $id): JsonResponse
+    {
+        try {
+             $this->visitationService->delete($id);
+            return response()->json([
+                'status' => true,
+                'message' => 'Assessment teacher successfully deleted',
+                'data' => []
+            ], 200);
+        }catch (Exception $exception)
+        {
+            return response()->json([
+                'success'    => false,
+                'message'   => $exception->getMessage()
+            ], 400);
+        }
+    }
 }

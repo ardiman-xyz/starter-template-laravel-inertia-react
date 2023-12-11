@@ -1,5 +1,4 @@
 import React from "react";
-import {ClipboardEdit, ClipboardList, FileDown, MoreHorizontal, Trash2} from "lucide-react";
 
 import {
     Table,
@@ -10,24 +9,16 @@ import {
     TableRow,
 } from "@/Components/ui/table"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar"
-import {Badge} from "@/Components/ui/badge";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger
-} from "@/Components/ui/dropdown-menu";
-import {Button} from "@/Components/ui/button";
 import {DataEmpty} from "@/Components/data-empty";
+import {Assessment} from "@/types/app";
+import FilterDataItem from "@/Pages/Visitation/_components/filter-data-item";
 
 interface IProps {
-    assessments: any[];
+    assessments: Assessment[];
 }
 
-
 const FilterDataTable = ({assessments}: IProps) => {
+
     return (
         <div>
             <Table className="border">
@@ -56,63 +47,10 @@ const FilterDataTable = ({assessments}: IProps) => {
                     {
                         assessments.length > 0 && (
                             assessments.map((assessment, index) => (
-                                <TableRow>
-                                    <TableCell className="font-medium">{index + 1}</TableCell>
-                                    <TableCell className="flex items-center gap-x-3">
-                                        <Avatar className="w-6 h-6">
-                                            <AvatarImage src="https://github.com/shadcn.png" />
-                                            <AvatarFallback>RS</AvatarFallback>
-                                        </Avatar>
-                                        <p className="text-blue-800 text-sm group-hover:underline transition">
-                                            Renita Setiawti, S.Pd
-                                        </p>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge className="bg-orange-600 text-white">
-                                            Sedang berlangsung
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell className="text-center">
-                                        -
-                                    </TableCell>
-                                    <TableCell className="text-center">
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" className="h-8 w-8 p-0">
-                                                    <span className="sr-only">Open menu</span>
-                                                    <MoreHorizontal className="h-4 w-4"/>
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end">
-                                                <DropdownMenuItem
-                                                    className="cursor-pointer"
-                                                >
-                                                    <ClipboardList className="h-4 w-4 mr-2"/>
-                                                    Detail
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    className="cursor-pointer"
-                                                >
-                                                    <ClipboardEdit className="h-4 w-4 mr-2"/>
-                                                    Edit
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    className="cursor-pointer"
-                                                >
-                                                    <FileDown className="h-4 w-4 mr-2"/>
-                                                    Donwload report
-                                                </DropdownMenuItem>
-                                                <DropdownMenuSeparator />
-                                                <DropdownMenuItem
-                                                    className="cursor-pointer"
-                                                >
-                                                    <Trash2 className="h-4 w-4 mr-2" />
-                                                    Delete
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </TableCell>
-                                </TableRow>
+                                <FilterDataItem
+                                    assessment={assessment}
+                                    index={index}
+                                />
                             ))
                         )
                     }

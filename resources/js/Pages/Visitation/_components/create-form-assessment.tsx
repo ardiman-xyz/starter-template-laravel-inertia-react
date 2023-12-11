@@ -9,10 +9,16 @@ import {Avatar, AvatarFallback, AvatarImage} from "@/Components/ui/avatar";
 import {User} from "@/types/app";
 import {DataEmpty} from "@/Components/data-empty";
 import {getFirstTwoLettersOfLastName} from "@/helper";
+import useTeachersStore from "@/Context/useTeachersStore";
 
 interface IProps {
     year:string;
     semester: string;
+}
+
+interface TeachersState {
+    teachers: User[];
+    fetchTeachers: () => Promise<User[]>;
 }
 
 export const CreateFormAssessment = ({year, semester}: IProps) => {
@@ -20,9 +26,12 @@ export const CreateFormAssessment = ({year, semester}: IProps) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isLoadingPost, setIsLoadingPost] = useState<boolean>(false);
-    const [teachers, setTeachers] = useState<User[] | []>([]);
+    const [teachersData, setTeachers] = useState<User[] | []>([]);
 
     const [selectedTeacher, setSelectedTeacher] = useState<User | null>(null);
+
+    // @ts-ignore
+    const { teachers, fetchTeachers }: TeachersState = useTeachersStore();
 
     const selectTeacher = (teacher: User) => {
         if(teacher.id === selectedTeacher?.id) {
@@ -42,14 +51,9 @@ export const CreateFormAssessment = ({year, semester}: IProps) => {
     const openModal = async () => {
         toggleModal()
         setIsLoading(true)
-        await axios.get("/visitation/teachers")
-            .then((data) => {
-                setTeachers(data.data.teachers)
-            }).catch(err => {
-                console.info(err)
-            }).finally(() => {
-                setIsLoading(false)
-            })
+        const data = await fetchTeachers();
+        setTeachers(data);
+        setIsLoading(false)
     }
 
     const handleSubmit = async () => {

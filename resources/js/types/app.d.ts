@@ -27,4 +27,11 @@ export interface Instrument {
     is_multiple?: number
 }
 
-// export interface A
+export type Assessment = {
+    id: string;
+    academic_semester_id : number;
+    teacher : User;
+    title?: null;
+    created_at: string;
+    updated_at: string;
+}

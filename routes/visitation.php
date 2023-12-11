@@ -10,6 +10,7 @@ Route::middleware(["cekCookie"])->group(function () {
             Route::get("filter", [\App\Http\Controllers\VisitationController::class, "filter"])->name("visitation.filter");
             Route::get("teachers", [\App\Http\Controllers\VisitationController::class, "teacher"]);
             Route::post("teacher/attach", [\App\Http\Controllers\VisitationController::class, "attach"]);
+            Route::delete("teacher/{id}", [\App\Http\Controllers\VisitationController::class, "destroy"]);
         });
 
     });

@@ -88,4 +88,20 @@ class VisitationService
             throw new Exception("something wrong!");
         }
     }
+
+    /**
+     * @throws Exception
+     */
+    public function delete(string $id): void
+    {
+        $assessment = $this->assessmentRepository->getById($id);
+        if(!$assessment) throw new Exception("Assessment not found");
+
+        try {
+            $this->assessmentRepository->deleteById($id);
+        }catch (Exception $exception)
+        {
+            throw new Exception("Something wrong, try again");
+        }
+    }
 }

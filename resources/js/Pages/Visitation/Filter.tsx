@@ -3,19 +3,19 @@ import {Head, Link} from "@inertiajs/react";
 import Heading from "@/Components/Heading";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/Components/ui/select";
 import {Button} from "@/Components/ui/button";
-import {PlusCircle, Search} from "lucide-react";
 import FilterDataTable from "@/Pages/Visitation/_components/filter-data-table";
 import {CreateFormAssessment} from "@/Pages/Visitation/_components/create-form-assessment";
+import {Assessment} from "@/types/app";
 
 
 interface FilterProps {
-    data: any[],
+    data: Assessment[],
     year: string;
     semester: string;
 }
 
 const FilterPage = ({data, year, semester}: FilterProps) => {
-    console.info(data)
+
     return(
         <Authenticated>
             <Head title="Visitasi tahun 2023/2024 ganjil" />
