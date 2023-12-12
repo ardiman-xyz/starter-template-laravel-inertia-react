@@ -137,9 +137,10 @@ class VisitationService
                         $isAllFinished = false;
                     }
 
+                    $scheduled['id']    = $hasSchedule->id;
                     $scheduled['status'] = true;
-                    $scheduled['started_at'] = Carbon::parse($hasSchedule->started_at)->translatedFormat('l, d F Y') . ' : ' . Carbon::parse($hasSchedule->started_at)->translatedFormat('H:i');
-                    $scheduled['finished_at'] = Carbon::parse($hasSchedule->finished_at)->translatedFormat('l, d F Y') . ' : ' . Carbon::parse($hasSchedule->finished_at)->translatedFormat('H:i');
+                    $scheduled['started_at'] = $hasSchedule->started_at;
+                    $scheduled['finished_at'] =$hasSchedule->finished_at;
                     $scheduled['progress'] = $hasSchedule->status;
                 }
                 else {
@@ -215,6 +216,51 @@ class VisitationService
         {
             throw new $exception;
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function update_date(SetUpDateDTO $dto, string $id): \App\Models\AssessmentSchedule
+    {
+        $assessment = $this->assessmentRepository->getById($dto->assessmentId);
+        if(!$assessment) throw new Exception("Assessment not found");
+
+        $stage = $this->assessmentStageRepository->getByName($dto->stageName);
+        if(!$stage) throw new Exception("Stage not found");
+
+        $instrument = $this->instrumentRepository->getById($dto->instrumentId);
+        if(!$instrument) throw new Exception("Instrument not found");
+
+        $schedule = $this->scheduleRepository->getById($id);
+        if(!$schedule) throw new Exception("Schedule not found");
+
+        $datetimeStart = $dto->dateStart . ' ' . $dto->timeStart;
+        $datetimeEnd = $dto->dateEnd . ' ' . $dto->timeEnd;
+
+        $startedAt = DateTime::createFromFormat('Y-m-d H:i', $datetimeStart);
+        $endedAt = DateTime::createFromFormat('Y-m-d H:i', $datetimeEnd);
+
+        $schedule->assessment_id = $dto->assessmentId;
+        $schedule->assessment_stage_id = $stage->id;
+        $schedule->instrument_id = $dto->instrumentId;
+        $schedule->started_at = $startedAt;
+        $schedule->finished_at = $endedAt;
+
+        return $this->scheduleRepository->update($schedule->id, $schedule);
+
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function reset_schedule(string $id)
+    {
+        $schedule = $this->scheduleRepository->getById($id);
+        if(!$schedule) throw new Exception("Schedule not found");
+
+        return $this->scheduleRepository->deleteById($id);
+
     }
 
     /**

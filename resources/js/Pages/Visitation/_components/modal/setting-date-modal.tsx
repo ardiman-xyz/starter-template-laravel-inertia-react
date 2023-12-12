@@ -6,18 +6,21 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import {router} from "@inertiajs/react";
 import {RotateCw} from "lucide-react";
+import moment from 'moment';
 
 import Modal from "@/Components/Modal";
 import { Button } from "@/Components/ui/button"
 import { Input } from "@/Components/ui/input"
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/Components/ui/form";
 import useVisitationContext from "@/Context/useVisitationContext";
+import {Schedule} from "@/types/app";
 
 
 interface IProps {
     onClose : () => void;
-    name: string;
     id: number;
+    name: string;
+    schedule?: Schedule
 }
 
 
@@ -37,27 +40,44 @@ const formSchema = z
         }),
     })
 
-export const SettingDateModal = ({onClose, name, id}: IProps) => {
+export const SettingDateModal = ({onClose, schedule, id, name}: IProps) => {
 
     const { assessmentId, stageName } = useVisitationContext();
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
+    const data = {
+        date_start: moment(schedule?.started_at).format('YYYY-MM-DD'),
+        time_start: moment(schedule?.started_at).format('HH:mm'),
+
+        date_end: moment(schedule?.finished_at).format('YYYY-MM-DD'),
+        time_end: moment(schedule?.finished_at).format('HH:mm'),
+    }
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            date_start: "",
-            time_start: "",
-            date_end: "",
-            time_end: "",
+            date_start: schedule?.status ? data.date_start : "",
+            time_start: schedule?.status ? data.time_start : "",
+            date_end: schedule?.status ? data.date_end : "",
+            time_end: schedule?.status ? data.time_end : "",
         },
     });
 
+
     async function onSubmit(values: z.infer<typeof formSchema>) {
+
+        let url = `/visitation/${assessmentId}/date/${id}`;
+
+        if(schedule?.status)
+        {
+            url = `/visitation/${assessmentId}/date/${id}/update/${schedule.id}`;
+        }
+
         const finalData = {...values, stageName }
         setIsLoading(true);
         await axios
-            .post(`/visitation/${assessmentId}/date/${id}`, finalData)
+            .post(url, finalData)
             .then((data) => {
                 console.info(data)
                 const { message } = data.data;

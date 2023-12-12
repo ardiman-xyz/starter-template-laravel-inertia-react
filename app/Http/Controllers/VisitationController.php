@@ -182,4 +182,49 @@ class VisitationController extends Controller
             ], 400);
         }
     }
+
+    public function update_date(SetUpDateRequest $request, string $assessment_id, string $instrument_id, string $id): JsonResponse
+    {
+        $data = $request->validationData();
+
+        $dto = new SetUpDateDTO();
+        $dto->assessmentId  = $assessment_id;
+        $dto->stageName     = $data["stageName"];
+        $dto->instrumentId  = $instrument_id;
+        $dto->dateStart     = $data["date_start"];
+        $dto->timeStart     = $data["time_start"];
+        $dto->dateEnd       = $data["date_end"];
+        $dto->timeEnd       = $data["time_end"];
+
+        try {
+            $this->visitationService->update_date($dto, $id);
+            return response()->json([
+                'status' => true,
+                'message' => 'successfully updated date',
+                'data' => []
+            ], 200);
+        }catch (Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage()
+            ], 400);
+        }
+    }
+
+    public function reset_date(string $id): JsonResponse
+    {
+        try {
+            $this->visitationService->reset_schedule($id);
+            return response()->json([
+                'status' => true,
+                'message' => 'successfully reset',
+                'data' => []
+            ], 200);
+        }catch (Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage()
+            ], 400);
+        }
+    }
 }

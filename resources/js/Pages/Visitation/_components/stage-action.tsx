@@ -1,28 +1,30 @@
 import {useState} from "react";
-import {MoreHorizontal} from "lucide-react";
+import {ClipboardList, MoreHorizontal, Pencil, XCircle} from "lucide-react";
 
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu"
 import {SettingDateModal} from "@/Pages/Visitation/_components/modal/setting-date-modal";
+import {Schedule} from "@/types/app";
+import CancelConfirm from "@/Pages/Visitation/_components/modal/cancel-confirm";
 
 
 interface IProps {
     id: number;
     name: string;
-    scheduled?: boolean
+    scheduled?: Schedule
 }
 
 export const StageAction = ({id, name, scheduled}: IProps) => {
 
     const [modalSetUpDate, setModalSetUpDate] = useState<boolean>(false);
+    const [cancelModal, setCancelModal] = useState<boolean>(false);
 
-    const dateTitleMenu = scheduled ? "Ubah tanggal" : "Atur tanggal ";
+    const dateTitleMenu = scheduled?.status ? "Ubah tanggal" : "Atur tanggal ";
 
     return (
         <div>
@@ -31,17 +33,38 @@ export const StageAction = ({id, name, scheduled}: IProps) => {
                     <MoreHorizontal className="h-4 w-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                    <DropdownMenuLabel>Visitation </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="cursor-pointer" onClick={() => setModalSetUpDate(true)}>{dateTitleMenu}</DropdownMenuItem>
-                    <DropdownMenuItem>Team</DropdownMenuItem>
-                    <DropdownMenuItem>Subscription</DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer" onClick={() => setModalSetUpDate(true)}>
+                        <Pencil className="w-4 h-4 mr-2" />
+                        {dateTitleMenu}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer">
+                        <ClipboardList className="w-4 h-4 mr-2" /> Instrumen
+                    </DropdownMenuItem>
+                    {
+                        scheduled?.status && (
+                            <DropdownMenuSeparator />
+                        )
+                    }
+                    {
+                        scheduled?.status && (
+                            <DropdownMenuItem className="cursor-pointer" onClick={() => setCancelModal(true)}>
+                                <XCircle className="h-4 w-4 mr-2" />
+                                Batalkan
+                            </DropdownMenuItem>
+                        )
+                    }
                 </DropdownMenuContent>
             </DropdownMenu>
 
             {
                 modalSetUpDate && (
-                    <SettingDateModal id={id} name={name} onClose={() => setModalSetUpDate(false)} />
+                    <SettingDateModal schedule={scheduled} id={id} name={name} onClose={() => setModalSetUpDate(false)} />
+                )
+            }
+
+            {
+                cancelModal && (
+                    <CancelConfirm id={scheduled?.id} onClose={() => setCancelModal(false)} />
                 )
             }
         </div>

@@ -1,4 +1,6 @@
 import {Instrument} from "@/types/app";
+import moment from 'moment';
+import 'moment/locale/id';
 
 import {
     Table,
@@ -20,8 +22,6 @@ interface StageDetailProps {
 }
 
 export const StageDetail = ({instruments, stage}: StageDetailProps) => {
-    console.info(instruments)
-
     const { setStageName } = useVisitationContext();
 
     useEffect(() => {
@@ -56,10 +56,12 @@ export const StageDetail = ({instruments, stage}: StageDetailProps) => {
                                         ): (
                                             <ul>
                                                 <li>
-                                                    <span className="font-bold">Mulai</span> : {instrument.scheduled?.started_at}
+                                                    <span
+                                                        className="font-bold">Mulai</span> : {moment(instrument.scheduled?.started_at).format(' D/MM/YYYY : HH:mm')}
                                                 </li>
                                                 <li>
-                                                    <span className="font-bold">Berakhir</span> : {instrument.scheduled?.finished_at}
+                                                    <span
+                                                        className="font-bold">Berakhir</span> : {moment(instrument.scheduled?.finished_at).format(' D/MM/YYYY : HH:mm')}
                                                 </li>
                                             </ul>
                                         )
@@ -90,7 +92,7 @@ export const StageDetail = ({instruments, stage}: StageDetailProps) => {
                                    <StageAction
                                         id={instrument.id}
                                         name={instrument.name}
-                                        scheduled={instrument.scheduled?.status}
+                                        scheduled={instrument.scheduled}
                                    />
                                 </TableCell>
                             </TableRow>

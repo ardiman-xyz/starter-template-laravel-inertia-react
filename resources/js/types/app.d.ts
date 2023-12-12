@@ -17,6 +17,7 @@ export interface User {
 }
 
 export type Schedule = {
+    id: number;
     status: boolean;
     started_at? : string;
     finished_at?: string;

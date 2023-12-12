@@ -7,6 +7,12 @@ use App\Models\AssessmentSchedule as Model;
 
 class AssessmentScheduleRepository
 {
+
+    public function getById(string $id)
+    {
+        return Model::find($id);
+    }
+
     public function create(AssessmentScheduleEntity $entity)
     {
         return Model::create([
@@ -25,5 +31,18 @@ class AssessmentScheduleRepository
                     ->where("assessment_stage_id", $stage_id)
                     ->where("instrument_id", $instrument_id)
                     ->first();
+    }
+
+    public function update(string $id, Model $schedule)
+    {
+        $schedule->id = $id;
+        $schedule->save();
+
+        return $schedule;
+    }
+
+    public function deleteById(string $id)
+    {
+        return Model::where("id", $id)->delete();
     }
 }
