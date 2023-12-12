@@ -50,16 +50,16 @@ export const StageDetail = ({instruments, stage}: StageDetailProps) => {
                                 <TableCell>
                                     {
                                         instrument.scheduled?.status === false ? (
-                                            <Badge variant="destructive">
+                                            <Badge variant="destructive" className="text-xs">
                                                 Date not setup yet
                                             </Badge>
                                         ): (
                                             <ul>
-                                                <li>
+                                                <li className="text-xs">
                                                     <span
                                                         className="font-bold">Mulai</span> : {moment(instrument.scheduled?.started_at).format(' D/MM/YYYY : HH:mm')}
                                                 </li>
-                                                <li>
+                                                <li className="text-xs">
                                                     <span
                                                         className="font-bold">Berakhir</span> : {moment(instrument.scheduled?.finished_at).format(' D/MM/YYYY : HH:mm')}
                                                 </li>

@@ -63,10 +63,10 @@ const CancelConfirm = ({onClose, id}: IProps) => {
                         {isLoading && (
                             <RotateCw className="mr-2 h-4 w-4 animate-spin"/>
                         )}
-                        Konfirmasi
+                        Iya, Batalkan
                     </Button>
                     <Button disabled={isLoading} variant="outline" onClick={onClose}>
-                        Batalkan
+                        Tidak
                     </Button>
                 </div>
             </div>

@@ -10,6 +10,7 @@ use App\Repositories\AcademicSemesterRepository;
 use App\Repositories\AssessmentRepository;
 use App\Repositories\AssessmentScheduleRepository;
 use App\Repositories\AssessmentStageRepository;
+use App\Repositories\InstrumentCriteriaRepository;
 use App\Repositories\InstrumentRepository;
 use App\Repositories\SchoolRepository;
 use App\Repositories\UserRepository;
@@ -28,6 +29,7 @@ class VisitationService
     private AssessmentStageRepository $assessmentStageRepository;
     private InstrumentRepository $instrumentRepository;
     private AssessmentScheduleRepository $scheduleRepository;
+    private InstrumentCriteriaRepository $criteriaRepository;
 
     public function __construct(
         AcademicSemesterRepository $academicSemesterRepository,
@@ -37,7 +39,8 @@ class VisitationService
         UserRepository $userRepository,
         AssessmentStageRepository $assessmentStageRepository,
         InstrumentRepository $instrumentRepository,
-        AssessmentScheduleRepository $scheduleRepository
+        AssessmentScheduleRepository $scheduleRepository,
+        InstrumentCriteriaRepository $criteriaRepository,
     )
     {
         $this->academicSemesterRepository = $academicSemesterRepository;
@@ -48,6 +51,7 @@ class VisitationService
         $this->assessmentStageRepository = $assessmentStageRepository;
         $this->instrumentRepository = $instrumentRepository;
         $this->scheduleRepository = $scheduleRepository;
+        $this->criteriaRepository = $criteriaRepository;
 
     }
 
@@ -261,6 +265,20 @@ class VisitationService
 
         return $this->scheduleRepository->deleteById($id);
 
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function instrument_criteria(string $assessment_id, string $instrument_id)
+    {
+        $assessment = $this->assessmentRepository->getById($assessment_id);
+        if(!$assessment) throw new Exception("Assessment not found");
+
+        $instrument = $this->instrumentRepository->getById($instrument_id);
+        if(!$instrument) throw new Exception("Instrument not found");
+
+        return $this->criteriaRepository->getByInstrumentId($instrument_id);
     }
 
     /**

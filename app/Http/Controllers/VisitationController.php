@@ -10,6 +10,7 @@ use App\Repositories\AcademicSemesterRepository;
 use App\Repositories\AssessmentRepository;
 use App\Repositories\AssessmentScheduleRepository;
 use App\Repositories\AssessmentStageRepository;
+use App\Repositories\InstrumentCriteriaRepository;
 use App\Repositories\InstrumentRepository;
 use App\Repositories\SchoolRepository;
 use App\Repositories\UserRepository;
@@ -34,6 +35,7 @@ class VisitationController extends Controller
         $assessmentStageRepository = new AssessmentStageRepository();
         $instrumentRepository = new InstrumentRepository();
         $scheduleRepository = new AssessmentScheduleRepository();
+        $instrumentCriteriaRepository = new InstrumentCriteriaRepository();
 
         $this->visitationService = new VisitationService(
             $academicRepository,
@@ -43,7 +45,8 @@ class VisitationController extends Controller
             $userRepository,
             $assessmentStageRepository,
             $instrumentRepository,
-            $scheduleRepository
+            $scheduleRepository,
+            $instrumentCriteriaRepository
         );
     }
 
@@ -219,6 +222,23 @@ class VisitationController extends Controller
                 'status' => true,
                 'message' => 'successfully reset',
                 'data' => []
+            ], 200);
+        }catch (Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage()
+            ], 400);
+        }
+    }
+
+    public function instrument_items(string $assessment_id, string $id): JsonResponse
+    {
+        try {
+            $data = $this->visitationService->instrument_criteria($assessment_id, $id);
+            return response()->json([
+                'status' => true,
+                'message' => 'successfully get data',
+                'data' => $data
             ], 200);
         }catch (Exception $exception) {
             return response()->json([

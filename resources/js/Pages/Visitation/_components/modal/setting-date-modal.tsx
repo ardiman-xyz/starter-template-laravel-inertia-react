@@ -79,7 +79,6 @@ export const SettingDateModal = ({onClose, schedule, id, name}: IProps) => {
         await axios
             .post(url, finalData)
             .then((data) => {
-                console.info(data)
                 const { message } = data.data;
                 toast.success(`${message}`);
                 form.reset();

@@ -11,6 +11,7 @@ import {
 import {SettingDateModal} from "@/Pages/Visitation/_components/modal/setting-date-modal";
 import {Schedule} from "@/types/app";
 import CancelConfirm from "@/Pages/Visitation/_components/modal/cancel-confirm";
+import InstrumentModal from "@/Pages/Visitation/_components/modal/instrument-modal";
 
 
 interface IProps {
@@ -23,6 +24,7 @@ export const StageAction = ({id, name, scheduled}: IProps) => {
 
     const [modalSetUpDate, setModalSetUpDate] = useState<boolean>(false);
     const [cancelModal, setCancelModal] = useState<boolean>(false);
+    const [instrumentModal, setInstrumentModal] = useState<boolean>(false);
 
     const dateTitleMenu = scheduled?.status ? "Ubah tanggal" : "Atur tanggal ";
 
@@ -37,8 +39,8 @@ export const StageAction = ({id, name, scheduled}: IProps) => {
                         <Pencil className="w-4 h-4 mr-2" />
                         {dateTitleMenu}
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer">
-                        <ClipboardList className="w-4 h-4 mr-2" /> Instrumen
+                    <DropdownMenuItem className="cursor-pointer" onClick={() => setInstrumentModal(true)}>
+                        <ClipboardList className="w-4 h-4 mr-2" /> Instrumen & nilai
                     </DropdownMenuItem>
                     {
                         scheduled?.status && (
@@ -65,6 +67,12 @@ export const StageAction = ({id, name, scheduled}: IProps) => {
             {
                 cancelModal && (
                     <CancelConfirm id={scheduled?.id} onClose={() => setCancelModal(false)} />
+                )
+            }
+
+            {
+                instrumentModal && (
+                    <InstrumentModal  onClose={() => setInstrumentModal(false)} instrumentId={id} name={name} />
                 )
             }
         </div>
