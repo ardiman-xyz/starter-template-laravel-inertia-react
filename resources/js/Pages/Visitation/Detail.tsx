@@ -1,15 +1,34 @@
-import Authenticated from "@/Layouts/AuthenticatedLayout";
+import {useEffect, useState} from "react";
 import {Head} from "@inertiajs/react";
-import {Assessment} from "@/types/app";
+
+import {Assessment, StageSchedule} from "@/types/app";
+import Authenticated from "@/Layouts/AuthenticatedLayout";
+import StageItemLayout from "./_components/stage-item";
+import {StageDetail} from "@/Pages/Visitation/_components/stage-detail";
+import useVisitationContext from "@/Context/useVisitationContext";
 
 interface DetailProps {
-    assessment: Assessment
+    data: {
+        assessment: Assessment,
+        stages: StageSchedule[]
+    }
 }
 
-const DetailVisitationPage = ({assessment}: DetailProps) => {
+const DetailVisitationPage = ({data}: DetailProps) => {
 
-    console.info(assessment)
+    const { setAssessmentId } = useVisitationContext();
+    const [activeStage, setActiveStage] = useState("");
 
+    useEffect(() => {
+        if (data.stages.some(stage => stage.name === "pra observasi")) {
+            setActiveStage("pra observasi");
+            setAssessmentId(data.assessment.id)
+        }
+    }, [data.stages]);
+
+    const handleStageClick = (stageName: string) => {
+        setActiveStage(stageName);
+    }
     return(
         <Authenticated
             breadCrumbs={
@@ -24,8 +43,8 @@ const DetailVisitationPage = ({assessment}: DetailProps) => {
                         url: "visitation.filter",
                         disabled: false,
                         params: {
-                            year: assessment.academic_semester.year,
-                            smt: assessment.academic_semester.semester
+                            year: data.assessment.academic_semester.year,
+                            smt: data.assessment.academic_semester.semester
                         }
                     },
                     {
@@ -38,23 +57,35 @@ const DetailVisitationPage = ({assessment}: DetailProps) => {
         >
             <Head title="Supervisi detail" />
             <div>
-                <div className=" mx-auto py-8">
+                <div className="py-8">
                     <div className="flex items-center justify-between space-x-4">
                         {
-                            assessment.assessment_steps.map((item, index) => (
-                                <>
-                                    <div className="flex items-center">
-                                        <span
-                                            className="bg-gray-300 rounded-full h-8 w-8 flex items-center justify-center">1</span>
-                                        <span className="ml-2 font-semibold">{item.assessment_stage.name}</span>
-                                    </div>
-
-                                    <div className="h-0.5 bg-gray-300 flex-1"></div>
-                                </>
+                            data.stages.map((stage, index) => (
+                                <StageItemLayout
+                                    stage={stage}
+                                    index={index}
+                                    stages={data.stages}
+                                    onStageClick={handleStageClick}
+                                    activeStage={activeStage}
+                                />
                             ))
                         }
                     </div>
                 </div>
+            </div>
+            <div className="mt-4 w-full">
+                {
+                    activeStage !== "" && (
+                        <StageDetail
+                            stage={
+                                data.stages.find(stage => stage.name === activeStage) || { id: "", name: "" }
+                            }
+                            instruments={
+                                data.stages.find(stage => stage.name === activeStage)?.instruments || []
+                            }
+                        />
+                    )
+                }
             </div>
         </Authenticated>
     )

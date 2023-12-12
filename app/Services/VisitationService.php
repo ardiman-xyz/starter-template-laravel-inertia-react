@@ -3,16 +3,20 @@
 namespace App\Services;
 
 use App\DTO\CreateAssessmentDTO;
+use App\DTO\SetUpDateDTO;
 use App\Entities\AssessmentEntity;
-use App\Entities\AssessmentStepEntity;
+use App\Entities\AssessmentScheduleEntity;
 use App\Repositories\AcademicSemesterRepository;
 use App\Repositories\AssessmentRepository;
+use App\Repositories\AssessmentScheduleRepository;
 use App\Repositories\AssessmentStageRepository;
-use App\Repositories\AssessmentStepRepository;
+use App\Repositories\InstrumentRepository;
 use App\Repositories\SchoolRepository;
 use App\Repositories\UserRepository;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use DateTime;
 
 class VisitationService
 {
@@ -21,8 +25,9 @@ class VisitationService
     private TokenService $tokenService;
     private AssessmentRepository $assessmentRepository;
     private UserRepository $userRepository;
-    private AssessmentStepRepository $assessmentStepRepository;
     private AssessmentStageRepository $assessmentStageRepository;
+    private InstrumentRepository $instrumentRepository;
+    private AssessmentScheduleRepository $scheduleRepository;
 
     public function __construct(
         AcademicSemesterRepository $academicSemesterRepository,
@@ -30,8 +35,9 @@ class VisitationService
         TokenService $tokenService,
         AssessmentRepository $assessmentRepository,
         UserRepository $userRepository,
-        AssessmentStepRepository $assessmentStepRepository,
-        AssessmentStageRepository $assessmentStageRepository
+        AssessmentStageRepository $assessmentStageRepository,
+        InstrumentRepository $instrumentRepository,
+        AssessmentScheduleRepository $scheduleRepository
     )
     {
         $this->academicSemesterRepository = $academicSemesterRepository;
@@ -39,8 +45,9 @@ class VisitationService
         $this->tokenService = $tokenService;
         $this->assessmentRepository = $assessmentRepository;
         $this->userRepository = $userRepository;
-        $this->assessmentStepRepository = $assessmentStepRepository;
         $this->assessmentStageRepository = $assessmentStageRepository;
+        $this->instrumentRepository = $instrumentRepository;
+        $this->scheduleRepository = $scheduleRepository;
 
     }
 
@@ -94,21 +101,9 @@ class VisitationService
             $createEntity->academicSemesterId = $academic->id;
             $assessment = $this->assessmentRepository->create($createEntity);
 
-            // store in table assessment_steps
-            $stages = $this->assessmentStageRepository->getAll();
-
-
-            foreach ($stages as $stage) {
-                $stepsEntity = new AssessmentStepEntity();
-                $stepsEntity->assessmentId = $assessment->id;
-                $stepsEntity->assessmentStageId = $stage->id;
-                $this->assessmentStepRepository->create($stepsEntity);
-            }
-
             DB::commit();
 
             return $assessment;
-
 
         }catch (Exception $exception)
         {
@@ -120,17 +115,106 @@ class VisitationService
     /**
      * @throws Exception
      */
-    public function getById(string $id)
+    public function getById(string $id): array
     {
+
         $assessment = $this->assessmentRepository->getById($id);
         if(!$assessment) throw new Exception("Assessment not found");
 
-        $assessment->load(['assessmentSteps.assessmentStage' => function ($query) {
-            $query->select('id', 'name');
-        }]);
+        $stages = $this->assessmentStageRepository->getAll();
+        $stagesData = [];
+        $isAllFinished = true;
+        foreach($stages as $stage)
+        {
+            $instruments = $this->instrumentRepository->getAssessmentStageId($stage->id);
+            $instrumentData = [];
+            foreach ($instruments as $instrument) {
+                $scheduled = [];
+                $hasSchedule = $this->scheduleRepository->getBySchedule($assessment->id, $stage->id, $instrument->id);
+                if ($hasSchedule) {
 
-        return $assessment;
+                    if ($hasSchedule->status !== 'finish') {
+                        $isAllFinished = false;
+                    }
 
+                    $scheduled['status'] = true;
+                    $scheduled['started_at'] = Carbon::parse($hasSchedule->started_at)->translatedFormat('l, d F Y') . ' : ' . Carbon::parse($hasSchedule->started_at)->translatedFormat('H:i');
+                    $scheduled['finished_at'] = Carbon::parse($hasSchedule->finished_at)->translatedFormat('l, d F Y') . ' : ' . Carbon::parse($hasSchedule->finished_at)->translatedFormat('H:i');
+                    $scheduled['progress'] = $hasSchedule->status;
+                }
+                else {
+                    $scheduled['status'] = false;
+                    $isAllFinished = false;
+                }
+
+                $instrumentData[] = [
+                    'id' => $instrument->id,
+                    'name' => $instrument->name,
+                    'type' => $instrument->type,
+                    'description'   => $instrument->description,
+                    'allowed_extension' => $instrument->allowed_extension,
+                    'max_size' => $instrument->max_size,
+                    'is_multiple'   => $instrument->is_multiple,
+                    'scheduled' => $scheduled
+                ];
+
+//                if (!$isAllFinished) {
+//                    break;
+//                }
+            };
+
+            $stagesData[] = [
+                'name' => $stage->name,
+                'instruments' => $instrumentData,
+                'isAllFinished' => $isAllFinished
+            ];
+
+        }
+
+        return [
+            "stages"        => $stagesData,
+            "assessment"    => $assessment
+        ];
+
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function setting_date(SetUpDateDTO $dto)
+    {
+        $assessment = $this->assessmentRepository->getById($dto->assessmentId);
+        if(!$assessment) throw new Exception("Assessment not found");
+
+        $stage = $this->assessmentStageRepository->getByName($dto->stageName);
+        if(!$stage) throw new Exception("Stage not found");
+
+        $instrument = $this->instrumentRepository->getById($dto->instrumentId);
+        if(!$instrument) throw new Exception("Instrument not found");
+
+        try {
+
+            $datetimeStart = $dto->dateStart . ' ' . $dto->timeStart;
+            $datetimeEnd = $dto->dateEnd . ' ' . $dto->timeEnd;
+
+            $startedAt = DateTime::createFromFormat('Y-m-d H:i', $datetimeStart);
+            $endedAt = DateTime::createFromFormat('Y-m-d H:i', $datetimeEnd);
+
+
+            $entity = new AssessmentScheduleEntity();
+            $entity->assessmentId = $dto->assessmentId;
+            $entity->assessmentStageId = $stage->id;
+            $entity->instrumentId = $dto->instrumentId;
+            $entity->status = "schedule";
+            $entity->startedAt = $startedAt;
+            $entity->finishedAt = $endedAt;
+
+            return $this->scheduleRepository->create($entity);
+
+        }catch (Exception $exception)
+        {
+            throw new $exception;
+        }
     }
 
     /**
@@ -141,24 +225,6 @@ class VisitationService
         $assessment = $this->assessmentRepository->getById($id);
         if(!$assessment) throw new Exception("Assessment not found");
 
-        DB::beginTransaction();
-
-        try {
-            $assessmentSteps = $this->assessmentStepRepository->getByAssessmentId($id);
-
-            if($assessmentSteps)
-            {
-                foreach($assessmentSteps as $assessmentStep) {
-                    $assessmentStep->delete();
-                }
-            }
-
-            $this->assessmentRepository->deleteById($id);
-            DB::commit();
-        }catch (Exception $exception)
-        {
-            DB::rollBack();
-            throw new $exception;
-        }
+        $this->assessmentRepository->deleteById($id);
     }
 }

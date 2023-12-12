@@ -13,6 +13,8 @@ Route::middleware(["cekCookie"])->group(function () {
             Route::delete("teacher/{id}", [\App\Http\Controllers\VisitationController::class, "destroy"]);
 
             Route::get("{assessment_id}", [\App\Http\Controllers\VisitationController::class, "detail"])->name("visitation.detail");
+
+            Route::post("{assessment_id}/date/{instrument_id}", [\App\Http\Controllers\VisitationController::class, "store_date"]);
         });
 
     });

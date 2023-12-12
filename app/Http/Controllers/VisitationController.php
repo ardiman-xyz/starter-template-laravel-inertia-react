@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\DTO\CreateAssessmentDTO;
+use App\DTO\SetUpDateDTO;
 use App\Http\Requests\CreateAssessmentRequest;
-use App\Models\Assessment;
+use App\Http\Requests\SetUpDateRequest;
 use App\Repositories\AcademicSemesterRepository;
 use App\Repositories\AssessmentRepository;
+use App\Repositories\AssessmentScheduleRepository;
 use App\Repositories\AssessmentStageRepository;
-use App\Repositories\AssessmentStepRepository;
+use App\Repositories\InstrumentRepository;
 use App\Repositories\SchoolRepository;
 use App\Repositories\UserRepository;
 use App\Services\TokenService;
@@ -29,8 +31,9 @@ class VisitationController extends Controller
         $tokenService = new TokenService();
         $assessmentRepository = new AssessmentRepository();
         $userRepository = new UserRepository();
-        $assessmentStepsRepository = new AssessmentStepRepository();
         $assessmentStageRepository = new AssessmentStageRepository();
+        $instrumentRepository = new InstrumentRepository();
+        $scheduleRepository = new AssessmentScheduleRepository();
 
         $this->visitationService = new VisitationService(
             $academicRepository,
@@ -38,8 +41,9 @@ class VisitationController extends Controller
             $tokenService,
             $assessmentRepository,
             $userRepository,
-            $assessmentStepsRepository,
-            $assessmentStageRepository
+            $assessmentStageRepository,
+            $instrumentRepository,
+            $scheduleRepository
         );
     }
 
@@ -138,16 +142,44 @@ class VisitationController extends Controller
 
     public function detail(string $assessment_id)
     {
-        try {
-            $assessment = $this->visitationService->getById($assessment_id);
 
-            return Inertia::render("Visitation/Detail", [
-                "assessment" => $assessment
-            ]);
+        try {
+            $response = $this->visitationService->getById($assessment_id);
+           return Inertia::render("Visitation/Detail", [
+               "data" => $response
+           ]);
         }catch (Exception $exception)
         {
-            return  $exception->getMessage();
+            abort(404, $exception->getMessage());
         }
+    }
 
+    public function store_date(SetUpDateRequest $request, $assessment_id, $instrument_id): JsonResponse
+    {
+        $data = $request->validationData();
+
+        $dto = new SetUpDateDTO();
+        $dto->assessmentId  = $assessment_id;
+        $dto->stageName     = $data["stageName"];
+        $dto->instrumentId  = $instrument_id;
+        $dto->dateStart     = $data["date_start"];
+        $dto->timeStart     = $data["time_start"];
+        $dto->dateEnd       = $data["date_end"];
+        $dto->timeEnd       = $data["time_end"];
+
+        try {
+            $this->visitationService->setting_date($dto);
+            return response()->json([
+                'status' => true,
+                'message' => 'successfully setup date',
+                'data' => []
+            ], 200);
+        }catch (Exception $exception)
+        {
+            return response()->json([
+                'success'    => false,
+                'message'   => $exception->getMessage()
+            ], 400);
+        }
     }
 }

@@ -27,7 +27,8 @@ class AssessmentRepository
 
     public function getById(string $id)
     {
-        return Model::with(['school', 'teacher', 'academicSemester', "assessmentSteps"])->find($id);
+        return Model::with(['school', 'teacher', 'academicSemester'])->find($id);
+
     }
 
     public function deleteById(string $id)

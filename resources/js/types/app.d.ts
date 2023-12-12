@@ -16,6 +16,13 @@ export interface User {
     updated_at: string;
 }
 
+export type Schedule = {
+    status: boolean;
+    started_at? : string;
+    finished_at?: string;
+    progress?: string;
+}
+
 export interface Instrument {
     id: number;
     assessment_stage_id: number;
@@ -23,8 +30,9 @@ export interface Instrument {
     type: string;
     description: string;
     allowed_extension: [];
-    max_size?: string
-    is_multiple?: number
+    max_size?: string;
+    is_multiple?: number;
+    scheduled? : Schedule
 }
 
 export type AcademicSemester = {
@@ -43,20 +51,16 @@ export type School = {
     updated_at?: string;
 }
 
-export type AssessmentStep = {
-    id: number;
-    assessment_id : string;
-    assessment_stage: {
-        id:number;
-        name: string;
-    }
+export type StageSchedule = {
+    name: string;
+    isAllFinished: boolean;
+    instruments: Instrument[]
 }
 
 export type Assessment = {
     id: string;
     academic_semester_id : number;
     academic_semester: AcademicSemester;
-    assessment_steps: AssessmentStep[];
     school: School;
     teacher : User;
     title?: null;

@@ -24,4 +24,9 @@ class AssessmentStageRepository
         return Model::find($id);
     }
 
+    public function getByName(string $name)
+    {
+        return Model::where("name", $name)->first();
+    }
+
 }
