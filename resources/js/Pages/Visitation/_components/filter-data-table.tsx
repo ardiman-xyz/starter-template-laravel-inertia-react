@@ -34,7 +34,7 @@ const FilterDataTable = ({assessments}: IProps) => {
                 <TableBody>
                     {
                         assessments.length < 1 && (
-                            <TableRow>
+                            <TableRow >
                                 <TableCell colSpan={5} >
                                     <div className="font-medium text-center flex items-center justify-center my-10">
                                         <DataEmpty />

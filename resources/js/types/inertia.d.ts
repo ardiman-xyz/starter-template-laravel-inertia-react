@@ -8,6 +8,7 @@ interface Auth {
 interface Ziggy {
     [key: string]: any;
     location: string;
+    url: string;
 }
 
 interface App {

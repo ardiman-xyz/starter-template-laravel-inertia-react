@@ -1,8 +1,8 @@
 import { SharedInertiaData } from "@/types/inertia";
 import { usePage } from "@inertiajs/react";
 import {
-    BookLock,
-    Layout, LibraryBig,
+    BookLock, ClipboardCheck,
+    Layout, LibraryBig, UserCircle, UserCog,
     Users,
 } from "lucide-react";
 import SidebarItem from "./SIdebarItem";
@@ -37,6 +37,18 @@ const Routes = [
         icon: Layout,
         label: "Dasbor",
         href: "/teacher/dashboard",
+        requiredRoles: ["Teacher"],
+    },
+    {
+        icon: ClipboardCheck,
+        label: "Visitasi",
+        href: "/teachers/visitation",
+        requiredRoles: ["Teacher"],
+    },
+    {
+        icon: UserCog,
+        label: "Profil",
+        href: "/teachers/profile",
         requiredRoles: ["Teacher"],
     },
 ];

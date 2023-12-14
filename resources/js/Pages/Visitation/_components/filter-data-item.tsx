@@ -26,9 +26,13 @@ const FilterDataItem = ({assessment, index}: IProps) => {
 
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState<boolean>(false);
 
+    const handleDetail = () => {
+        router.visit(route("visitation.detail", assessment.id))
+    }
+
     return(
         <>
-            <TableRow key={index}>
+            <TableRow key={index} className="cursor-pointer" onClick={handleDetail}>
                 <TableCell className="font-medium">{index + 1}</TableCell>
                 <TableCell className="flex items-center gap-x-3">
                     <Avatar className="w-6 h-6">

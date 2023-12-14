@@ -31,7 +31,7 @@ class AuthService
     /**
      * @throws Exception
      */
-    public function authenticateWithCredential(string $email, string $password): void
+    public function authenticateWithCredential(string $email, string $password)
     {
         $user = $this->userRepository->getByEmail($email);
 
@@ -46,6 +46,8 @@ class AuthService
 
         $token = $this->tokenService->generate($newPayload);
         Cookie::queue("vistoken", $token, 1440);
+
+        return $user['role'] = $user->getRoleNames()[0];
     }
 
     /**

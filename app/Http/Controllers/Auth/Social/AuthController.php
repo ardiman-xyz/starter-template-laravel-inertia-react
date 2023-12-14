@@ -61,11 +61,13 @@ class AuthController
         $data = $request->validationData();
 
         try {
-            $this->authService->authenticateWithCredential($data['email'], $data['password']);
+           $response = $this->authService->authenticateWithCredential($data['email'], $data['password']);
             return response()->json([
                 'status' => true,
                 'message' => 'Successfully login',
-                'data' => $data
+                'data' => [
+                    "role" => $response
+                ]
             ], 201);
         }catch (Exception $exception)
         {

@@ -3,6 +3,7 @@ import {AlertCircle, RotateCw} from "lucide-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {router} from "@inertiajs/react";
 
 import {useState} from "react";
 import { Input } from "@/Components/ui/input";
@@ -66,7 +67,14 @@ const AuthFomAction = ({variant}: AuthForm) => {
         await axios
             .post(url, values)
             .then((data) => {
-                window.location.reload()
+                const { role } = data.data.data;
+
+                if(role === "Teacher") {
+                    router.visit("/teacher/dashboard")
+                    return;
+                }
+                window.location.reload();
+
             })
             .catch((err) => {
                 console.info(err)

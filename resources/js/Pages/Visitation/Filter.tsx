@@ -34,7 +34,6 @@ const FilterPage = ({data, year, semester}: FilterProps) => {
             }
         >
             <Head title="Visitasi tahun 2023/2024 ganjil" />
-
             <div className="w-full flex items-center justify-between">
                 <Heading
                     title="Visitasi tahun 2023/2024 ganjil"

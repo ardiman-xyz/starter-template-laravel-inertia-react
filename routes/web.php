@@ -68,7 +68,6 @@ Route::middleware(["cekCookie"])->group(function () {
         Route::prefix("teacher")->group(function () {
             Route::get("dashboard", [\App\Http\Controllers\DashboardController::class, "index"])->name("dashboard.teacher");
         });
-
     });
 });
 
@@ -102,3 +101,4 @@ Route::middleware('auth')->group(function () {
 
 //require __DIR__.'/auth.php';
 require __DIR__.'/visitation.php';
+require __DIR__.'/teacher.php';
