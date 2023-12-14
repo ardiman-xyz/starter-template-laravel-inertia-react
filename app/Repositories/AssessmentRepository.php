@@ -31,6 +31,11 @@ class AssessmentRepository
 
     }
 
+    public function findBySchoolAndTeacher(string $schoolId, string $teacherId)
+    {
+        return Model::with('academicSemester')->where("school_id", $schoolId)->where("teacher_id", $teacherId)->get();
+    }
+
     public function deleteById(string $id)
     {
         return Model::where("id", $id)->delete();
