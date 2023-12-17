@@ -20,10 +20,16 @@ const Routes = [
         href: "/teacher",
         requiredRoles: ["Headmaster"],
     },
+    // {
+    //     icon: BookLock,
+    //     label: "Instrumen & nilai",
+    //     href: "/instrumental",
+    //     requiredRoles: ["Headmaster"],
+    // },
     {
         icon: BookLock,
         label: "Instrumen & nilai",
-        href: "/instrumental",
+        href: "/instruments",
         requiredRoles: ["Headmaster"],
     },
     {

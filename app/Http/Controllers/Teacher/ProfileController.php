@@ -50,7 +50,7 @@ class ProfileController
 
     }
 
-    public function change_password(UpdatePasswordRequest $request)
+    public function change_password(UpdatePasswordRequest $request): JsonResponse
     {
         $data = $request->validationData();
 
@@ -70,7 +70,7 @@ class ProfileController
         }
     }
 
-    public function bio(UpdateBioRequest $request)
+    public function bio(UpdateBioRequest $request): JsonResponse
     {
         $data = $request->validationData();
 

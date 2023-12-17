@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Repositories\AssessmentRepository;
-use App\Repositories\SchoolRepository;
+use App\Repositories\AssessmentScheduleRepository;
+use App\Repositories\AssessmentStageRepository;
+use App\Repositories\InstrumentRepository;
 use App\Repositories\UserRepository;
 use App\Services\Teachers\VisitationService;
 use App\Services\TokenService;
 use Inertia\Inertia;
+use Exception;
 
 class VisitationController
 {
@@ -15,11 +18,21 @@ class VisitationController
 
     public function __construct()
     {
-        $assessmentRepository = new AssessmentRepository();
-        $schoolRepository = new SchoolRepository();
         $tokenService = new TokenService();
+        $assessmentRepository = new AssessmentRepository();
         $userRepository = new UserRepository();
-        $this->visitationService = new VisitationService($assessmentRepository, $schoolRepository, $tokenService, $userRepository);
+        $assessmentStageRepository = new AssessmentStageRepository();
+        $instrumentRepository = new InstrumentRepository();
+        $scheduleRepository = new AssessmentScheduleRepository();
+
+        $this->visitationService = new VisitationService(
+            $assessmentRepository,
+            $tokenService,
+            $assessmentStageRepository,
+            $userRepository,
+            $instrumentRepository,
+            $scheduleRepository,
+        );
     }
 
     public function index(): \Inertia\Response
@@ -33,6 +46,14 @@ class VisitationController
 
     public function show(string $id)
     {
-        dd($id);
+        try {
+            $response = $this->visitationService->getById($id);
+            return Inertia::render("Teachers/Visitation/Detail", [
+                "data" => $response
+            ]);
+        }catch (Exception $exception)
+        {
+            abort(404, $exception->getMessage());
+        }
     }
 }

@@ -1,0 +1,65 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\StoreComponentRequest;
+use App\Repositories\ComponentRepository;
+use App\Services\ComponentService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Exception;
+
+class InstrumentController extends Controller
+{
+    private ComponentService $componentService;
+
+    public function __construct()
+    {
+        $componentRepository = new ComponentRepository();
+        $this->componentService = new ComponentService($componentRepository);
+    }
+
+    public function index(): \Inertia\Response
+    {
+        $instruments = $this->componentService->getAll();
+
+        return Inertia::render("Instruments/Index", [
+            "instruments"    => $instruments
+        ]);
+    }
+
+    public function store(StoreComponentRequest $request): JsonResponse
+    {
+        $data = $request->validationData();
+
+        try {
+            $this->componentService->create($data['name']);
+            return response()->json([
+                'status' => true,
+                'message' => 'Instrument successfully created!',
+                'data' => []
+            ], 201);
+        }catch (Exception $exception)
+        {
+            return response()->json([
+                'success'    => false,
+                'message'   => $exception->getMessage()
+            ], 400);
+        }
+
+    }
+
+    public function show(string $id): \Inertia\Response
+    {
+        try {
+            $instrument = $this->componentService->getById($id);
+            return Inertia::render("Instruments/Detail", [
+                "instrument" => $instrument
+            ]);
+        }catch (Exception $exception)
+        {
+            abort(404, $exception->getMessage());
+        }
+    }
+}

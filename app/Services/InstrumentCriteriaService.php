@@ -27,7 +27,7 @@ class InstrumentCriteriaService
     public function getAll(string $instrumentId)
     {
         $instrument = $this->instrumentRepository->getById($instrumentId);
-        if(!$instrument) throw new Exception("Instrument not found");
+        if(!$instrument) throw new Exception("InstrumentController not found");
 
         return $this->criteriaRepository->getByInstrumentId($instrumentId);
     }
@@ -38,7 +38,7 @@ class InstrumentCriteriaService
     public function create(CreateInstrumentCriteriaDTO $criteriaDTO)
     {
         $instrument = $this->instrumentRepository->getById($criteriaDTO->instrumentId);
-        if(!$instrument) throw new Exception("Instrument not found");
+        if(!$instrument) throw new Exception("InstrumentController not found");
 
         try {
 
@@ -61,7 +61,7 @@ class InstrumentCriteriaService
     public function update(UpdateInstrumentItemDTO $data)
     {
         $criteria = $this->criteriaRepository->getById($data->id);
-        if(!$criteria) throw new Exception("Instrument item not found");
+        if(!$criteria) throw new Exception("InstrumentController item not found");
 
         $criteria->title = $data->title;
         $criteria->max_score = (int) $data->maxScore;
@@ -76,7 +76,7 @@ class InstrumentCriteriaService
     public function delete(string $id): void
     {
         $criteria = $this->criteriaRepository->getById($id);
-        if(!$criteria) throw new Exception("Instrument item not found");
+        if(!$criteria) throw new Exception("InstrumentController item not found");
 
         $this->criteriaRepository->deleteById($id);
     }

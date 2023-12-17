@@ -195,7 +195,7 @@ class VisitationService
         if(!$stage) throw new Exception("Stage not found");
 
         $instrument = $this->instrumentRepository->getById($dto->instrumentId);
-        if(!$instrument) throw new Exception("Instrument not found");
+        if(!$instrument) throw new Exception("InstrumentController not found");
 
         try {
 
@@ -234,7 +234,7 @@ class VisitationService
         if(!$stage) throw new Exception("Stage not found");
 
         $instrument = $this->instrumentRepository->getById($dto->instrumentId);
-        if(!$instrument) throw new Exception("Instrument not found");
+        if(!$instrument) throw new Exception("InstrumentController not found");
 
         $schedule = $this->scheduleRepository->getById($id);
         if(!$schedule) throw new Exception("Schedule not found");
@@ -276,7 +276,7 @@ class VisitationService
         if(!$assessment) throw new Exception("Assessment not found");
 
         $instrument = $this->instrumentRepository->getById($instrument_id);
-        if(!$instrument) throw new Exception("Instrument not found");
+        if(!$instrument) throw new Exception("InstrumentController not found");
 
         return $this->criteriaRepository->getByInstrumentId($instrument_id);
     }

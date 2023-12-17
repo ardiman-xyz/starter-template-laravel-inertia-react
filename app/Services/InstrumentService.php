@@ -70,7 +70,7 @@ class InstrumentService
     {
         $instrument = $this->instrumentRepository->getById($id);
 
-        if(!$instrument) throw new Exception("Instrument not found");
+        if(!$instrument) throw new Exception("InstrumentController not found");
 
         $allowed_extensions_string = implode(", ", $data->allowedExtensions);
 
@@ -90,7 +90,7 @@ class InstrumentService
     public function delete(string $id): void
     {
         $instrument = $this->instrumentRepository->getById($id);
-        if(!$instrument) throw new Exception("Instrument not found");
+        if(!$instrument) throw new Exception("InstrumentController not found");
 
         $this->instrumentRepository->delete($id);
     }

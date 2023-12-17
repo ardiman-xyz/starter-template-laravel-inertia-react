@@ -68,3 +68,21 @@ export type Assessment = {
     created_at: string;
     updated_at: string;
 }
+
+export type Component = {
+    id: number;
+    name: string;
+    type?: string;
+    description?: string;
+    allowed_extension?: [];
+    max_size?: string;
+    is_multiple?: number;
+    details: ComponentDetail [];
+}
+
+export type ComponentDetail = {
+    id: number;
+    name: string;
+    description?: string;
+    max_score: number
+}

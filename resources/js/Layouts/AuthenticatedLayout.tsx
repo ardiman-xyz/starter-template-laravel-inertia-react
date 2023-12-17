@@ -1,7 +1,7 @@
 import React from "react";
 import { Toaster } from "sonner";
 
-// import { Navbar } from "@/Components/Navbar";
+// import { Navbar } from "@/Instruments/Navbar";
 import Sidebar from "@/Components/Sidebar";
 import {MobileSidebar} from "@/Components/MobileSidebar";
 import {NavbarRoutes} from "@/Components/NavbarRoutes";

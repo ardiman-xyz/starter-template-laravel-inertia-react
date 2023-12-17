@@ -16,7 +16,11 @@ export const NavbarRoutes = () => {
             <DropdownMenu>
                 <DropdownMenuTrigger>
                     <Avatar>
-                        <AvatarImage src={ziggy?.url+"/storage/"+auth?.user?.profile_picture} />
+                        {
+                            auth?.user?.profile_picture !== null && (
+                                <AvatarImage src={ziggy?.url+"/storage/"+auth?.user?.profile_picture} />
+                            )
+                        }
                         <AvatarFallback>G</AvatarFallback>
                     </Avatar>
                 </DropdownMenuTrigger>

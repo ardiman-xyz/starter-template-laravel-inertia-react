@@ -58,9 +58,14 @@ Route::middleware(["cekCookie"])->group(function () {
             Route::post("{instrument_id}/instrument/criteria", [\App\Http\Controllers\InstrumentCriteriaController::class, "store"]);
             Route::put("instrument/criteria", [\App\Http\Controllers\InstrumentCriteriaController::class, "update"]);
             Route::delete("instrument/criteria/{id}", [\App\Http\Controllers\InstrumentCriteriaController::class, "destroy"]);
-
         });
 
+
+        Route::prefix("instruments")->group(function () {
+            Route::get("/", [\App\Http\Controllers\InstrumentController::class, "index"])->name("instrument.index");
+            Route::post("/", [\App\Http\Controllers\InstrumentController::class, "store"]);
+            Route::get("{id}", [\App\Http\Controllers\InstrumentController::class, "show"])->name("instrument.detail");
+        });
 
     });
 

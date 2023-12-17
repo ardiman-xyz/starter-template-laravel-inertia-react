@@ -3,6 +3,8 @@ import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import {AlertCircle, PlusCircle, RotateCw} from "lucide-react";
+import { router } from "@inertiajs/react";
 import * as z from "zod";
 
 import Modal from "@/Components/Modal";
@@ -12,45 +14,22 @@ import { Input } from "@/Components/ui/input";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
 } from "@/Components/ui/form";
-import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
-import {AlertCircle, PlusCircle, RotateCw} from "lucide-react";
-import { router } from "@inertiajs/react";
+import {Alert, AlertDescription, AlertTitle} from "@/Components/ui/alert";
 
 const formSchema = z
     .object({
         name: z.string().min(2, {
             message: "Nama harus di isi",
         }),
-        email: z
-            .string()
-            .min(2, {
-                message: "Email harus di isi",
-            })
-            .email({
-                message: "hmm, kelihatan email anda tidak benar",
-            }),
-        password: z.string().min(4, {
-            message: "Password minimal 4 karakter",
-        }),
-        confirm_password: z.string().min(4, {
-            message: "konfirmasi password baru wajib di isi!",
-        }),
-
     })
-    .refine((data) => data.password === data.confirm_password, {
-        message: "Password baru dan konfirmasi password harus sama!",
-        path: ["confirm_password"],
-    });
 
+export const CreateModal = () => {
 
-
-const CreateModal = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isOpenModalAdd, setIsOpenModalAdd] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -59,9 +38,6 @@ const CreateModal = () => {
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
-            email: "",
-            password: "",
-            confirm_password: "",
         },
     });
 
@@ -74,7 +50,7 @@ const CreateModal = () => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
         await axios
-            .post("/teacher", values)
+            .post("/instruments", values)
             .then((data) => {
                 const { message } = data.data;
                 toast.success(`${message}`);
@@ -93,6 +69,7 @@ const CreateModal = () => {
             });
     }
 
+
     return (
         <div>
             <Button onClick={toggleModalAdd}>
@@ -107,7 +84,7 @@ const CreateModal = () => {
                 <div className="px-6 py-4">
                     <div className="w-full flex items-center justify-center">
                         <h2 className="text-md text-center font-bold">
-                            Tambah guru
+                            Tambah Instrumen
                         </h2>
                     </div>
                     <div className="mt-4">
@@ -127,7 +104,7 @@ const CreateModal = () => {
                                 <FormField
                                     control={form.control}
                                     name="name"
-                                    render={({ field }) => (
+                                    render={({field}) => (
                                         <FormItem>
                                             <FormLabel>Nama</FormLabel>
                                             <FormControl>
@@ -137,67 +114,7 @@ const CreateModal = () => {
                                                     disabled={isLoading}
                                                 />
                                             </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="email"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Email</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    placeholder="Masukkan email..."
-                                                    {...field}
-                                                    disabled={isLoading}
-                                                />
-                                            </FormControl>
-                                            <FormDescription className="text-xs text-gray-500">
-                                                Email akan menjadi username
-                                                untuk login
-                                            </FormDescription>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-
-                                <FormField
-                                    control={form.control}
-                                    name="password"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Password</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    placeholder="Masukkan password..."
-                                                    type="password"
-                                                    {...field}
-                                                    disabled={isLoading}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="confirm_password"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>
-                                                Konfirmasi password
-                                            </FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    placeholder="Konfirmasi password..."
-                                                    {...field}
-                                                    type="password"
-                                                    disabled={isLoading}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
+                                            <FormMessage/>
                                         </FormItem>
                                     )}
                                 />
@@ -217,7 +134,7 @@ const CreateModal = () => {
                                         disabled={isLoading}
                                     >
                                         {isLoading && (
-                                            <RotateCw className="mr-2 h-4 w-4 animate-spin" />
+                                            <RotateCw className="mr-2 h-4 w-4 animate-spin"/>
                                         )}
                                         Simpan
                                     </Button>
@@ -228,7 +145,5 @@ const CreateModal = () => {
                 </div>
             </Modal>
         </div>
-    );
-};
-
-export default CreateModal;
+    )
+}
