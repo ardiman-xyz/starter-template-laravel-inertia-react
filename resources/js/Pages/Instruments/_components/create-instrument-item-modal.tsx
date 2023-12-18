@@ -1,34 +1,34 @@
-import { useState } from "react";
-import axios from "axios";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+import {Button} from "@/Components/ui/button";
 import {AlertCircle, PlusCircle, RotateCw} from "lucide-react";
-import { router } from "@inertiajs/react";
+import {useState} from "react";
+import {useForm} from "react-hook-form";
 import * as z from "zod";
-
-import Modal from "@/Components/Modal";
-import { Button } from "@/Components/ui/button";
-import { Input } from "@/Components/ui/input";
-
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/Components/ui/form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import axios from "axios";
+import {toast} from "sonner";
+import {router} from "@inertiajs/react";
 import {Alert, AlertDescription, AlertTitle} from "@/Components/ui/alert";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/Components/ui/form";
+import {Input} from "@/Components/ui/input";
+import Modal from "@/Components/Modal";
+import {Textarea} from "@/Components/ui/textarea";
+
 
 const formSchema = z
     .object({
         name: z.string().min(2, {
             message: "Nama harus di isi",
         }),
+        max_score: z.string().min(1, {
+            message: "Skor harus di isi"
+        })
     })
 
-export const CreateModal = () => {
+interface IProps {
+    documentId: number;
+}
+
+export const CreateInstrumentItemModal = ({documentId}: IProps) => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isOpenModalAdd, setIsOpenModalAdd] = useState<boolean>(false);
@@ -38,6 +38,7 @@ export const CreateModal = () => {
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
+            max_score: ""
         },
     });
 
@@ -50,7 +51,7 @@ export const CreateModal = () => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
         await axios
-            .post("/instruments", values)
+            .post(`/instruments/${documentId}/item`, values)
             .then((data) => {
                 const { message } = data.data;
                 toast.success(`${message}`);
@@ -69,12 +70,12 @@ export const CreateModal = () => {
             });
     }
 
-
     return (
         <div>
             <Button onClick={toggleModalAdd}>
                 <PlusCircle className="h-4 w-4 mr-2" />
-                Tambah</Button>
+                Tambah
+            </Button>
             <Modal
                 onClose={toggleModalAdd}
                 show={isOpenModalAdd}
@@ -106,12 +107,31 @@ export const CreateModal = () => {
                                     name="name"
                                     render={({field}) => (
                                         <FormItem>
-                                            <FormLabel>Nama</FormLabel>
+                                            <FormLabel>Judul <span className="text-red-800 text-xs">*</span></FormLabel>
                                             <FormControl>
-                                                <Input
-                                                    placeholder="Masukkan nama..."
+                                                <Textarea
+                                                    placeholder="Masukkan judul..."
                                                     {...field}
                                                     disabled={isLoading}
+                                                />
+                                            </FormControl>
+                                            <FormMessage/>
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="max_score"
+                                    render={({field}) => (
+                                        <FormItem>
+                                            <FormLabel>Maksimal Skor <span
+                                                className="text-red-800 text-xs">*</span></FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="Masukkan skor..."
+                                                    {...field}
+                                                    disabled={isLoading}
+                                                    type="number"
                                                 />
                                             </FormControl>
                                             <FormMessage/>

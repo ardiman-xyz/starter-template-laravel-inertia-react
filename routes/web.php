@@ -60,13 +60,14 @@ Route::middleware(["cekCookie"])->group(function () {
             Route::delete("instrument/criteria/{id}", [\App\Http\Controllers\InstrumentCriteriaController::class, "destroy"]);
         });
 
-
         Route::prefix("instruments")->group(function () {
             Route::get("/", [\App\Http\Controllers\InstrumentController::class, "index"])->name("instrument.index");
             Route::post("/", [\App\Http\Controllers\InstrumentController::class, "store"]);
             Route::get("{id}", [\App\Http\Controllers\InstrumentController::class, "show"])->name("instrument.detail");
+            Route::post("{instrument_id}/item", [\App\Http\Controllers\InstrumentItemController::class, "store"]);
+            Route::put("{id}/item", [\App\Http\Controllers\InstrumentItemController::class, "edit"]);
+            Route::delete("{id}/item", [\App\Http\Controllers\InstrumentItemController::class, "destroy"]);
         });
-
     });
 
     Route::middleware(["role:Teacher"])->group(function () {
@@ -76,11 +77,6 @@ Route::middleware(["cekCookie"])->group(function () {
     });
 });
 
-
-Route::get('/logout', function () {
-    Cookie::queue(Cookie::forget('vistoken'));
-    return redirect('/auth');
-})->name('logout');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -102,6 +98,12 @@ Route::middleware('auth')->group(function () {
     });
 
 });
+
+
+Route::get('/logout', function () {
+    Cookie::queue(Cookie::forget('vistoken'));
+    return redirect('/auth');
+})->name('logout');
 
 
 //require __DIR__.'/auth.php';

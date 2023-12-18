@@ -25,4 +25,9 @@ class ComponentRepository
         return Model::with('details')->find($id);
     }
 
+    public function delete(string $id)
+    {
+        return Model::where("id", $id)->delete();
+    }
+
 }

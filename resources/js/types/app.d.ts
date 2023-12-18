@@ -83,6 +83,5 @@ export type Component = {
 export type ComponentDetail = {
     id: number;
     name: string;
-    description?: string;
     max_score: number
 }

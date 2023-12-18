@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger("component_id");
             $table->string("name");
-            $table->longText("description")->nullable();
             $table->timestamps();
 
             $table->foreign("component_id")->references("id")->on("components");
