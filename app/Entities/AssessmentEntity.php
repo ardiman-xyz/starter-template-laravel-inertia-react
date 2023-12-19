@@ -8,4 +8,7 @@ class AssessmentEntity
     public string $teacherId;
     public string $academicSemesterId;
     public ?string $title = null;
+    public string $status = "schedule";
+    public string $startedAt;
+    public string $finishedAt;
 }

@@ -21,7 +21,10 @@ class AssessmentRepository
             "school_id"     => $entity->schoolId,
             "teacher_id"    => $entity->teacherId,
             "academic_semester_id" => $entity->academicSemesterId,
-            "title" => $entity->title
+            "title" => $entity->title,
+            "status" => $entity->status,
+            "started_at" => $entity->startedAt,
+            "finished_at" => $entity->startedAt
         ]);
     }
 

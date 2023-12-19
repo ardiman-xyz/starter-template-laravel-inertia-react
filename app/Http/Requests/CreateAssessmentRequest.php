@@ -25,6 +25,11 @@ class CreateAssessmentRequest extends FormRequest
             "teacher_id"  => ["required"],
             "year"  => ["required"],
             "semester"  => ["required"],
+            'dateForm' => 'required|array',
+            'dateForm.date_start' => 'required|date',
+            'dateForm.time_start' => 'required',
+            'dateForm.date_end' => 'required|date',
+            'dateForm.time_end' => 'required',
         ];
     }
 }

@@ -95,23 +95,23 @@ class VisitationService
         $school = $this->schoolRepository->getByUserId($this->tokenService->userId());
         if(!$school) throw new Exception("School not found");
 
-        DB::beginTransaction();
 
         try {
+
+            $startDateTime = Carbon::parse($dto->dateStart . ' ' . $dto->timeStart);
+            $endDateTime = Carbon::parse($dto->dateEnd . ' ' . $dto->timeEnd);
 
             $createEntity = new AssessmentEntity();
             $createEntity->teacherId = $dto->teacherId;
             $createEntity->schoolId = $school->id;
             $createEntity->academicSemesterId = $academic->id;
-            $assessment = $this->assessmentRepository->create($createEntity);
+            $createEntity->startedAt = $startDateTime->toDateTimeString();
+            $createEntity->finishedAt = $endDateTime->toDateTimeString();
 
-            DB::commit();
-
-            return $assessment;
+            return $this->assessmentRepository->create($createEntity);
 
         }catch (Exception $exception)
         {
-            DB::rollBack();
             throw new $exception;
         }
     }

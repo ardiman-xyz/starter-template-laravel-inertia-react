@@ -98,22 +98,22 @@ class VisitationController extends Controller
 
     public function attach(CreateAssessmentRequest $request): JsonResponse
     {
-        $data = $request->validationData();
-
-        $teacherId = $data["teacher_id"];
-        $year =  $data["year"];
-        $semester =  $data["semester"];
+        $validated = $request->validationData();
 
         $dto = new CreateAssessmentDTO();
-        $dto->teacherId = $teacherId;
-        $dto->academicYear = $year;
-        $dto->academicSemester = $semester;
+        $dto->teacherId = $validated['teacher_id'];
+        $dto->academicYear = $validated['year'];
+        $dto->academicSemester = $validated['semester'];
+        $dto->dateStart = $validated['dateForm']['date_start'];
+        $dto->timeStart = $validated['dateForm']['time_start'];
+        $dto->dateEnd = $validated['dateForm']['date_end'];
+        $dto->timeEnd = $validated['dateForm']['time_end'];
 
         try {
             $response = $this->visitationService->create($dto);
             return response()->json([
                 'status' => true,
-                'message' => 'Teacher successfully created',
+                'message' => 'Visitation successfully created',
                 'data' => $response
             ], 201);
         }catch (Exception $exception)

@@ -26,13 +26,9 @@ const FilterDataItem = ({assessment, index}: IProps) => {
 
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState<boolean>(false);
 
-    const handleDetail = () => {
-        router.visit(route("visitation.detail", assessment.id))
-    }
-
     return(
         <>
-            <TableRow key={index} className="cursor-pointer" onClick={handleDetail}>
+            <TableRow key={index} className="cursor-pointer">
                 <TableCell className="font-medium">{index + 1}</TableCell>
                 <TableCell className="flex items-center gap-x-3">
                     <Avatar className="w-6 h-6">
@@ -50,9 +46,17 @@ const FilterDataItem = ({assessment, index}: IProps) => {
                     </p>
                 </TableCell>
                 <TableCell>
-                    <Badge className="bg-orange-600 text-white">
-                        Sedang berlangsung
-                    </Badge>
+                    {
+                        assessment.status === "schedule"  ? (
+                            <Badge className="bg-orange-600 text-white">
+                                Sedang berlangsung
+                            </Badge>
+                        ): (
+                            <Badge className="bg-green-600 text-white">
+                                Selesai
+                            </Badge>
+                        )
+                    }
                 </TableCell>
                 <TableCell className="text-center">
                     -
