@@ -18,9 +18,12 @@ import {Schedule} from "@/types/app";
 
 interface IProps {
     onClose : () => void;
-    id: number;
+    id: string;
     name: string;
-    schedule?: Schedule
+    defaultData : {
+        startedAt: string;
+        finishedAt: string;
+    }
 }
 
 
@@ -40,44 +43,39 @@ const formSchema = z
         }),
     })
 
-export const SettingDateModal = ({onClose, schedule, id, name}: IProps) => {
+export const SettingDateModal = ({onClose, defaultData, id, name}: IProps) => {
 
     const { assessmentId, stageName } = useVisitationContext();
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const data = {
-        date_start: moment(schedule?.started_at).format('YYYY-MM-DD'),
-        time_start: moment(schedule?.started_at).format('HH:mm'),
+        date_start: moment(defaultData?.startedAt).format('YYYY-MM-DD'),
+        time_start: moment(defaultData?.startedAt).format('HH:mm'),
 
-        date_end: moment(schedule?.finished_at).format('YYYY-MM-DD'),
-        time_end: moment(schedule?.finished_at).format('HH:mm'),
+        date_end: moment(defaultData?.finishedAt).format('YYYY-MM-DD'),
+        time_end: moment(defaultData?.finishedAt).format('HH:mm'),
     }
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            date_start: schedule?.status ? data.date_start : "",
-            time_start: schedule?.status ? data.time_start : "",
-            date_end: schedule?.status ? data.date_end : "",
-            time_end: schedule?.status ? data.time_end : "",
+            date_start: data.date_start,
+            time_start: data.time_start,
+            date_end: data.date_end,
+            time_end: data.time_end,
         },
     });
 
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
 
-        let url = `/visitation/${assessmentId}/date/${id}`;
-
-        if(schedule?.status)
-        {
-            url = `/visitation/${assessmentId}/date/${id}/update/${schedule.id}`;
-        }
+        const url = `/visitation/${id}/date`;
 
         const finalData = {...values, stageName }
         setIsLoading(true);
         await axios
-            .post(url, finalData)
+            .put(url, finalData)
             .then((data) => {
                 const { message } = data.data;
                 toast.success(`${message}`);

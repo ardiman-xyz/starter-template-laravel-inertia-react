@@ -24,3 +24,10 @@ export function isValidSize(file: ValidFile) {
     return file.size <= maxSizeInBytes;
 
 }
+
+
+export function formatDate(value:string) {
+    const date = new Date(value);
+
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
+}

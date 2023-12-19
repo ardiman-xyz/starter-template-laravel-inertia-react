@@ -12,6 +12,7 @@ class AssessmentRepository
         return Model::where("school_id", $schoolId)
             ->where("academic_semester_id", $academicSemesterId)
             ->with('teacher')
+            ->orderBy("id", "desc")
             ->get();
     }
 
@@ -24,7 +25,7 @@ class AssessmentRepository
             "title" => $entity->title,
             "status" => $entity->status,
             "started_at" => $entity->startedAt,
-            "finished_at" => $entity->startedAt
+            "finished_at" => $entity->finishedAt
         ]);
     }
 
@@ -42,6 +43,14 @@ class AssessmentRepository
     public function deleteById(string $id)
     {
         return Model::where("id", $id)->delete();
+    }
+
+    public function update(string $id, Model $assessment)
+    {
+        $assessment->id = $id;
+        $assessment->save();
+
+        return $assessment;
     }
 
 }

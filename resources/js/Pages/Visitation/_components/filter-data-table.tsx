@@ -26,6 +26,7 @@ const FilterDataTable = ({assessments}: IProps) => {
                     <TableRow>
                         <TableHead className="w-[100px]">No.</TableHead>
                         <TableHead>Guru</TableHead>
+                        <TableHead>Tanggal</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead className="text-center">Nilai</TableHead>
                         <TableHead className="text-center">Aksi</TableHead>
@@ -50,6 +51,7 @@ const FilterDataTable = ({assessments}: IProps) => {
                                 <FilterDataItem
                                     assessment={assessment}
                                     index={index}
+                                    key={index}
                                 />
                             ))
                         )

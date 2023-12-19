@@ -22,7 +22,6 @@ class SetUpDateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "stageName"     => ["required", "string"],
             "date_start"    => ["required", "string"],
             "time_start"    => ["required", "string"],
             "date_end"    => ["required", "string"],

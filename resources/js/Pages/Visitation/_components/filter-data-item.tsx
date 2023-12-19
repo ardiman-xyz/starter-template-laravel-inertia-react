@@ -1,11 +1,11 @@
 import React, {useState} from "react";
 import {ClipboardEdit, ClipboardList, FileDown, MoreHorizontal, Trash2} from "lucide-react";
-import {Link, router} from "@inertiajs/react";
+import {Link, router, usePage} from "@inertiajs/react";
 
 import {Assessment} from "@/types/app";
-import {TableCell, TableRow} from "@/Components/ui/table";
+import {TableCell, TableHead, TableRow} from "@/Components/ui/table";
 import {Avatar, AvatarFallback, AvatarImage} from "@/Components/ui/avatar";
-import {getFirstTwoLettersOfLastName} from "@/helper";
+import {formatDate, getFirstTwoLettersOfLastName} from "@/helper";
 import {Badge} from "@/Components/ui/badge";
 import {
     DropdownMenu,
@@ -16,6 +16,9 @@ import {
 } from "@/Components/ui/dropdown-menu";
 import {Button} from "@/Components/ui/button";
 import {DeleteAction} from "@/Pages/Visitation/_components/delete-action";
+import {SharedInertiaData} from "@/types/inertia";
+import {Hint} from "@/Components/Hint";
+import {SettingDateModal} from "@/Pages/Visitation/_components/modal/setting-date-modal";
 
 interface IProps {
     assessment: Assessment;
@@ -24,34 +27,57 @@ interface IProps {
 
 const FilterDataItem = ({assessment, index}: IProps) => {
 
+    console.info(assessment)
+
+    const { ziggy } = usePage<SharedInertiaData>().props;
+
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState<boolean>(false);
+    const [isModalDateOpen, setIsModalDateOpen] = useState<boolean>(false);
+
+    const formattedStartDate = formatDate(assessment.started_at);
+    const formattedEndDate = formatDate(assessment.finished_at);
 
     return(
         <>
-            <TableRow key={index} className="cursor-pointer">
+            <TableRow key={index} >
                 <TableCell className="font-medium">{index + 1}</TableCell>
                 <TableCell className="flex items-center gap-x-3">
                     <Avatar className="w-6 h-6">
-                        <AvatarImage />
+                        {
+                            assessment.teacher.profile_picture !== null && (
+                                <AvatarImage src={ziggy?.url + "/storage/" + assessment.teacher?.profile_picture}/>
+                            )
+                        }
                         <AvatarFallback>
                             {
                                 getFirstTwoLettersOfLastName(assessment.teacher.name)
                             }
                         </AvatarFallback>
                     </Avatar>
-                    <p className="text-blue-800 text-sm group-hover:underline transition">
-                        {
-                            assessment.teacher.name
-                        }
-                    </p>
+                           {
+                               assessment.teacher.name
+                           }
                 </TableCell>
+                <TableHead>
+                    <Hint description="Klik untuk ubah tanggal">
+                        <span className="font-sans underline text-gray-800" onClick={() => setIsModalDateOpen(true)}>
+                        {formatDate(assessment.started_at)}
+
+                            <span className="text-orange-700 mx-3">
+                            s/d
+                          </span>
+
+                            {formatDate(assessment.finished_at)}
+                    </span>
+                    </Hint>
+                </TableHead>
                 <TableCell>
                     {
-                        assessment.status === "schedule"  ? (
+                        assessment.status === "schedule" ? (
                             <Badge className="bg-orange-600 text-white">
-                                Sedang berlangsung
+                                Dijadwalkan
                             </Badge>
-                        ): (
+                        ) : (
                             <Badge className="bg-green-600 text-white">
                                 Selesai
                             </Badge>
@@ -81,12 +107,6 @@ const FilterDataItem = ({assessment, index}: IProps) => {
                             <DropdownMenuItem
                                 className="cursor-pointer"
                             >
-                                <ClipboardEdit className="h-4 w-4 mr-2"/>
-                                Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                className="cursor-pointer"
-                            >
                                 <FileDown className="h-4 w-4 mr-2"/>
                                 Donwload report
                             </DropdownMenuItem>
@@ -109,6 +129,21 @@ const FilterDataItem = ({assessment, index}: IProps) => {
                         id={assessment.id}
                         teacher_name={assessment.teacher.name}
                         onClose={() => setIsModalDeleteOpen(false)}
+                    />
+                )
+            }
+            {
+                isModalDateOpen && (
+                    <SettingDateModal
+                        onClose={() => setIsModalDateOpen(false)}
+                        id={assessment.id}
+                        name={assessment.teacher.name}
+                        defaultData={
+                            {
+                                startedAt: assessment.started_at,
+                                finishedAt: assessment.finished_at
+                            }
+                        }
                     />
                 )
             }

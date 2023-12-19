@@ -20,7 +20,7 @@ export const Hint = ({
 }: HintProps) => {
     return (
         <TooltipProvider>
-            <Tooltip delayDuration={0}>
+            <Tooltip delayDuration={1}>
                 <TooltipTrigger>{children}</TooltipTrigger>
                 <TooltipContent
                     sideOffset={sideOffset}

@@ -15,7 +15,7 @@ Route::middleware(["cekCookie"])->group(function () {
             Route::get("{assessment_id}", [\App\Http\Controllers\VisitationController::class, "detail"])->name("visitation.detail");
 
             Route::post("{assessment_id}/date/{instrument_id}", [\App\Http\Controllers\VisitationController::class, "store_date"]);
-            Route::post("{assessment_id}/date/{instrument_id}/update/{id}", [\App\Http\Controllers\VisitationController::class, "update_date"]);
+            Route::put("{assessment_id}/date", [\App\Http\Controllers\VisitationController::class, "update_date"]);
             Route::delete("date/{id}", [\App\Http\Controllers\VisitationController::class, "reset_date"]);
             Route::get("{assessment_id}/instrument/{id}/items", [\App\Http\Controllers\VisitationController::class, "instrument_items"]);
         });

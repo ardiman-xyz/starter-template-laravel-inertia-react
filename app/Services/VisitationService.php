@@ -191,11 +191,6 @@ class VisitationService
         $assessment = $this->assessmentRepository->getById($dto->assessmentId);
         if(!$assessment) throw new Exception("Assessment not found");
 
-        $stage = $this->assessmentStageRepository->getByName($dto->stageName);
-        if(!$stage) throw new Exception("Stage not found");
-
-        $instrument = $this->instrumentRepository->getById($dto->instrumentId);
-        if(!$instrument) throw new Exception("InstrumentController not found");
 
         try {
 
@@ -206,9 +201,8 @@ class VisitationService
             $endedAt = DateTime::createFromFormat('Y-m-d H:i', $datetimeEnd);
 
 
-            $entity = new AssessmentScheduleEntity();
+            $entity = new AssessmentEntity();
             $entity->assessmentId = $dto->assessmentId;
-            $entity->assessmentStageId = $stage->id;
             $entity->instrumentId = $dto->instrumentId;
             $entity->status = "schedule";
             $entity->startedAt = $startedAt;
@@ -225,19 +219,10 @@ class VisitationService
     /**
      * @throws Exception
      */
-    public function update_date(SetUpDateDTO $dto, string $id): \App\Models\AssessmentSchedule
+    public function update_date(SetUpDateDTO $dto)
     {
         $assessment = $this->assessmentRepository->getById($dto->assessmentId);
         if(!$assessment) throw new Exception("Assessment not found");
-
-        $stage = $this->assessmentStageRepository->getByName($dto->stageName);
-        if(!$stage) throw new Exception("Stage not found");
-
-        $instrument = $this->instrumentRepository->getById($dto->instrumentId);
-        if(!$instrument) throw new Exception("InstrumentController not found");
-
-        $schedule = $this->scheduleRepository->getById($id);
-        if(!$schedule) throw new Exception("Schedule not found");
 
         $datetimeStart = $dto->dateStart . ' ' . $dto->timeStart;
         $datetimeEnd = $dto->dateEnd . ' ' . $dto->timeEnd;
@@ -245,13 +230,11 @@ class VisitationService
         $startedAt = DateTime::createFromFormat('Y-m-d H:i', $datetimeStart);
         $endedAt = DateTime::createFromFormat('Y-m-d H:i', $datetimeEnd);
 
-        $schedule->assessment_id = $dto->assessmentId;
-        $schedule->assessment_stage_id = $stage->id;
-        $schedule->instrument_id = $dto->instrumentId;
-        $schedule->started_at = $startedAt;
-        $schedule->finished_at = $endedAt;
+        $assessment->id  = $dto->assessmentId;
+        $assessment->started_at     = $startedAt;
+        $assessment->finished_at    = $endedAt;
 
-        return $this->scheduleRepository->update($schedule->id, $schedule);
+        return $this->assessmentRepository->update($assessment->id, $assessment);
 
     }
 
