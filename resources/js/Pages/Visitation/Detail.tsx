@@ -3,9 +3,9 @@ import {Head} from "@inertiajs/react";
 
 import {Assessment, StageSchedule} from "@/types/app";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-import StageItemLayout from "./_components/stage-item";
 import {StageDetail} from "@/Pages/Visitation/_components/stage-detail";
 import useVisitationContext from "@/Context/useVisitationContext";
+import Heading from "@/Components/Heading";
 
 interface DetailProps {
     data: {
@@ -26,9 +26,7 @@ const DetailVisitationPage = ({data}: DetailProps) => {
         }
     }, [data.stages]);
 
-    const handleStageClick = (stageName: string) => {
-        setActiveStage(stageName);
-    }
+
     return(
         <Authenticated
             breadCrumbs={
@@ -48,7 +46,7 @@ const DetailVisitationPage = ({data}: DetailProps) => {
                         }
                     },
                     {
-                        title : "Detail",
+                        title : data.assessment.teacher.name,
                         url: "",
                         disabled: true,
                     },
@@ -56,23 +54,10 @@ const DetailVisitationPage = ({data}: DetailProps) => {
             }
         >
             <Head title="Supervisi detail" />
-            <div>
-                <div className="py-8">
-                    <div className="flex items-center justify-between space-x-4">
-                        {
-                            data.stages.map((stage, index) => (
-                                <StageItemLayout
-                                    stage={stage}
-                                    index={index}
-                                    stages={data.stages}
-                                    onStageClick={handleStageClick}
-                                    activeStage={activeStage}
-                                />
-                            ))
-                        }
-                    </div>
-                </div>
-            </div>
+            <Heading
+                title={`Visitasi ${data.assessment.teacher.name}`}
+                description={`List instrument dan nilai dari ${data.assessment.teacher.name}`}
+            />
             <div className="mt-4 w-full">
                 {
                     activeStage !== "" && (

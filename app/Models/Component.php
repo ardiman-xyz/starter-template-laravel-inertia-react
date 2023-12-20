@@ -17,4 +17,9 @@ class Component extends Model
     {
         return $this->hasMany(ComponentDetail::class, "component_id");
     }
+
+    public function assessmentAnswers(): HasMany
+    {
+        return $this->hasMany(AssessmentAnswer::class, 'component_id', 'id');
+    }
 }

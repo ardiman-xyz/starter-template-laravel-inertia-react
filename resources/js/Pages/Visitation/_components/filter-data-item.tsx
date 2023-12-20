@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {ClipboardEdit, ClipboardList, FileDown, MoreHorizontal, Trash2} from "lucide-react";
+import { ClipboardList, FileDown, MoreHorizontal, Trash2} from "lucide-react";
 import {Link, router, usePage} from "@inertiajs/react";
 
 import {Assessment} from "@/types/app";
@@ -27,15 +27,10 @@ interface IProps {
 
 const FilterDataItem = ({assessment, index}: IProps) => {
 
-    console.info(assessment)
-
     const { ziggy } = usePage<SharedInertiaData>().props;
 
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState<boolean>(false);
     const [isModalDateOpen, setIsModalDateOpen] = useState<boolean>(false);
-
-    const formattedStartDate = formatDate(assessment.started_at);
-    const formattedEndDate = formatDate(assessment.finished_at);
 
     return(
         <>
@@ -54,21 +49,23 @@ const FilterDataItem = ({assessment, index}: IProps) => {
                             }
                         </AvatarFallback>
                     </Avatar>
-                           {
-                               assessment.teacher.name
-                           }
+                       <Hint description="Klik untuk lihat detail" >
+                           <span className="underline text-blue-900" onClick={() => router.visit(route("visitation.detail", assessment.id))}>
+                               {
+                                   assessment.teacher.name
+                               }
+                           </span>
+                       </Hint>
                 </TableCell>
                 <TableHead>
                     <Hint description="Klik untuk ubah tanggal">
                         <span className="font-sans underline text-gray-800" onClick={() => setIsModalDateOpen(true)}>
-                        {formatDate(assessment.started_at)}
-
-                            <span className="text-orange-700 mx-3">
-                            s/d
-                          </span>
-
-                            {formatDate(assessment.finished_at)}
-                    </span>
+                            {formatDate(assessment.started_at)}
+                                <span className="text-orange-700 mx-3">
+                                s/d
+                              </span>
+                                {formatDate(assessment.finished_at)}
+                        </span>
                     </Hint>
                 </TableHead>
                 <TableCell>

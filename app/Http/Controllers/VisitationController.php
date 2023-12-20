@@ -79,7 +79,7 @@ class VisitationController extends Controller
 
         }catch (Exception $exception)
         {
-            return "not okay";
+            abort(404, "Data filter tidak ditemukan!");
         }
 
     }
@@ -148,7 +148,7 @@ class VisitationController extends Controller
 
         try {
             $response = $this->visitationService->getById($assessment_id);
-           return Inertia::render("Visitation/Detail", [
+            return Inertia::render("Visitation/Detail", [
                "data" => $response
            ]);
         }catch (Exception $exception)
