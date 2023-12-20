@@ -33,4 +33,9 @@ class ComponentDetailRepository
     {
         return Model::where("id", $id)->delete();
     }
+
+    public function findByComponentId(string $id)
+    {
+        return Model::where("component_id", $id)->get();
+    }
 }

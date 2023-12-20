@@ -16,6 +16,7 @@ return new class extends Migration
             $table->uuid("assessment_id");
             $table->unsignedBigInteger("component_id");
             $table->unsignedBigInteger("component_detail_id");
+            $table->integer("score")->default(0);
             $table->timestamps();
 
             $table->foreign("assessment_id")->references("id")->on("assessments");

@@ -86,5 +86,12 @@ export type Component = {
 export type ComponentDetail = {
     id: number;
     name: string;
-    max_score: number
+    max_score: number;
+    scored: ComponentScore
+}
+
+export type ComponentScore = {
+    id: number;
+    status: boolean;
+    score: number;
 }

@@ -1,7 +1,6 @@
 import React from "react";
 import { Toaster } from "sonner";
 
-// import { Navbar } from "@/Instruments/Navbar";
 import Sidebar from "@/Components/Sidebar";
 import {MobileSidebar} from "@/Components/MobileSidebar";
 import {NavbarRoutes} from "@/Components/NavbarRoutes";
@@ -21,7 +20,7 @@ export default function Authenticated({children, breadCrumbs}: IProps) {
     return (
         <div className="min-h-screen font-albert">
             <Toaster richColors />
-            <div className="w-full h-[80px] md:pl-64 fixed inset-y-0 bg-white">
+            <div className="w-full h-[80px] md:pl-64 fixed inset-y-0 bg-white z-50">
                 <div className="w-full p-4 border-b h-full flex items-center bg-white z-50">
                     {
                         breadCrumbs && (

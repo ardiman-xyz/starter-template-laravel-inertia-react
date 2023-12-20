@@ -7,9 +7,12 @@ use App\DTO\SetUpDateDTO;
 use App\Http\Requests\CreateAssessmentRequest;
 use App\Http\Requests\SetUpDateRequest;
 use App\Repositories\AcademicSemesterRepository;
+use App\Repositories\AssessmentAnswerRepository;
 use App\Repositories\AssessmentRepository;
 use App\Repositories\AssessmentScheduleRepository;
-use App\Repositories\AssessmentStageRepository;
+use App\Repositories\AssessmentScoreRepository;
+use App\Repositories\ComponentDetailRepository;
+use App\Repositories\ComponentRepository;
 use App\Repositories\InstrumentCriteriaRepository;
 use App\Repositories\InstrumentRepository;
 use App\Repositories\SchoolRepository;
@@ -32,10 +35,13 @@ class VisitationController extends Controller
         $tokenService = new TokenService();
         $assessmentRepository = new AssessmentRepository();
         $userRepository = new UserRepository();
-        $assessmentStageRepository = new AssessmentStageRepository();
         $instrumentRepository = new InstrumentRepository();
         $scheduleRepository = new AssessmentScheduleRepository();
         $instrumentCriteriaRepository = new InstrumentCriteriaRepository();
+        $componentRepository = new ComponentRepository();
+        $componentDetailRepository = new ComponentDetailRepository();
+        $assessmentAnswerRepository = new AssessmentAnswerRepository();
+        $assessmentScoreRepository = new AssessmentScoreRepository();
 
         $this->visitationService = new VisitationService(
             $academicRepository,
@@ -43,10 +49,13 @@ class VisitationController extends Controller
             $tokenService,
             $assessmentRepository,
             $userRepository,
-            $assessmentStageRepository,
             $instrumentRepository,
             $scheduleRepository,
-            $instrumentCriteriaRepository
+            $instrumentCriteriaRepository,
+            $componentRepository,
+            $componentDetailRepository,
+            $assessmentAnswerRepository,
+            $assessmentScoreRepository
         );
     }
 

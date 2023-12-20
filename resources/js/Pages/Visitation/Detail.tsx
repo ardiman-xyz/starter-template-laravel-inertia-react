@@ -1,31 +1,29 @@
-import {useEffect, useState} from "react";
+
 import {Head} from "@inertiajs/react";
 
-import {Assessment, StageSchedule} from "@/types/app";
+import {Assessment, Component} from "@/types/app";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-import {StageDetail} from "@/Pages/Visitation/_components/stage-detail";
 import useVisitationContext from "@/Context/useVisitationContext";
 import Heading from "@/Components/Heading";
+
+import {
+    Table,
+    TableBody,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/Components/ui/table"
+import {TableItem} from "./_components/detail/table-item";
+
 
 interface DetailProps {
     data: {
         assessment: Assessment,
-        stages: StageSchedule[]
+        instruments: Component []
     }
 }
 
 const DetailVisitationPage = ({data}: DetailProps) => {
-
-    const { setAssessmentId } = useVisitationContext();
-    const [activeStage, setActiveStage] = useState("");
-
-    useEffect(() => {
-        if (data.stages.some(stage => stage.name === "pra observasi")) {
-            setActiveStage("pra observasi");
-            setAssessmentId(data.assessment.id)
-        }
-    }, [data.stages]);
-
 
     return(
         <Authenticated
@@ -55,22 +53,37 @@ const DetailVisitationPage = ({data}: DetailProps) => {
         >
             <Head title="Supervisi detail" />
             <Heading
-                title={`Visitasi ${data.assessment.teacher.name}`}
-                description={`List instrument dan nilai dari ${data.assessment.teacher.name}`}
+                title={`Visitasi`}
+                description={`List instrument dan nilai`}
             />
-            <div className="mt-4 w-full">
-                {
-                    activeStage !== "" && (
-                        <StageDetail
-                            stage={
-                                data.stages.find(stage => stage.name === activeStage) || { id: "", name: "" }
-                            }
-                            instruments={
-                                data.stages.find(stage => stage.name === activeStage)?.instruments || []
-                            }
-                        />
-                    )
-                }
+            <div className="mt-4 w-full mb-10">
+                <Table className="mt-7 border">
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead rowSpan={2} className="border text-center">No</TableHead>
+                            <TableHead rowSpan={2} className="border">Sub Komponen dan Butir komponen</TableHead>
+                            <TableHead  colSpan={4} className="text-center border">Skor Nilai</TableHead>
+                        </TableRow>
+                        <TableRow>
+                            <TableHead className="border text-center">1</TableHead>
+                            <TableHead className="border text-center">2</TableHead>
+                            <TableHead className="border text-center">3</TableHead>
+                            <TableHead className="border text-center">4</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {
+                            data.instruments.map((instrument, index) => (
+                                <TableItem
+                                    instrument={instrument}
+                                    index={index}
+                                    key={index}
+                                />
+                            ))
+                        }
+                    </TableBody>
+                </Table>
+
             </div>
         </Authenticated>
     )
