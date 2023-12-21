@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\DTO\CreateAssessmentDTO;
+use App\DTO\ScoredAssessmentDTO;
 use App\DTO\SetUpDateDTO;
 use App\Http\Requests\CreateAssessmentRequest;
 use App\Http\Requests\SetUpDateRequest;
+use App\Http\Requests\StoreScoreRequest;
 use App\Repositories\AcademicSemesterRepository;
 use App\Repositories\AssessmentAnswerRepository;
 use App\Repositories\AssessmentRepository;
@@ -245,6 +247,31 @@ class VisitationController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'successfully get data',
+                'data' => $data
+            ], 200);
+        }catch (Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage()
+            ], 400);
+        }
+    }
+
+    public function score(StoreScoreRequest $request, string $assessment_id): JsonResponse
+    {
+        $data = $request->validationData();
+
+        $dto = new ScoredAssessmentDTO();
+        $dto->assessmentId  = $assessment_id;
+        $dto->componentId = $data['instrument_id'];
+        $dto->componentDetailId = $data['item_id'];
+        $dto->value = $data['value'];
+
+        try {
+            $data = $this->visitationService->scored($dto);
+            return response()->json([
+                'status' => true,
+                'message' => 'successfully scored',
                 'data' => $data
             ], 200);
         }catch (Exception $exception) {

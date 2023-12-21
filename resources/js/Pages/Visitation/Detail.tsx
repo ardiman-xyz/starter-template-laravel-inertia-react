@@ -14,6 +14,8 @@ import {
     TableRow,
 } from "@/Components/ui/table"
 import {TableItem} from "./_components/detail/table-item";
+import useVisitationContextNew from "@/Context/useVisitationContextNew";
+import {useEffect} from "react";
 
 
 interface DetailProps {
@@ -24,6 +26,12 @@ interface DetailProps {
 }
 
 const DetailVisitationPage = ({data}: DetailProps) => {
+
+    const { setAssessmentId } = useVisitationContextNew();
+
+    useEffect(() => {
+        setAssessmentId(data.assessment.id)
+    }, [])
 
     return(
         <Authenticated

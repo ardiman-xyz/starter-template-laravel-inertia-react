@@ -15,6 +15,7 @@ class AssessmentScore extends Model
         'assessment_id',
         'component_id',
         'component_detail_id',
+        'score'
     ];
 
     public function assessment(): BelongsTo

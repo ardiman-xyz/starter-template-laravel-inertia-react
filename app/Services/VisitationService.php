@@ -3,9 +3,12 @@
 namespace App\Services;
 
 use App\DTO\CreateAssessmentDTO;
+use App\DTO\ScoredAssessmentDTO;
 use App\DTO\SetUpDateDTO;
 use App\Entities\AssessmentEntity;
 use App\Entities\AssessmentScheduleEntity;
+use App\Entities\ScoredEntity;
+use App\Models\AssessmentScore;
 use App\Repositories\AcademicSemesterRepository;
 use App\Repositories\AssessmentAnswerRepository;
 use App\Repositories\AssessmentRepository;
@@ -249,6 +252,52 @@ class VisitationService
         if(!$instrument) throw new Exception("InstrumentController not found");
 
         return $this->criteriaRepository->getByInstrumentId($instrument_id);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function scored(ScoredAssessmentDTO $dto)
+    {
+        $assessment = $this->assessmentRepository->getById($dto->assessmentId);
+        if(!$assessment) throw new Exception("Assessment not found");
+
+        $component = $this->componentRepository->findById($dto->componentId);
+        if(!$component) throw new Exception("Component not found");
+
+        $componentDetail = $this->componentDetailRepository->findById($dto->componentDetailId);
+        if(!$componentDetail) throw new Exception("Component detail not found");
+
+        $scoredEntity = new ScoredEntity();
+        $scoredEntity->assessmentId = $dto->assessmentId;
+        $scoredEntity->componentId = (int)$dto->componentId;
+        $scoredEntity->componentDetailId = (int)$dto->componentDetailId;
+        $scoredEntity->score = (int)$dto->value;
+
+        $alreadyScored = $this->scoredStatus($dto);
+
+        if (!$alreadyScored) {
+            return $this->saveScored($scoredEntity);
+        }else{
+            return $this->updateScored($dto, $alreadyScored);
+        }
+
+    }
+
+    public function saveScored(ScoredEntity $entity)
+    {
+        return $this->assessmentScoreRepository->create($entity);
+    }
+
+    public function scoredStatus(ScoredAssessmentDTO $dto)
+    {
+        return $this->assessmentScoreRepository->findByAssessmentAndItemId($dto->assessmentId, $dto->componentId, $dto->componentDetailId);
+    }
+
+    public function updateScored(ScoredAssessmentDTO $dto, AssessmentScore $assessmentScore): AssessmentScore
+    {
+       $assessmentScore->score = (int)$dto->value;
+       return $this->assessmentScoreRepository->update($assessmentScore->id, $assessmentScore);
     }
 
     /**
