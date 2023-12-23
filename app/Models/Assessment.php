@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 class Assessment extends Model
@@ -42,9 +43,9 @@ class Assessment extends Model
         return $this->belongsTo(School::class, "school_id");
     }
 
-    public function assessmentAnswers(): HasMany
+    public function assessmentAnswers(): HasOne
     {
-        return $this->hasMany(AssessmentAnswer::class, 'assessment_id', 'id');
+        return $this->hasOne(AssessmentAnswer::class, 'assessment_id', 'id');
     }
 
     public function assessmentScores(): HasMany

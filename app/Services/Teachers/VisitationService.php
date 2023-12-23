@@ -2,12 +2,18 @@
 
 namespace App\Services\Teachers;
 
+use App\Entities\AssessmentAnswerEntity;
+use App\Repositories\AssessmentAnswerRepository;
 use App\Repositories\AssessmentRepository;
 use App\Repositories\AssessmentScheduleRepository;
+use App\Repositories\AssessmentScoreRepository;
 use App\Repositories\AssessmentStageRepository;
+use App\Repositories\ComponentDetailRepository;
+use App\Repositories\ComponentRepository;
 use App\Repositories\InstrumentRepository;
 use App\Repositories\UserRepository;
 use App\Services\TokenService;
+use Carbon\Carbon;
 use Exception;
 
 class VisitationService
@@ -15,27 +21,30 @@ class VisitationService
     private $userId;
 
     private AssessmentRepository $assessmentRepository;
-    private AssessmentStageRepository $assessmentStageRepository;
     private TokenService $tokenService;
     private UserRepository $userRepository;
-    private InstrumentRepository $instrumentRepository;
-    private AssessmentScheduleRepository $scheduleRepository;
+    private ComponentRepository $componentRepository;
+    private ComponentDetailRepository $componentDetailRepository;
+    private AssessmentScoreRepository $assessmentScoreRepository;
+    private AssessmentAnswerRepository $assessmentAnswerRepository;
 
     public function __construct(
         AssessmentRepository $assessmentRepository,
         TokenService $tokenService,
-        AssessmentStageRepository $assessmentStageRepository,
         UserRepository $userRepository,
-        InstrumentRepository $instrumentRepository,
-        AssessmentScheduleRepository $scheduleRepository,
+        ComponentRepository $componentRepository,
+        ComponentDetailRepository $componentDetailRepository,
+        AssessmentScoreRepository $assessmentScoreRepository,
+        AssessmentAnswerRepository $assessmentAnswerRepository,
     )
     {
         $this->assessmentRepository = $assessmentRepository;
         $this->tokenService = $tokenService;
-        $this->assessmentStageRepository = $assessmentStageRepository;
         $this->userRepository = $userRepository;
-        $this->instrumentRepository = $instrumentRepository;
-        $this->scheduleRepository = $scheduleRepository;
+        $this->componentRepository = $componentRepository;
+        $this->componentDetailRepository = $componentDetailRepository;
+        $this->assessmentScoreRepository = $assessmentScoreRepository;
+        $this->assessmentAnswerRepository = $assessmentAnswerRepository;
 
         $this->userId = $this->tokenService->userId();
     }
@@ -51,65 +60,67 @@ class VisitationService
     /**
      * @throws Exception
      */
-    public function getById(string $id)
+    public function getById(string $assessmentId)
     {
-        $assessment = $this->assessmentRepository->getById($id);
+        $assessment = $this->assessmentRepository->getById($assessmentId);
         if(!$assessment) throw new Exception("Assessment not found");
 
-        $stages = $this->assessmentStageRepository->getAll();
-        $stagesData = [];
-        $isAllFinished = true;
-        foreach($stages as $stage)
-        {
-            $instruments = $this->instrumentRepository->getAssessmentStageId($stage->id);
-            $instrumentData = [];
-            foreach ($instruments as $instrument) {
-                $scheduled = [];
-                $hasSchedule = $this->scheduleRepository->getBySchedule($assessment->id, $stage->id, $instrument->id);
-                if ($hasSchedule) {
+        $components = $this->componentRepository->findall();
+        $result = [];
 
-                    if ($hasSchedule->status !== 'finish') {
-                        $isAllFinished = false;
-                    }
+        foreach ($components as $component) {
+            $items = $this->componentDetailRepository->findByComponentId($component->id);
 
-                    $scheduled['id']    = $hasSchedule->id;
-                    $scheduled['status'] = true;
-                    $scheduled['started_at'] = $hasSchedule->started_at;
-                    $scheduled['finished_at'] =$hasSchedule->finished_at;
-                    $scheduled['progress'] = $hasSchedule->status;
-                }
-                else {
-                    $scheduled['status'] = false;
-                    $isAllFinished = false;
-                }
-
-                $instrumentData[] = [
-                    'id' => $instrument->id,
-                    'name' => $instrument->name,
-                    'type' => $instrument->type,
-                    'description'   => $instrument->description,
-                    'allowed_extension' => $instrument->allowed_extension,
-                    'max_size' => $instrument->max_size,
-                    'is_multiple'   => $instrument->is_multiple,
-                    'scheduled' => $scheduled
+            $componentItems = [];
+            foreach ($items as $item) {
+                $answer = $this->assessmentScoreRepository->findByAssessmentAndItemId($assessment->id, $component->id, $item->id);
+                $componentItems[] = [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'scored' => [
+                        'status' => (bool)$answer,
+                        'score' => $answer ? $answer->score : null,
+                    ],
                 ];
+            }
 
-//                if (!$isAllFinished) {
-//                    break;
-//                }
-            };
+            $result[] = [
+                'id' => $component->id,
+                'name' => $component->name,
+                'details' => $componentItems,
 
-            $stagesData[] = [
-                'name' => $stage->name,
-                'instruments' => $instrumentData,
-                'isAllFinished' => $isAllFinished
             ];
-
         }
 
         return [
-            "stages"        => $stagesData,
-            "assessment"    => $assessment
+            "instruments" => $result,
+            "assessment" => $assessment
         ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function create_answer(string $link, string $assessmentId)
+    {
+        $assessment = $this->assessmentRepository->getById($assessmentId);
+        if(!$assessment) throw new Exception("Assessment not found");
+
+        if(!$link) throw new Exception("Link tidak boleh kosong");
+
+        try {
+
+            $answerEntity = new AssessmentAnswerEntity();
+            $answerEntity->assessmentId = $assessmentId;
+            $answerEntity->answer = $link;
+            $answerEntity->createdAt = Carbon::now();
+
+            return $this->assessmentAnswerRepository->create($answerEntity);
+
+        } catch (Exception $exception)
+        {
+            throw new $exception;
+        }
+
     }
 }

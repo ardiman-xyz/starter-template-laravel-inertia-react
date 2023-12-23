@@ -11,7 +11,7 @@ import {
     TableRow,
 } from "@/Components/ui/table"
 import {Assessment} from "@/types/app";
-import {TableItem} from "@/Pages/Teachers/Visitation/_components/table-item";
+import {TableItem} from "./_components/table-item";
 
 interface IProps {
     assessments : Assessment[]

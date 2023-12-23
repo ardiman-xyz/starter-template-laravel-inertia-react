@@ -111,7 +111,6 @@ class VisitationService
         $school = $this->schoolRepository->getByUserId($this->tokenService->userId());
         if(!$school) throw new Exception("School not found");
 
-
         try {
 
             $startDateTime = Carbon::parse($dto->dateStart . ' ' . $dto->timeStart);

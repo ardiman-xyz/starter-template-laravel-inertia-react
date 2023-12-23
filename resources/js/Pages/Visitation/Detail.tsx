@@ -32,8 +32,6 @@ const DetailVisitationPage = ({data}: DetailProps) => {
 
     const { setAssessmentId } = useVisitationContextNew();
 
-    console.info(data)
-
     useEffect(() => {
         setAssessmentId(data.assessment.id)
     }, [])

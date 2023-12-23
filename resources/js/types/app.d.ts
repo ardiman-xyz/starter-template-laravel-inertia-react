@@ -72,6 +72,13 @@ export type Assessment = {
     status: "schedule" | "finish";
     action_plan?: string|null;
     findings?: string|null;
+    assessment_answers: AssessmentAnswer
+}
+
+export type AssessmentAnswer = {
+    answer : string;
+    notes?: string;
+    created_at: string;
 }
 
 export type Component = {

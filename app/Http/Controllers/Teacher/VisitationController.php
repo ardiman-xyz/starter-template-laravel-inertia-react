@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Teacher;
 
+use App\Repositories\AssessmentAnswerRepository;
 use App\Repositories\AssessmentRepository;
-use App\Repositories\AssessmentScheduleRepository;
-use App\Repositories\AssessmentStageRepository;
-use App\Repositories\InstrumentRepository;
+use App\Repositories\AssessmentScoreRepository;
+use App\Repositories\ComponentDetailRepository;
+use App\Repositories\ComponentRepository;
 use App\Repositories\UserRepository;
 use App\Services\Teachers\VisitationService;
 use App\Services\TokenService;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Exception;
 
@@ -21,17 +23,19 @@ class VisitationController
         $tokenService = new TokenService();
         $assessmentRepository = new AssessmentRepository();
         $userRepository = new UserRepository();
-        $assessmentStageRepository = new AssessmentStageRepository();
-        $instrumentRepository = new InstrumentRepository();
-        $scheduleRepository = new AssessmentScheduleRepository();
+        $assessmentScoreRepository = new AssessmentScoreRepository();
+        $componentDetailRepository = new ComponentDetailRepository();
+        $componentRepository = new ComponentRepository();
+        $assessmentAnswer = new AssessmentAnswerRepository();
 
         $this->visitationService = new VisitationService(
             $assessmentRepository,
             $tokenService,
-            $assessmentStageRepository,
             $userRepository,
-            $instrumentRepository,
-            $scheduleRepository,
+            $componentRepository,
+            $componentDetailRepository,
+            $assessmentScoreRepository,
+            $assessmentAnswer
         );
     }
 
@@ -54,6 +58,25 @@ class VisitationController
         }catch (Exception $exception)
         {
             abort(404, $exception->getMessage());
+        }
+    }
+
+    public function answer(Request $request, string $assessmentId): \Illuminate\Http\JsonResponse
+    {
+        $link = $request->input("link");
+
+        try {
+            $data = $this->visitationService->create_answer($link, $assessmentId);
+            return response()->json([
+                'status' => true,
+                'message' => 'successfully upload',
+                'data' => $data
+            ], 200);
+        }catch (Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage()
+            ], 400);
         }
     }
 }

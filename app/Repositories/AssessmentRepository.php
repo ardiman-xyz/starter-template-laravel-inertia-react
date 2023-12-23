@@ -31,7 +31,7 @@ class AssessmentRepository
 
     public function getById(string $id)
     {
-        return Model::with(['school', 'teacher', 'academicSemester'])->find($id);
+        return Model::with(['school', 'teacher', 'academicSemester', 'assessmentAnswers'])->find($id);
 
     }
 

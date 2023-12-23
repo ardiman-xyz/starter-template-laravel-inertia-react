@@ -2,23 +2,24 @@ import React from "react";
 
 import {Component} from "@/types/app";
 import {TableCell, TableRow} from "@/Components/ui/table";
-import {TableItemDetail} from "../detail/table-item-detail";
+import {InstrumentItemDetail} from "./instrument-item-detail";
 
-interface TableItemProps {
+
+interface IProps {
     instrument: Component;
     index: number
 }
 
-export const TableItem = ({instrument, index}: TableItemProps) => {
 
+export const InstrumentItem = ({instrument, index}: IProps) => {
     return (
         <>
-            <TableRow>
-                <TableCell className="text-center border" rowSpan={instrument.details.length + 1}>{index + 1}</TableCell>
-                <TableCell className="border font-semibold text-lg">{instrument.name}</TableCell>
-            </TableRow>
+        <TableRow>
+            <TableCell className="text-center border" rowSpan={instrument.details.length + 1}>{index + 1}</TableCell>
+            <TableCell className="border font-semibold text-lg">{instrument.name}</TableCell>
+        </TableRow>
             {instrument.details.map((item, itemIndex) => (
-                <TableItemDetail
+                <InstrumentItemDetail
                     index={itemIndex}
                     key={itemIndex}
                     data={item}

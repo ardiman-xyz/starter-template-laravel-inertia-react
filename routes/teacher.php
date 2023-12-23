@@ -14,6 +14,7 @@ Route::middleware(["cekCookie"])->group(function () {
             Route::prefix("visitation")->group(function () {
                 Route::get("/", [\App\Http\Controllers\Teacher\VisitationController::class, 'index'])->name("teacher.visitation.index");
                 Route::get("{id}", [\App\Http\Controllers\Teacher\VisitationController::class, 'show'])->name("teacher.visitation.show");
+                Route::post("{id}/answer", [\App\Http\Controllers\Teacher\VisitationController::class, 'answer'])->name("teacher.visitation.answer");
             });
         });
 
