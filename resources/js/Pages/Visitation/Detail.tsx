@@ -1,9 +1,10 @@
+import {useEffect, useState} from "react";
+import {ChevronDown} from "lucide-react";
 
 import {Head} from "@inertiajs/react";
-
 import {Assessment, Component} from "@/types/app";
+import useVisitationContextNew from "@/Context/useVisitationContextNew";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-import {ChevronDown} from "lucide-react";
 import {cn} from "@/lib/utils";
 
 import Heading from "@/Components/Heading";
@@ -15,10 +16,9 @@ import {
     TableRow,
 } from "@/Components/ui/table"
 import {TableItem} from "./_components/detail/table-item";
-import useVisitationContextNew from "@/Context/useVisitationContextNew";
-import {useEffect, useState} from "react";
-import {Answer} from "@/Pages/Visitation/_components/detail/answer";
+import {Answer} from "./_components/detail/answer";
 import {Hint} from "@/Components/Hint";
+import {Note} from "./_components/detail/note";
 
 
 interface DetailProps {
@@ -32,6 +32,8 @@ const DetailVisitationPage = ({data}: DetailProps) => {
 
     const { setAssessmentId } = useVisitationContextNew();
 
+    console.info(data)
+
     useEffect(() => {
         setAssessmentId(data.assessment.id)
     }, [])
@@ -41,8 +43,6 @@ const DetailVisitationPage = ({data}: DetailProps) => {
     const handleClick = () => {
         setIsOpen(!isOpen);
     };
-
-
 
     return(
         <Authenticated
@@ -72,11 +72,11 @@ const DetailVisitationPage = ({data}: DetailProps) => {
         >
             <Head title="Supervisi detail" />
 
-            <div className="mt-4 container mx-auto max-w-5xl mb-10">
+            <div className="mt-4 container mx-auto max-w-5xl mb-10 space-y-10">
                 <div className="">
                     <Answer />
                 </div>
-                <div className="mt-10">
+                <div className="">
                     <div className="flex justify-between bg-gray-100 rounded p-4">
                         <Heading
                             title={`Instrumen Evaluasi Visitasi Guru`}
@@ -113,6 +113,15 @@ const DetailVisitationPage = ({data}: DetailProps) => {
                             }
                         </TableBody>
                     </Table>
+                </div>
+
+                <div>
+                    <Note
+                        defaultData={{
+                            findings: data.assessment.findings,
+                            action_plan: data.assessment.action_plan
+                        }}
+                    />
                 </div>
 
             </div>

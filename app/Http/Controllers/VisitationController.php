@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\AnalysisUpdateDTO;
 use App\DTO\CreateAssessmentDTO;
 use App\DTO\ScoredAssessmentDTO;
 use App\DTO\SetUpDateDTO;
 use App\Http\Requests\CreateAssessmentRequest;
 use App\Http\Requests\SetUpDateRequest;
 use App\Http\Requests\StoreScoreRequest;
+use App\Http\Requests\UpdateAnalysisRequest;
 use App\Repositories\AcademicSemesterRepository;
 use App\Repositories\AssessmentAnswerRepository;
 use App\Repositories\AssessmentRepository;
@@ -272,6 +274,30 @@ class VisitationController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'successfully scored',
+                'data' => $data
+            ], 200);
+        }catch (Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage()
+            ], 400);
+        }
+    }
+
+    public function analysis(UpdateAnalysisRequest $request, string $assessment_id): JsonResponse
+    {
+        $data = $request->validationData();
+
+        $dto = new AnalysisUpdateDTO();
+        $dto->assessmentId = $assessment_id;
+        $dto->finder = $data['finder'];
+        $dto->actionPlan = $data['action_plan'];
+
+        try {
+            $data = $this->visitationService->UpdateAnalysis($dto);
+            return response()->json([
+                'status' => true,
+                'message' => 'successfully updated',
                 'data' => $data
             ], 200);
         }catch (Exception $exception) {

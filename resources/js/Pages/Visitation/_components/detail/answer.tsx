@@ -34,7 +34,7 @@ export const Answer = () => {
                 </Hint>
             </div>
 
-            <Table className={cn("border mt-4 transition-all duration-500", !isOpen && "hidden")}>
+            <Table className={cn("border mt-3 transition-all duration-500", !isOpen && "hidden")}>
 
             <TableHeader>
                     <TableRow>

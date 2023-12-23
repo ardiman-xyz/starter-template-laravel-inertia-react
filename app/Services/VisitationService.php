@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTO\AnalysisUpdateDTO;
 use App\DTO\CreateAssessmentDTO;
 use App\DTO\ScoredAssessmentDTO;
 use App\DTO\SetUpDateDTO;
@@ -309,5 +310,18 @@ class VisitationService
         if(!$assessment) throw new Exception("Assessment not found");
 
         $this->assessmentRepository->deleteById($id);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function UpdateAnalysis(AnalysisUpdateDTO $dto): \App\Models\Assessment
+    {
+        $assessment = $this->assessmentRepository->findById($dto->assessmentId);
+        if(!$assessment) throw new Exception("Assessment not found");
+
+        $assessment->findings = $dto->finder;
+        $assessment->action_plan = $dto->actionPlan;
+        return $this->assessmentRepository->update($assessment->id, $assessment);
     }
 }

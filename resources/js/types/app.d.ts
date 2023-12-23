@@ -69,7 +69,9 @@ export type Assessment = {
     updated_at: string;
     started_at: string;
     finished_at: string;
-    status: "schedule" | "finish"
+    status: "schedule" | "finish";
+    action_plan?: string|null;
+    findings?: string|null;
 }
 
 export type Component = {
