@@ -40,7 +40,6 @@ export const Note = ({defaultData}: NoteProps) => {
 
     const [isOpen, setIsOpen] = useState<boolean>(true);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -75,14 +74,15 @@ export const Note = ({defaultData}: NoteProps) => {
     }
 
     return (
-        <div>
+        <div className="border-t-2 border-sky-700  rounded ">
             <div className="flex justify-between bg-gray-100 rounded p-4">
                 <Heading
                     title={`Temuan dan Tindak Lanjut Guru`}
                     description={`Silakan gunakan formulir di bawah ini untuk mencatat temuan Anda dan tindak lanjut yang guru akan lakukan dan perbaiki.`}
                 />
                 <Hint description={isOpen ? "Close section" : "Open section"}>
-                    <ChevronDown onClick={handleClick} className={`transition-transform duration-500 ${isOpen ? "" : "transform -rotate-90"}`}/>
+                    <ChevronDown onClick={handleClick}
+                                 className={`transition-transform duration-500 ${isOpen ? "" : "transform -rotate-90"}`}/>
                 </Hint>
             </div>
 

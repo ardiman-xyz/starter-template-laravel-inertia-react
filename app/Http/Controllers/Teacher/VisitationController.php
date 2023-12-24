@@ -66,7 +66,7 @@ class VisitationController
         $link = $request->input("link");
 
         try {
-            $data = $this->visitationService->create_answer($link, $assessmentId);
+            $data = $this->visitationService->answer($link, $assessmentId);
             return response()->json([
                 'status' => true,
                 'message' => 'successfully upload',

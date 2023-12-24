@@ -3,14 +3,12 @@
 namespace App\Services\Teachers;
 
 use App\Entities\AssessmentAnswerEntity;
+use App\Models\AssessmentAnswer;
 use App\Repositories\AssessmentAnswerRepository;
 use App\Repositories\AssessmentRepository;
-use App\Repositories\AssessmentScheduleRepository;
 use App\Repositories\AssessmentScoreRepository;
-use App\Repositories\AssessmentStageRepository;
 use App\Repositories\ComponentDetailRepository;
 use App\Repositories\ComponentRepository;
-use App\Repositories\InstrumentRepository;
 use App\Repositories\UserRepository;
 use App\Services\TokenService;
 use Carbon\Carbon;
@@ -101,13 +99,29 @@ class VisitationService
     /**
      * @throws Exception
      */
-    public function create_answer(string $link, string $assessmentId)
+    public function answer(string $link, string $assessmentId)
     {
         $assessment = $this->assessmentRepository->getById($assessmentId);
         if(!$assessment) throw new Exception("Assessment not found");
 
         if(!$link) throw new Exception("Link tidak boleh kosong");
 
+        $answer = $this->assessmentAnswerRepository->findByAssessmentId($assessmentId);
+
+        if(!$answer)
+        {
+           return $this->create_answer($link, $assessmentId);
+        }else{
+            return $this->update_answer($answer, $link);
+        }
+
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function create_answer(string $link, string $assessmentId)
+    {
         try {
 
             $answerEntity = new AssessmentAnswerEntity();
@@ -121,6 +135,13 @@ class VisitationService
         {
             throw new $exception;
         }
+    }
 
+    private function update_answer(AssessmentAnswer $model, string $link): AssessmentAnswer
+    {
+        $model->answer = $link;
+        $model->created_at = Carbon::now();
+
+        return $this->assessmentAnswerRepository->update($model->id, $model);
     }
 }

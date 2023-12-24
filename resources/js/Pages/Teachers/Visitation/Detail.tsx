@@ -5,7 +5,6 @@ import {Head} from "@inertiajs/react";
 
 import {Assessment, Component} from "@/types/app";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-import useVisitationContext from "@/Context/useVisitationContext";
 import Heading from "@/Components/Heading";
 import {Hint} from "@/Components/Hint";
 import {Table, TableBody, TableHead, TableHeader, TableRow} from "@/Components/ui/table";
@@ -23,8 +22,6 @@ interface DetailProps {
 }
 
 const DetailVisitationPageTeacher = ({data}: DetailProps) => {
-
-    console.info(data)
 
     const [isOpen, setIsOpen] = useState<boolean>(true);
 
@@ -62,7 +59,7 @@ const DetailVisitationPageTeacher = ({data}: DetailProps) => {
                     <Answer
                         startedAt={data.assessment.started_at}
                         finishedAt={data.assessment.finished_at}
-                        defaultData={data.assessment.assessment_answers}
+                        defaultData={data.assessment.assessment_answers ?? null}
                     />
                 </div>
 

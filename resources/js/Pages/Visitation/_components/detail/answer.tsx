@@ -1,5 +1,8 @@
-import {useState} from "react";
-import {ChevronDown} from "lucide-react";
+import React, {useState} from "react";
+import {cn} from "@/lib/utils";
+import {AlertCircle, ChevronDown} from "lucide-react";
+
+import {AssessmentAnswer} from "@/types/app";
 
 import Heading from "@/Components/Heading";
 import {
@@ -11,10 +14,16 @@ import {
     TableRow,
 } from "@/Components/ui/table"
 import {Hint} from "@/Components/Hint";
-import {cn} from "@/lib/utils";
+import {Alert, AlertDescription, AlertTitle} from "@/Components/ui/alert";
+import {formatDate} from "@/helper";
 
+interface AnswerProps {
+    startedAt: string;
+    finishedAt: string;
+    defaultData?: AssessmentAnswer
+}
 
-export const Answer = () => {
+export const Answer = ({ startedAt, finishedAt, defaultData }: AnswerProps) => {
 
     const [isOpen, setIsOpen] = useState<boolean>(true);
 
@@ -24,31 +33,74 @@ export const Answer = () => {
 
     return (
         <div>
-            <div className="flex justify-between bg-gray-100 rounded p-4">
+            <div className="flex justify-between bg-gray-100 rounded border-t-2 border-sky-700 p-4">
                 <Heading
                     title={`Tanggapan Guru`}
-                    description={`Ini adalah bagian di mana Anda dapat melihat jawaban dan tanggapan dari guru yang Anda visitasi.`}
+                    description={`Silakan upload link video anda`}
                 />
                 <Hint description={isOpen ? "Close section": "Open section"} >
                     <ChevronDown onClick={handleClick} className={`transition-transform duration-500 ${isOpen ? "" : "transform -rotate-90"}`} />
                 </Hint>
             </div>
 
-            <Table className={cn("border mt-3 transition-all duration-500", !isOpen && "hidden")}>
+            <div className={cn(" transition-all duration-500", !isOpen && "hidden")}>
 
-            <TableHeader>
-                    <TableRow>
-                        <TableHead>Jawaban guru</TableHead>
-                        <TableHead>Tanggal submit</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    <TableRow>
-                        <TableCell>Paid</TableCell>
-                        <TableCell>Credit Card</TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
+                {
+                    !defaultData?.answer && (
+                        <Alert className="mt-4 bg-yellow-100 border border-yellow-400">
+                            <AlertCircle className="h-4 w-4" />
+                            <AlertTitle>Pemberitahuan!</AlertTitle>
+                            <AlertDescription>
+                                Anda belum mengupload link, klik upload sekarang untuk
+                            </AlertDescription>
+                        </Alert>
+                    )
+                }
+
+                <Table className={"border mt-3"}>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Jadwal</TableHead>
+                            <TableHead>Link video</TableHead>
+                            <TableHead>Tanggal submit</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell className="w-[300px]">
+                                <span className="font-sans font-semibold"
+                                >
+                                        {formatDate(startedAt)}
+                                    <span className="text-orange-700 mx-3">
+                                            s/d
+                                          </span>
+                                    {formatDate(finishedAt)}
+                                    </span>
+                            </TableCell>
+                            <TableCell>
+                                {
+                                    defaultData === null && "-"
+                                }
+
+                                <Hint description={"Klik untuk lihat"}>
+                                    <a href={defaultData?.answer} target="_blank" className="underline cursor-pointer text-blue-800">
+                                        {
+                                            defaultData?.answer
+                                        }
+                                    </a>
+                                </Hint>
+                            </TableCell>
+                            <TableCell>
+                                {
+                                    defaultData?.created_at === null || defaultData?.created_at === undefined ? "-" : formatDate(defaultData?.created_at)
+                                }
+
+
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </div>
         </div>
     )
 }

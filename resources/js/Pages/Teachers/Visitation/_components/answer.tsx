@@ -21,12 +21,10 @@ import {AnswerStoreModal} from "./answer-store-modal";
 interface AnswerProps {
     startedAt: string;
     finishedAt: string;
-    defaultData: AssessmentAnswer
+    defaultData?: AssessmentAnswer
 }
 
 export const Answer = ({ startedAt, finishedAt, defaultData }: AnswerProps) => {
-
-    console.info(defaultData)
 
     const [isOpen, setIsOpen] = useState<boolean>(true);
 
@@ -49,7 +47,7 @@ export const Answer = ({ startedAt, finishedAt, defaultData }: AnswerProps) => {
             <div className={cn(" transition-all duration-500", !isOpen && "hidden")}>
 
                 {
-                    defaultData.answer === null && (
+                   !defaultData?.answer && (
                         <Alert className="mt-4 bg-yellow-100 border border-yellow-400">
                             <AlertCircle className="h-4 w-4" />
                             <AlertTitle>Pemberitahuan!</AlertTitle>
@@ -86,25 +84,27 @@ export const Answer = ({ startedAt, finishedAt, defaultData }: AnswerProps) => {
                                     defaultData === null && "-"
                                 }
 
-                                {
-                                    defaultData.answer
-                                }
+                                <Hint description={"Klik untuk lihat"}>
+                                   <a href={defaultData?.answer} target="_blank" className="underline cursor-pointer text-blue-800">
+                                        {
+                                            defaultData?.answer
+                                        }
+                                   </a>
+                                </Hint>
                             </TableCell>
                             <TableCell>
                                 {
-                                    defaultData.created_at === null && "-"
+                                    defaultData?.created_at === null || defaultData?.created_at === undefined ? "-" : formatDate(defaultData?.created_at)
                                 }
 
-                                {
-                                    formatDate(defaultData.created_at)
-                                }
+
                             </TableCell>
                             <TableCell>
                                <AnswerStoreModal
                                 defaultData={{
-                                    link : defaultData.answer
+                                    link : defaultData?.answer
                                 }}
-                                alreadyAnswer={ defaultData.answer !== null }
+                                alreadyAnswer={ defaultData?.answer !== null }
                                />
                             </TableCell>
                         </TableRow>

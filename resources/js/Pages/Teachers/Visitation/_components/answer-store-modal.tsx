@@ -34,7 +34,7 @@ const formSchema = z
 
 interface IProps {
     defaultData: {
-        link: string
+        link?: string | null
     };
     alreadyAnswer: boolean;
 }

@@ -72,9 +72,13 @@ const DetailVisitationPage = ({data}: DetailProps) => {
 
             <div className="mt-4 container mx-auto max-w-5xl mb-10 space-y-10">
                 <div className="">
-                    <Answer />
+                    <Answer
+                        startedAt={data.assessment.started_at}
+                        finishedAt={data.assessment.finished_at}
+                        defaultData={data.assessment.assessment_answers ?? null}
+                    />
                 </div>
-                <div className="">
+                <div className="border-t-2 border-sky-700  rounded ">
                     <div className="flex justify-between bg-gray-100 rounded p-4">
                         <Heading
                             title={`Instrumen Evaluasi Visitasi Guru`}
