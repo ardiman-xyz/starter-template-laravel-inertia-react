@@ -33,4 +33,9 @@ class AssessmentScoreRepository
 
         return $scored;
     }
+
+    public function totalScore(string $assessmentId)
+    {
+        return Model::where("assessment_id", $assessmentId)->sum("score");
+    }
 }

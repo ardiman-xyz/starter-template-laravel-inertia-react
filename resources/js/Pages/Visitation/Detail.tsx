@@ -19,6 +19,7 @@ import {TableItem} from "./_components/detail/table-item";
 import {Answer} from "./_components/detail/answer";
 import {Hint} from "@/Components/Hint";
 import {Note} from "./_components/detail/note";
+import {Score} from "./_components/detail/Score";
 
 
 interface DetailProps {
@@ -29,6 +30,8 @@ interface DetailProps {
 }
 
 const DetailVisitationPage = ({data}: DetailProps) => {
+
+    console.info(data)
 
     const { setAssessmentId } = useVisitationContextNew();
 
@@ -117,8 +120,12 @@ const DetailVisitationPage = ({data}: DetailProps) => {
                     </Table>
                 </div>
 
+                <div className="w-full mt-10">
+                   <Score />
+                </div>
+
                 <div>
-                    <Note
+                <Note
                         defaultData={{
                             findings: data.assessment.findings,
                             action_plan: data.assessment.action_plan

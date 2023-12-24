@@ -38,4 +38,9 @@ class ComponentDetailRepository
     {
         return Model::where("component_id", $id)->get();
     }
+
+    public function sumMaxScore()
+    {
+        return Model::sum("max_score");
+    }
 }
