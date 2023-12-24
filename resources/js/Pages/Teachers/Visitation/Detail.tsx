@@ -13,15 +13,24 @@ import {Answer} from "./_components/answer";
 import {Note} from "./_components/note";
 import {InstrumentItem} from "./_components/instrument-item";
 import useAssessmentStore from "@/Context/teacher/useAssessmentStore";
+import {Score} from "./_components/score";
 
 interface DetailProps {
     data: {
-        assessment: Assessment,
-        instruments: Component []
+        assessment: Assessment;
+        instruments: Component [];
+        component_max_score: number;
+        total_score: number;
+        final_score: {
+            evaluate: string;
+            final_score: number;
+        }
     }
 }
 
 const DetailVisitationPageTeacher = ({data}: DetailProps) => {
+
+    console.info(data)
 
     const [isOpen, setIsOpen] = useState<boolean>(true);
 
@@ -60,6 +69,7 @@ const DetailVisitationPageTeacher = ({data}: DetailProps) => {
                         startedAt={data.assessment.started_at}
                         finishedAt={data.assessment.finished_at}
                         defaultData={data.assessment.assessment_answers ?? null}
+                        status={data.assessment.status}
                     />
                 </div>
 
@@ -101,6 +111,15 @@ const DetailVisitationPageTeacher = ({data}: DetailProps) => {
                         </TableBody>
                     </Table>
                 </div>
+
+                <div className="w-full mt-10">
+                    <Score
+                        component_max_score={data.component_max_score}
+                        total_score={data.total_score}
+                        final_score={data.final_score}
+                    />
+                </div>
+
                 <div>
                     <Note
                         data={{

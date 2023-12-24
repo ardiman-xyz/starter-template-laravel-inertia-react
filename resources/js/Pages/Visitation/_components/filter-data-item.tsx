@@ -58,15 +58,30 @@ const FilterDataItem = ({assessment, index}: IProps) => {
                        </Hint>
                 </TableCell>
                 <TableHead>
-                    <Hint description="Klik untuk ubah tanggal">
-                        <span className="font-sans underline text-gray-800" onClick={() => setIsModalDateOpen(true)}>
-                            {formatDate(assessment.started_at)}
-                                <span className="text-orange-700 mx-3">
-                                s/d
-                              </span>
+                    {
+                        assessment.status === "schedule" && (
+                            <Hint description="Klik untuk ubah tanggal">
+                                <span className="font-sans underline text-gray-800" onClick={() => setIsModalDateOpen(true)}>
+                                    {formatDate(assessment.started_at)}
+                                    <span className="text-orange-800 mx-3">
+                                        s/d
+                                      </span>
+                                    {formatDate(assessment.finished_at)}
+                                </span>
+                            </Hint>
+                        )
+                    }
+                    {
+                        assessment.status === "finish" && (
+                            <span className="font-sans text-gray-600" >
+                                    {formatDate(assessment.started_at)}
+                                <span className="mx-3">
+                                        s/d
+                                      </span>
                                 {formatDate(assessment.finished_at)}
-                        </span>
-                    </Hint>
+                                </span>
+                        )
+                    }
                 </TableHead>
                 <TableCell>
                     {
@@ -76,7 +91,7 @@ const FilterDataItem = ({assessment, index}: IProps) => {
                             </Badge>
                         ) : (
                             <Badge className="bg-green-600 text-white">
-                                Selesai
+                            Selesai
                             </Badge>
                         )
                     }

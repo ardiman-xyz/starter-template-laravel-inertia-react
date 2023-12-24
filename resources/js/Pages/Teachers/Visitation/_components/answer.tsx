@@ -17,14 +17,16 @@ import {Hint} from "@/Components/Hint";
 import {Alert, AlertDescription, AlertTitle} from "@/Components/ui/alert";
 import {formatDate} from "@/helper";
 import {AnswerStoreModal} from "./answer-store-modal";
+import {Badge} from "@/Components/ui/badge";
 
 interface AnswerProps {
     startedAt: string;
     finishedAt: string;
-    defaultData?: AssessmentAnswer
+    defaultData?: AssessmentAnswer;
+    status: string;
 }
 
-export const Answer = ({ startedAt, finishedAt, defaultData }: AnswerProps) => {
+export const Answer = ({ startedAt, finishedAt, defaultData, status }: AnswerProps) => {
 
     const [isOpen, setIsOpen] = useState<boolean>(true);
 
@@ -64,7 +66,9 @@ export const Answer = ({ startedAt, finishedAt, defaultData }: AnswerProps) => {
                             <TableHead>Jadwal</TableHead>
                             <TableHead>Link video</TableHead>
                             <TableHead>Tanggal submit</TableHead>
-                            <TableHead>Aksi</TableHead>
+                            <TableHead>
+                                {status === "schedule" ? "Aksi" : "Status visitasi"}
+                            </TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -100,12 +104,20 @@ export const Answer = ({ startedAt, finishedAt, defaultData }: AnswerProps) => {
 
                             </TableCell>
                             <TableCell>
-                               <AnswerStoreModal
-                                defaultData={{
-                                    link : defaultData?.answer
-                                }}
-                                alreadyAnswer={ defaultData?.answer !== null }
-                               />
+                                {
+                                    status === "schedule" ? (
+                                        <AnswerStoreModal
+                                            defaultData={{
+                                                link : defaultData?.answer
+                                            }}
+                                            alreadyAnswer={ defaultData?.answer !== null }
+                                        />
+                                    ): (
+                                        <Badge className="bg-green-600 text-white">
+                                            Selesai
+                                        </Badge>
+                                    )
+                                }
                             </TableCell>
                         </TableRow>
                     </TableBody>

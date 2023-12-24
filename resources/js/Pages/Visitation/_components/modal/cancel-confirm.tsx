@@ -21,7 +21,6 @@ const CancelConfirm = ({onClose, id}: IProps) => {
         await axios
             .delete(`/visitation/date/${id}`)
             .then((data) => {
-                console.info(data)
                 const { message } = data.data;
                 toast.success(`${message}`);
                 router.reload();

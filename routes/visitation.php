@@ -21,6 +21,7 @@ Route::middleware(["cekCookie"])->group(function () {
 
             Route::post("{assessment_id}/score", [\App\Http\Controllers\VisitationController::class, "score"]);
             Route::put("{assessment_id}/analysis", [\App\Http\Controllers\VisitationController::class, "analysis"]);
+            Route::put("{assessment_id}/finish", [\App\Http\Controllers\VisitationController::class, "finish"]);
         });
 
     });

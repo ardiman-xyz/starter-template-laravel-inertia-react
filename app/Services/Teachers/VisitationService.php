@@ -90,10 +90,43 @@ class VisitationService
             ];
         }
 
+        $sumMaxScore = (int)$this->componentDetailRepository->sumMaxScore();
+        $totalScore = (int)$this->assessmentScoreRepository->totalScore($assessment->id);
+
+        $final_score = $this->calculateFinalScore($totalScore, $sumMaxScore);
+
         return [
             "instruments" => $result,
-            "assessment" => $assessment
+            "assessment" => $assessment,
+            "component_max_score" => $sumMaxScore,
+            "total_score" => $totalScore,
+            "final_score" => $final_score
         ];
+    }
+
+    public function calculateFinalScore(int $score, int $max_score): array
+    {
+        $final_score = ($score / $max_score) * 100;
+        $final_score = ceil($final_score);
+
+        return [
+            "final_score" => $final_score,
+            "evaluate" => $this->evaluateAchievement($final_score),
+        ];
+    }
+
+    private function evaluateAchievement(int $finalScore): string
+    {
+
+        if($finalScore >= 86) {
+            return 'Baik Sekali';
+        } elseif($finalScore >= 70) {
+            return 'Baik';
+        } elseif($finalScore >= 55) {
+            return 'Cukup';
+        } else {
+            return 'Kurang';
+        }
     }
 
     /**

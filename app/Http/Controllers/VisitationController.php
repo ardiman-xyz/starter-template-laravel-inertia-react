@@ -307,4 +307,21 @@ class VisitationController extends Controller
             ], 400);
         }
     }
+
+    public function finish(string $assessment_id): JsonResponse
+    {
+        try {
+            $this->visitationService->finish($assessment_id);
+            return response()->json([
+                'status' => true,
+                'message' => 'successfully updated',
+                'data' => []
+            ], 200);
+        }catch (Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => $exception->getMessage()
+            ], 400);
+        }
+    }
 }

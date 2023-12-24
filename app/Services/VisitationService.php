@@ -187,7 +187,7 @@ class VisitationService
         $final_score = ceil($final_score);
 
         return [
-            "finale_score" => $final_score,
+            "final_score" => $final_score,
             "evaluate" => $this->evaluateAchievement($final_score),
         ];
     }
@@ -354,6 +354,15 @@ class VisitationService
 
         $assessment->findings = $dto->finder;
         $assessment->action_plan = $dto->actionPlan;
+        return $this->assessmentRepository->update($assessment->id, $assessment);
+    }
+
+    public function finish(string $assessment_id)
+    {
+        $assessment = $this->assessmentRepository->findById($assessment_id);
+        if(!$assessment) throw new Exception("Assessment not found");
+
+        $assessment->status = "finish";
         return $this->assessmentRepository->update($assessment->id, $assessment);
     }
 }
