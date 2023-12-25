@@ -97,7 +97,9 @@ const FilterDataItem = ({assessment, index}: IProps) => {
                     }
                 </TableCell>
                 <TableCell className="text-center">
-                    -
+                   <span>
+                        {assessment.final_score.final_score}%  <Badge className="text-black ml-1 bg-gray-300 hover:bg-gray-400">{assessment.final_score.evaluate}</Badge>
+                   </span>
                 </TableCell>
                 <TableCell className="text-center">
                     <DropdownMenu>

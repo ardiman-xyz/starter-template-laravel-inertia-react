@@ -12,7 +12,7 @@ class AssessmentRepository
         return Model::where("school_id", $schoolId)
             ->where("academic_semester_id", $academicSemesterId)
             ->with('teacher')
-            ->orderBy("id", "desc")
+            ->orderBy("id", "asc")
             ->get();
     }
 

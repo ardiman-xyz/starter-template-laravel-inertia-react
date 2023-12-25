@@ -86,7 +86,20 @@ class VisitationService
 
         $school = $this->schoolRepository->getByUserId($this->tokenService->userId());
 
-        return $this->assessmentRepository->findBySchoolAndSemester($school->id, $yearAcademic->id);
+
+
+        $assessments = $this->assessmentRepository->findBySchoolAndSemester($school->id, $yearAcademic->id);
+
+        $assessments->map(function ($assessment) {
+            $sumMaxScore = (int)$this->componentDetailRepository->sumMaxScore();
+            $totalScore = (int)$this->assessmentScoreRepository->totalScore($assessment->id);
+
+            $assessment->final_score = $this->calculateFinalScore($totalScore, $sumMaxScore);
+
+            return $assessment;
+        });
+
+        return $assessments;
     }
 
     public function getTeachersBySchoolId()
