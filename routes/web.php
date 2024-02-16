@@ -6,8 +6,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Cookie;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [

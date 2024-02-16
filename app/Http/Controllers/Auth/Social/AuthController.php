@@ -51,7 +51,7 @@ class AuthController
         $authData->providerAccountId = $user->getId();
         $authData->provider = "google";
 
-        $response = $this->authService->authenticateWithGoogle($authData);
+        $this->authService->authenticateWithGoogle($authData);
 
         return redirect()->route("dashboard");
     }
