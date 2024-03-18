@@ -102,8 +102,9 @@ class AuthService
     /**
      * @throws Exception
      */
-    public function userRegister(UserRegisterDTO $DTO): void
+    public function userRegister(UserRegisterDTO $DTO)
     {
+
         $isEmailExist = $this->userRepository->getByEmail($DTO->email);
         if($isEmailExist) throw new Exception("Email exist");
 
@@ -124,6 +125,7 @@ class AuthService
             $newPayload->name = $DTO->name;
 
             $token = $this->tokenService->generate($newPayload);
+
             Cookie::queue("vistoken", $token, 1440);
 
             DB::commit();
