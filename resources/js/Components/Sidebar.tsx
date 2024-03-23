@@ -8,9 +8,9 @@ const Sidebar = () => {
             <div className="p-6">
                 <Logo />
             </div>
-            <div className="flex flex-col w-full h-full justify-between overflow-y-auto relative">
+            <div className="flex flex-col w-full h-full overflow-y-auto relative">
                 <SidebarRoutes />
-                <SideBarBottom />
+                {/* <SideBarBottom /> */}
             </div>
         </div>
     );
