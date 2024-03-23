@@ -4,6 +4,7 @@ namespace App\DTO;
 
 class SetUpDateDTO
 {
+    public string $instrumentId;
     public string $assessmentId;
     public string $dateStart;
     public string $timeStart;

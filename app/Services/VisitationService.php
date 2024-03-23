@@ -87,7 +87,6 @@ class VisitationService
         $school = $this->schoolRepository->getByUserId($this->tokenService->userId());
 
 
-
         $assessments = $this->assessmentRepository->findBySchoolAndSemester($school->id, $yearAcademic->id);
 
         $assessments->map(function ($assessment) {
@@ -182,6 +181,7 @@ class VisitationService
         $sumMaxScore = (int)$this->componentDetailRepository->sumMaxScore();
         $totalScore = (int)$this->assessmentScoreRepository->totalScore($assessment->id);
 
+
         $final_score = $this->calculateFinalScore($totalScore, $sumMaxScore);
 
         return [
@@ -196,6 +196,16 @@ class VisitationService
 
     public function calculateFinalScore(int $score, int $max_score): array
     {
+        if ($max_score == 0) {
+            // Handle the case where $max_score is zero
+            // You can either return a default value or throw an exception
+            return [
+                "final_score" => 0,
+                "evaluate" => "N/A",
+            ];
+        }
+    
+        
         $final_score = ($score / $max_score) * 100;
         $final_score = ceil($final_score);
 
