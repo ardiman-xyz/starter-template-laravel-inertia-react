@@ -16,6 +16,11 @@ class AcademicSemesterRepository
             ->get();
     }
 
+    public function getAll()
+    {
+        return Model::latest()->get();
+    }
+
     public function getByYearSemester(string $year, string $semester)
     {
         return Model::where("year", $year)->where("semester", $semester)->first();

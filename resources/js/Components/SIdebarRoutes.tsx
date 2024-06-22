@@ -26,17 +26,16 @@ const Routes = [
         href: "/teacher",
         requiredRoles: ["Headmaster"],
     },
-
-    {
-        icon: BookLock,
-        label: "Instrumen & nilai",
-        href: "/instruments",
-        requiredRoles: ["Headmaster"],
-    },
     {
         icon: Inbox,
         label: "Tahun Akademik",
         href: "/academic-semester",
+        requiredRoles: ["Headmaster"],
+    },
+    {
+        icon: BookLock,
+        label: "Instrumen & nilai",
+        href: "/instruments",
         requiredRoles: ["Headmaster"],
     },
     {

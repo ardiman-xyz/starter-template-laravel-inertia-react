@@ -19,7 +19,11 @@ class AcademicSemesterController extends Controller
 
     public function index(): InertiaResponse
     {
-        return Inertia::render("AcademicSemester/Index", []);
+        $data = $this->academicSemesterService->all();
+
+        return Inertia::render("AcademicSemester/Index", [
+            "data" => $data
+        ]);
     }
 
     public function store(AcademicSemesterRequest $request, AcademicSemesterDTO $dto): JsonResponse

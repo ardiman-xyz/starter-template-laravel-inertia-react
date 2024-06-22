@@ -5,6 +5,10 @@ import {AcademicSemester} from "@/types/app";
 
 export const columns: ColumnDef<AcademicSemester>[] = [
     {
+        accessorKey: "year",
+        header: "Tahun",
+    },
+    {
         accessorKey: "academic_year",
         header: "Tahun Akademik",
     },

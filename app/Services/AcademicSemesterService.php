@@ -22,6 +22,11 @@ class AcademicSemesterService
         return $this->academicSemesterRepository->findAll();
     }
 
+    public function all()
+    {
+        return $this->academicSemesterRepository->getAll();
+    }
+
     public function create(AcademicSemesterDTO $data)
     {
         $isAcademicSemesterAlreadyExist = $this->academicSemesterRepository->academicAlreadyExists($data->year, $data->semester, $data->academicYear);

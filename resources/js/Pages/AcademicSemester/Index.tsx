@@ -4,8 +4,16 @@ import Authenticated from "@/Layouts/AuthenticatedLayout";
 import Heading from "@/Components/Heading";
 import {DataTable} from "@/Pages/AcademicSemester/_components/data-table";
 import {columns} from "@/Pages/AcademicSemester/_components/columns";
+import {AcademicSemester} from "@/types/app";
 
-const AcademicSemesterPage = () => {
+interface IProps {
+    data: AcademicSemester[]
+}
+
+const AcademicSemesterPage = ({data}: IProps) => {
+
+    console.info(data)
+
     return (
         <Authenticated>
             <Head title="Akademik semester"/>
@@ -15,7 +23,7 @@ const AcademicSemesterPage = () => {
             />
 
             <div className="mt-7">
-                <DataTable columns={columns} data={[]}/>
+                <DataTable columns={columns} data={data}/>
             </div>
         </Authenticated>
     )
