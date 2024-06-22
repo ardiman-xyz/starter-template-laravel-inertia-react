@@ -67,26 +67,26 @@ class VisitationController extends Controller
     {
         $data = $this->visitationService->getAcademicSemester();
         return Inertia::render("Visitation/Index", [
-            "academic_year" => $data
+            "data" => $data
         ]);
     }
 
     public function filter(Request $request)
     {
-        $year = $request->query('year');
+        $academic_year = $request->query('academic_year');
         $semester = $request->query('smt');
 
-        if(!$year || !$semester) {
+        if(!$academic_year || !$semester) {
             abort("404");
         }
 
         try {
 
-            $data = $this->visitationService->getFilterByAcademicSemester($year, $semester);
+            $data = $this->visitationService->getFilterByAcademicSemester($academic_year, $semester);
 
             return Inertia::render("Visitation/Filter", [
                 "data"  => $data,
-                "year"  => $year,
+                "year"  => $academic_year,
                 "semester" => $semester
             ]);
 

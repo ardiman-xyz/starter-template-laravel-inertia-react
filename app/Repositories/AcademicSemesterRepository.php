@@ -11,8 +11,8 @@ class AcademicSemesterRepository
     public function findAll()
     {
         return DB::table('academic_semesters')
-            ->select('year')
-            ->groupBy('year')
+            ->select('academic_year')
+            ->distinct()
             ->get();
     }
 
@@ -21,9 +21,9 @@ class AcademicSemesterRepository
         return Model::latest()->get();
     }
 
-    public function getByYearSemester(string $year, string $semester)
+    public function getByYearSemester(string $academic_year, string $semester)
     {
-        return Model::where("year", $year)->where("semester", $semester)->first();
+        return Model::where("academic_year", $academic_year)->where("semester", $semester)->first();
     }
 
     public function getById(int $id)

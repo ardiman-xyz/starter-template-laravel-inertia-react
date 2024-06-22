@@ -6,14 +6,13 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/C
 import {Button} from "@/Components/ui/button";
 
 interface FilterFormProps {
-    academic_year : {
-        id: string;
-        year: string;
-        semester: string;
+    data : {
+        academic_year: string
     }[]
 }
 
-const FilterForm = ({academic_year}: FilterFormProps) => {
+const FilterForm = ({data}: FilterFormProps) => {
+
 
     const [filterForm, setFilterForm] = useState({
         selectedYear: "",
@@ -29,8 +28,8 @@ const FilterForm = ({academic_year}: FilterFormProps) => {
     const handleFilterAction = () => {
         if(isEmpty)return;
 
-       return router.visit(route("visitation.filter", {
-            year: filterForm.selectedYear,
+        return router.visit(route("visitation.filter", {
+            academic_year: filterForm.selectedYear,
             smt: filterForm.selectedSemester
         }));
 
@@ -44,8 +43,8 @@ const FilterForm = ({academic_year}: FilterFormProps) => {
                 </SelectTrigger>
                 <SelectContent>
                     {
-                        academic_year.map((item, i) => (
-                            <SelectItem key={i} value={item.year}>{item.year}</SelectItem>
+                        data.map((item, i) => (
+                            <SelectItem key={i} value={item.academic_year}>{item.academic_year}</SelectItem>
                         ))
                     }
                 </SelectContent>

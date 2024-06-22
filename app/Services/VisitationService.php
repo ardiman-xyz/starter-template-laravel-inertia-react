@@ -79,10 +79,12 @@ class VisitationService
     /**
      * @throws Exception
      */
-    public function getFilterByAcademicSemester(string $year, string $semester)
+    public function getFilterByAcademicSemester(string $academic_year, string $semester)
     {
-        $yearAcademic = $this->academicSemesterRepository->getByYearSemester($year, $semester);
-        if(!$yearAcademic) throw new Exception("Year and semester not found");
+        $yearAcademic = $this->academicSemesterRepository->getByYearSemester($academic_year, $semester);
+        if(!$yearAcademic) {
+            return [];
+        }
 
         $school = $this->schoolRepository->getByUserId($this->tokenService->userId());
 
@@ -204,8 +206,8 @@ class VisitationService
                 "evaluate" => "N/A",
             ];
         }
-    
-        
+
+
         $final_score = ($score / $max_score) * 100;
         $final_score = ceil($final_score);
 
