@@ -1,67 +1,72 @@
-import React, { useState, useEffect } from "react";
-import { Chart } from "react-google-charts";
+import {
+    AreaChart,
+    Area,
+    CartesianGrid,
+    XAxis,
+    YAxis,
+    Tooltip,
+    Legend,
+    ResponsiveContainer
+} from 'recharts';
+
+const data = [
+    {
+        year: 2020,
+        ganjil: 75.5,
+        genap: 76.2,
+    },
+    {
+        year: 2021,
+        ganjil: 77.8,
+        genap: 78.5,
+    },
+    {
+        year: 2022,
+        ganjil: 76.9,
+        genap: 75.6,
+    },
+    {
+        year: 2023,
+        ganjil: 74.1,
+        genap: 75.8,
+    },
+    {
+        year: 2024,
+        ganjil: 77.3,
+        genap: 78.0,
+    },
+];
 
 const VisitationChart = () => {
-    const [selectedYear, setSelectedYear] = useState("2023");
-    const [selectedSemester, setSelectedSemester] = useState("Spring");
-    const [chartData, setChartData] = useState([]);
-
-    useEffect(() => {
-        // Di sini Anda perlu mengambil data Anda dari server atau tempat lain
-        // Untuk contoh ini, kita akan menggunakan data dummy
-        const data = [
-            ["Teacher", "Visits"],
-            ["Teacher A", 100],
-            ["Teacher B", 75],
-            ["Teacher C", 50],
-            // Tambahkan lebih banyak data sesuai kebutuhan
-        ];
-
-        // @ts-ignore
-        setChartData(data);
-    }, [selectedYear, selectedSemester]);
-
     return (
-        <div>
-            <h1>Dashboard</h1>
-
-            <select
-                value={selectedYear}
-                onChange={(e) => setSelectedYear(e.target.value)}
+        <ResponsiveContainer width="100%" height={300}>
+            <AreaChart
+                data={data}
+                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
             >
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                // Tambahkan lebih banyak tahun sesuai kebutuhan
-            </select>
-
-            <select
-                value={selectedSemester}
-                onChange={(e) => setSelectedSemester(e.target.value)}
-            >
-                <option value="Spring">Spring</option>
-                <option value="Fall">Fall</option>
-                // Tambahkan lebih banyak semester sesuai kebutuhan
-            </select>
-
-            <Chart
-                width={"500px"}
-                height={"300px"}
-                chartType="BarChart"
-                loader={<div>Loading Chart</div>}
-                data={chartData}
-                options={{
-                    title: `Teacher Visits in ${selectedYear} (${selectedSemester})`,
-                    chartArea: { width: "50%" },
-                    hAxis: {
-                        title: "Total Visits",
-                        minValue: 0,
-                    },
-                    vAxis: {
-                        title: "Teacher",
-                    },
-                }}
-            />
-        </div>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="year" />
+                <YAxis domain={[70, 85]} />
+                <Tooltip />
+                <Legend />
+                <Area
+                    type="monotone"
+                    dataKey="ganjil"
+                    stroke="#8884d8"
+                    fill="#8884d8"
+                    fillOpacity={0.3}
+                    name="Semester Ganjil"
+                />
+                <Area
+                    type="monotone"
+                    dataKey="genap"
+                    stroke="#82ca9d"
+                    fill="#82ca9d"
+                    fillOpacity={0.3}
+                    name="Semester Genap"
+                />
+            </AreaChart>
+        </ResponsiveContainer>
     );
 };
 

@@ -199,8 +199,6 @@ class VisitationService
     public function calculateFinalScore(int $score, int $max_score): array
     {
         if ($max_score == 0) {
-            // Handle the case where $max_score is zero
-            // You can either return a default value or throw an exception
             return [
                 "final_score" => 0,
                 "evaluate" => "N/A",
