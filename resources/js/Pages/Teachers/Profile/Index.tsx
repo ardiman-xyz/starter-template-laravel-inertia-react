@@ -8,16 +8,10 @@ const IndexProfilePage = () => {
     return (
         <Authenticated>
             <Head title="Profil" />
-            <div>
-                <Heading
-                    title="Profil"
-                    description="Manage akun anda"
-                />
                 <div className="w-full mt-10 flex md:flex-row flex-col ">
                     <AvatarForm />
                     <TeacherProfileEditor />
                 </div>
-            </div>
         </Authenticated>
     )
 }

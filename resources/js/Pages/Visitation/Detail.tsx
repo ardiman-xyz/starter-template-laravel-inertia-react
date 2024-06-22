@@ -61,7 +61,7 @@ const DetailVisitationPage = ({ data }: DetailProps) => {
                     url: "visitation.filter",
                     disabled: false,
                     params: {
-                        year: data.assessment.academic_semester.year,
+                        academic_year: data.assessment.academic_semester.academic_year,
                         smt: data.assessment.academic_semester.semester,
                     },
                 },

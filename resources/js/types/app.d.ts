@@ -12,6 +12,7 @@ export interface User {
     address?: string;
     phone_number: string;
     profile_picture?: string;
+    is_password_changed: number;
     created_at: string;
     updated_at: string;
 }
@@ -102,7 +103,7 @@ export type Component = {
 export type ComponentDetail = {
     id: number;
     name: string;
-    max_score: number;
+    max_Score: number;
     scored: ComponentScore
 }
 

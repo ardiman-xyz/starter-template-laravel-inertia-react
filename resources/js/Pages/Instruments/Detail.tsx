@@ -14,6 +14,8 @@ interface DetailProps {
 
 const DetailInstrument = ({instrument}: DetailProps) => {
 
+    console.info(instrument)
+
 
     return(
         <Authenticated

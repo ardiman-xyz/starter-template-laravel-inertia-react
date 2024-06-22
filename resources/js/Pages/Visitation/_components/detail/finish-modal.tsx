@@ -43,7 +43,7 @@ export const FinishModal = () => {
 
     return (
         <div>
-            <Button onClick={toggleModal} className="mt-10 w-full" variant="secondary">
+            <Button onClick={toggleModal} className="mt-10 w-full">
                 Selesaikan visitasi
             </Button>
 

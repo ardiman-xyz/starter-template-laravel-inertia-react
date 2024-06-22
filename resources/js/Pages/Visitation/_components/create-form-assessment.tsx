@@ -132,7 +132,7 @@ export const CreateFormAssessment = ({year, semester}: IProps) => {
         <div>
             <Button onClick={openModal} size={"lg"}>
                 <PlusCircle className="w-4 h-4 mr-2" />
-                Buat baru
+                Buat jadwal
             </Button>
 
             <Modal

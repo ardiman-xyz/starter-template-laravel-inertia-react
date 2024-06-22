@@ -11,9 +11,61 @@ import {
 } from "@/Components/ui/dropdown-menu";
 import {Button} from "@/Components/ui/button";
 import InviteLinkModal from "./invite-link-modal";
-import {useState} from "react";
+import React, {useState} from "react";
 import EditModal from "./edit-modal";
 import DeleteConfirm from "./delete-confirm";
+import {Avatar, AvatarFallback, AvatarImage} from "@/Components/ui/avatar";
+import {getFirstTwoLettersOfLastName} from "@/helper";
+import {usePage} from "@inertiajs/react";
+import {SharedInertiaData} from "@/types/inertia";
+import {StatusBadge} from "@/Pages/Teacher/_components/status-badge";
+
+
+export const columns: ColumnDef<User>[] = [
+    {
+      id: "avatar",
+      header: "Foto",
+      cell: ({row}) => {
+          const { ziggy } = usePage<SharedInertiaData>().props;
+          return(
+              <Avatar className="w-16 h-16 ">
+                  {
+                      row.original.profile_picture !== null && (
+                          <AvatarImage src={ziggy?.url + "/storage/" + row.original?.profile_picture}/>
+                      )
+                  }
+                  <AvatarFallback className="bg-blue-100">
+                     G
+                  </AvatarFallback>
+              </Avatar>
+          )
+      }
+    },
+    {
+        accessorKey: "name",
+        header: "Nama",
+    },
+    {
+        accessorKey: "email",
+        header: "Email",
+    },
+    {
+        id: "join",
+        header: "Status",
+        cell: ({row}) => {
+            return(
+              <StatusBadge isPasswordChange={row.original.is_password_changed} />
+            )
+        }
+    },
+    {
+        id: "actions",
+        cell: ({ row }) => {
+            return <ActionMenu data={row.original} />;
+        },
+    },
+]
+
 
 
 const ActionMenu = ({ data }: { data: User }) => {
@@ -79,20 +131,3 @@ const ActionMenu = ({ data }: { data: User }) => {
         </div>
     );
 };
-
-export const columns: ColumnDef<User>[] = [
-    {
-        accessorKey: "name",
-        header: "Nama",
-    },
-    {
-        accessorKey: "email",
-        header: "Email",
-    },
-    {
-        id: "actions",
-        cell: ({ row }) => {
-            return <ActionMenu data={row.original} />;
-        },
-    },
-]

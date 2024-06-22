@@ -12,7 +12,7 @@ const Heading = ({ title, description, className }: HeaderProps) => {
 
     return (
         <div className={combinedClasses}>
-            <h3 className="text-foreground text-xl font-medium">{title}</h3>
+            <h3 className="text-foreground text-xl font-bold capitalize">{title}</h3>
             <div className="text-muted-foreground text-sm">
                 <p>{description}</p>
             </div>

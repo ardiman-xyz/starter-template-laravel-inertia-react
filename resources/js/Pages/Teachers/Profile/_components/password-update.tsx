@@ -77,7 +77,7 @@ export const PasswordUpdate = () => {
 
     return (
         <div>
-            <Heading title="Akun" description="Mangage akun dan password anda" />
+            <Heading title="Akun" description="Atur akun dan password anda" />
             {error !== null && (
                 <Alert className="mb-5 bg-red-100 border border-red-600">
                     <AlertCircle className="h-4 w-4 " />

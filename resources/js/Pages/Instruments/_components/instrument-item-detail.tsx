@@ -24,7 +24,7 @@ interface IProps {
 type DefaultDataType = {
     id: number;
     name: string;
-    max_score: number;
+    max_Score: number;
 };
 
 
@@ -37,7 +37,7 @@ export const InstrumentItemDetail = ({instrument, index}: IProps) => {
     const [defaultData, setDefaultData] = useState<DefaultDataType>({
         id: instrument.id,
         name: instrument.name,
-        max_score: instrument.max_score,
+        max_Score: instrument.max_Score,
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLElement>) => {
@@ -89,7 +89,7 @@ export const InstrumentItemDetail = ({instrument, index}: IProps) => {
                     }
                 </TableCell>
                 <TableCell>
-                    {!isEditing && instrument.max_score}
+                    {!isEditing && instrument.max_Score}
                     {
                         isEditing && (
                             <Input
@@ -97,7 +97,7 @@ export const InstrumentItemDetail = ({instrument, index}: IProps) => {
                                 disabled={isLoading}
                                 className="w-[80px]"
                                 name="max_score"
-                                defaultValue={defaultData.max_score}
+                                defaultValue={defaultData.max_Score}
                                 onChange={handleChange}
                             />
                         )
@@ -148,7 +148,7 @@ export const InstrumentItemDetail = ({instrument, index}: IProps) => {
                                     disabled={
                                         isLoading ||
                                         !defaultData.name ||
-                                        defaultData.max_score === null
+                                        defaultData.max_Score === null
                                     }
                                     onClick={handleSubmit}
                                     size="sm"

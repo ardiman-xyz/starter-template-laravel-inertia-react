@@ -27,10 +27,10 @@ const FilterPage = ({ data, year, semester }: FilterProps) => {
                 },
             ]}
         >
-            <Head title="Visitasi tahun 2023/2024 ganjil" />
+            <Head  title={`Visitasi tahun ${year} ${semester}`} />
             <div className="w-full flex items-center justify-between">
                 <Heading
-                    title={`Visitasi tahun ${year} ${semester}`}
+                    title={`Visitasi tahun ${year} - ${semester}`}
                     description="Laporan visitasi anda"
                 />
                 <div className="hidden md:flex md:flex-row flex-col  items-center md:gap-x-4 gap-x-0 gap-y-2 md:gap-y-0">
