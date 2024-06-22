@@ -12,7 +12,6 @@ import { Input } from "@/Components/ui/input";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -27,49 +26,49 @@ import {
 } from "@/Components/ui/select"
 
 import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
-import {AlertCircle, PlusCircle, RotateCw} from "lucide-react";
-import { router } from "@inertiajs/react";
+import {AlertCircle, RotateCw} from "lucide-react";
 import {AcademicSemesterSchema} from "@/Schemas";
+import {AcademicSemester} from "@/types/app";
 
-const CreateModal = () => {
+interface EditModalProps {
+    data: AcademicSemester
+    isOpen: boolean;
+    onClose: (isCancelled: boolean) => void;
+}
+
+export const EditModal = ({data, isOpen, onClose}: EditModalProps) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isOpenModalAdd, setIsOpenModalAdd] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     const form = useForm<z.infer<typeof AcademicSemesterSchema>>({
         resolver: zodResolver(AcademicSemesterSchema),
         defaultValues: {
-            year: "",
-            academic_year: "",
-            semester: "",
-            start_date: "",
-            end_date: "",
+            year: data.year,
+            academic_year: data.academic_year,
+            semester: data.semester,
+            start_date: data.start_date,
+            end_date: data.end_date,
         },
     });
 
-    const toggleModalAdd = () => {
-        setIsOpenModalAdd(!isOpenModalAdd);
-        form.reset();
-        setError(null);
-    };
+
 
     async function onSubmit(values: z.infer<typeof AcademicSemesterSchema>) {
 
         setIsLoading(true);
         await axios
-            .post(route("academic_year.store"), values)
+            .put(route("academic_year.update", data.id), values)
             .then((data) => {
                 const { message } = data.data;
+                onClose(false)
                 toast.success(`${message}`);
-                toggleModalAdd();
-                form.reset();
-                router.reload();
             })
             .catch((err) => {
                 const { data, status, statusText } = err.response;
                 toast.error(`${statusText} ${status}`, {
                     description: `${data.message}`,
                 });
+                setIsLoading(false)
             })
             .finally(() => {
                 setIsLoading(false);
@@ -77,20 +76,17 @@ const CreateModal = () => {
     }
 
     return (
-        <div>
-            <Button onClick={toggleModalAdd}>
-                <PlusCircle className="h-4 w-4 mr-2" />
-                Tambah</Button>
+
             <Modal
-                onClose={toggleModalAdd}
-                show={isOpenModalAdd}
+                onClose={onClose}
+                show={isOpen}
                 closeable={!isLoading}
                 maxWidth="lg"
             >
                 <div className="px-6 py-4">
                     <div className="w-full flex items-center justify-center">
                         <h2 className="text-md text-center font-bold">
-                            Tambah tahun ajaran
+                            Ubah tahun ajaran {data.academic_year} / {data.semester}
                         </h2>
                     </div>
                     <div className="mt-4">
@@ -205,7 +201,7 @@ const CreateModal = () => {
                                         type="button"
                                         className="w-full"
                                         variant="outline"
-                                        onClick={toggleModalAdd}
+                                        onClick={() => onClose(true)}
                                         disabled={isLoading}
                                     >
                                         Batal
@@ -226,8 +222,6 @@ const CreateModal = () => {
                     </div>
                 </div>
             </Modal>
-        </div>
     );
 };
 
-export default CreateModal;

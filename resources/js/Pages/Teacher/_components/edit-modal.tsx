@@ -22,7 +22,6 @@ import { router } from "@inertiajs/react";
 
 
 import {User} from "@/types/app";
-import {Alert, AlertDescription, AlertTitle} from "@/Components/ui/alert";
 import {RotateCw} from "lucide-react";
 
 
@@ -54,7 +53,6 @@ const formSchema = z
 
 const EditModal = ({user, onClose}: EditModalProps) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isOpenModalAdd, setIsOpenModalAdd] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -74,7 +72,6 @@ const EditModal = ({user, onClose}: EditModalProps) => {
     };
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        console.info(values);
         setIsLoading(true);
         await axios
             .put("/teacher/"+user.id, values)

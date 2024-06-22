@@ -26,11 +26,25 @@ class AcademicSemesterRepository
         return Model::where("year", $year)->where("semester", $semester)->first();
     }
 
+    public function getById(int $id)
+    {
+        return Model::find($id);
+    }
+
     public function academicAlreadyExists(string $year, string $semester, string $academic_year): bool
     {
         return Model::where('year', $year)
             ->where('semester', $semester)
             ->where('academic_year', $academic_year)
+            ->exists();
+    }
+
+    public function academicAlreadyExistsExcept(string $year, string $semester, string $academicYear, int $id): bool
+    {
+        return Model::where('year', $year)
+            ->where('semester', $semester)
+            ->where('academic_year', $academicYear)
+            ->where('id', '<>', $id)
             ->exists();
     }
 

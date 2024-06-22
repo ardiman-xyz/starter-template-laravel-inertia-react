@@ -1,4 +1,4 @@
-import {User} from "@/types/app";
+import {AcademicSemester,} from "@/types/app";
 import {AlertTriangle, RotateCw} from "lucide-react";
 import Modal from "@/Components/Modal";
 import {useState} from "react";
@@ -8,17 +8,17 @@ import {router} from "@inertiajs/react";
 import {toast} from "sonner";
 
 interface DeleteConfirmProps {
-    user: User;
+    data: AcademicSemester;
     onClose: () => void
 }
 
-const DeleteConfirm = ({user, onClose}: DeleteConfirmProps) => {
+const DeleteConfirm = ({data, onClose}: DeleteConfirmProps) => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleDelete = async () => {
         setIsLoading(true)
-        await axios.delete("teacher/"+user.id)
+        await axios.delete(route("academic_year.destroy", data.id))
             .then((data) => {
                 toast.success(`User berhasil dihapus`);
                 router.reload()
