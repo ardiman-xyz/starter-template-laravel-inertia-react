@@ -3,9 +3,10 @@ import { usePage } from "@inertiajs/react";
 import {
     BookLock,
     ClipboardCheck,
+    Inbox, InfoIcon,
     Layout,
     LibraryBig,
-    Play,
+    Play, Settings,
     UserCog,
     Users,
 } from "lucide-react";
@@ -30,6 +31,12 @@ const Routes = [
         icon: BookLock,
         label: "Instrumen & nilai",
         href: "/instruments",
+        requiredRoles: ["Headmaster"],
+    },
+    {
+        icon: Inbox,
+        label: "Tahun Akademik",
+        href: "/academic-semester",
         requiredRoles: ["Headmaster"],
     },
     {
@@ -61,10 +68,16 @@ const Routes = [
 
 const Routes2 = [
     {
-        icon: Play,
-        label: "Tutorial Penggunaan",
+        icon: InfoIcon,
+        label: "Informasi",
         href: "/booker",
         requiredRoles: ["Headmaster", "Teacher"],
+    },
+    {
+        icon: Settings,
+        label: "Pengaturan",
+        href: "/booker",
+        requiredRoles: ["Headmaster"],
     },
 ];
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AcademicSemesterController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(["cekCookie"])->group(function () {
@@ -24,6 +25,9 @@ Route::middleware(["cekCookie"])->group(function () {
             Route::put("{assessment_id}/finish", [\App\Http\Controllers\VisitationController::class, "finish"]);
         });
 
+        Route::prefix("academic-semester")->group(function () {
+            Route::get("/", [AcademicSemesterController::class, "index"])->name("semester.index");
+        });
     });
 });
 

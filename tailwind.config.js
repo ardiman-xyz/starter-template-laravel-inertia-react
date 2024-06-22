@@ -76,6 +76,7 @@ module.exports = {
             },
             fontFamily: {
                 albert: ["Albert Sans", "sans-serif"],
+                jakarta: ["Plus Jakarta Sans", "sans-serif"],
             },
         },
     },

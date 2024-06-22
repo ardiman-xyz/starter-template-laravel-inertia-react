@@ -137,6 +137,9 @@ const CreateModal = () => {
                                                     disabled={isLoading}
                                                 />
                                             </FormControl>
+                                            <FormDescription className="text-xs text-gray-500">
+                                               Sertakan title pendidikan. ex: john, S.Pd
+                                            </FormDescription>
                                             <FormMessage />
                                         </FormItem>
                                     )}
