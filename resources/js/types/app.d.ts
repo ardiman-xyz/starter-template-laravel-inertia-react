@@ -39,7 +39,10 @@ export interface Instrument {
 export type AcademicSemester = {
     id: number;
     year: string;
+    academic_year: string;
     semester: string;
+    start_date: string;
+    end_date: string;
     create_at?: string;
     updated_at?: string;
 }
@@ -108,3 +111,4 @@ export type ComponentScore = {
     status: boolean;
     score: number;
 }
+

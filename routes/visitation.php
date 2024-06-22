@@ -26,7 +26,8 @@ Route::middleware(["cekCookie"])->group(function () {
         });
 
         Route::prefix("academic-semester")->group(function () {
-            Route::get("/", [AcademicSemesterController::class, "index"])->name("semester.index");
+            Route::get("/", [AcademicSemesterController::class, "index"])->name("academic_year.index");
+            Route::post("/", [AcademicSemesterController::class, "store"])->name("academic_year.store");
         });
     });
 });
