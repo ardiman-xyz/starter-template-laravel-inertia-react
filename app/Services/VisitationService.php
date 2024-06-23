@@ -9,6 +9,7 @@ use App\DTO\SetUpDateDTO;
 use App\Entities\AssessmentEntity;
 use App\Entities\AssessmentScheduleEntity;
 use App\Entities\ScoredEntity;
+use App\Models\Assessment;
 use App\Models\AssessmentScore;
 use App\Repositories\AcademicSemesterRepository;
 use App\Repositories\AssessmentAnswerRepository;
@@ -26,6 +27,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use DateTime;
+use Illuminate\Support\Facades\Log;
 
 class VisitationService
 {
@@ -88,7 +90,6 @@ class VisitationService
 
         $school = $this->schoolRepository->getByUserId($this->tokenService->userId());
 
-
         $assessments = $this->assessmentRepository->findBySchoolAndSemester($school->id, $yearAcademic->id);
 
         $assessments->map(function ($assessment) {
@@ -136,6 +137,8 @@ class VisitationService
             $createEntity->academicSemesterId = $academic->id;
             $createEntity->startedAt = $startDateTime->toDateTimeString();
             $createEntity->finishedAt = $endDateTime->toDateTimeString();
+            $createEntity->finalScore = 0;
+            $createEntity->evaluation = null;
 
             return $this->assessmentRepository->create($createEntity);
 
@@ -315,32 +318,52 @@ class VisitationService
      */
     public function scored(ScoredAssessmentDTO $dto)
     {
-        $assessment = $this->assessmentRepository->getById($dto->assessmentId);
-        if(!$assessment) throw new Exception("Assessment not found");
+        try {
+            $assessment = $this->assessmentRepository->getById($dto->assessmentId);
+            if(!$assessment) throw new Exception("Assessment not found");
 
-        $component = $this->componentRepository->findById($dto->componentId);
-        if(!$component) throw new Exception("Component not found");
+            $component = $this->componentRepository->findById($dto->componentId);
+            if(!$component) throw new Exception("Component not found");
 
-        $componentDetail = $this->componentDetailRepository->findById($dto->componentDetailId);
-        if(!$componentDetail) throw new Exception("Component detail not found");
+            $componentDetail = $this->componentDetailRepository->findById($dto->componentDetailId);
+            if(!$componentDetail) throw new Exception("Component detail not found");
 
-        $scoredEntity = new ScoredEntity();
-        $scoredEntity->assessmentId = $dto->assessmentId;
-        $scoredEntity->componentId = (int)$dto->componentId;
-        $scoredEntity->componentDetailId = (int)$dto->componentDetailId;
-        $scoredEntity->score = (int)$dto->value;
+            $scoredEntity = new ScoredEntity();
+            $scoredEntity->assessmentId = $dto->assessmentId;
+            $scoredEntity->componentId = (int)$dto->componentId;
+            $scoredEntity->componentDetailId = (int)$dto->componentDetailId;
+            $scoredEntity->score = (int)$dto->value;
 
-        $alreadyScored = $this->scoredStatus($dto);
+            $alreadyScored = $this->scoredStatus($dto);
 
-        if (!$alreadyScored) {
-            return $this->saveScored($scoredEntity);
-        }else{
-            return $this->updateScored($dto, $alreadyScored);
+            if (!$alreadyScored) {
+                $result = $this->_saveScored($scoredEntity);
+            } else {
+                $result = $this->_updateScored($dto, $alreadyScored);
+            }
+
+            $this->updateAssessmentFinalScore($assessment);
+
+            return $result;
+        }catch (Exception $e) {
+            throw new $e;
         }
 
     }
 
-    public function saveScored(ScoredEntity $entity)
+    private function updateAssessmentFinalScore($assessment): void
+    {
+        $sumMaxScore = (int)$this->componentDetailRepository->sumMaxScore();
+        $totalScore = (int)$this->assessmentScoreRepository->totalScore($assessment->id);
+
+        $finalScoreData = $this->calculateFinalScore($totalScore, $sumMaxScore);
+
+        $assessment->final_score = (int)$finalScoreData['final_score'];
+        $assessment->evaluation = $finalScoreData['evaluate'];
+        $this->assessmentRepository->update($assessment->id, $assessment);
+    }
+
+    private function _saveScored(ScoredEntity $entity)
     {
         return $this->assessmentScoreRepository->create($entity);
     }
@@ -350,7 +373,7 @@ class VisitationService
         return $this->assessmentScoreRepository->findByAssessmentAndItemId($dto->assessmentId, $dto->componentId, $dto->componentDetailId);
     }
 
-    public function updateScored(ScoredAssessmentDTO $dto, AssessmentScore $assessmentScore): AssessmentScore
+    private function _updateScored(ScoredAssessmentDTO $dto, AssessmentScore $assessmentScore): AssessmentScore
     {
        $assessmentScore->score = (int)$dto->value;
        return $this->assessmentScoreRepository->update($assessmentScore->id, $assessmentScore);

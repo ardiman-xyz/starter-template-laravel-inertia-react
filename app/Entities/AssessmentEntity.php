@@ -11,6 +11,8 @@ class AssessmentEntity
     public string $academicSemesterId;
     public ?string $title = null;
     public string $status = "schedule";
+    public int $finalScore;
+    public ?string $evaluation = null;
     public string $startedAt;
     public string $finishedAt;
 }

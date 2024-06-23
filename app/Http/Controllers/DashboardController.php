@@ -22,6 +22,9 @@ class DashboardController extends Controller
 
     public function index()
     {
+
+//        dd($this->dashboardService->getTrendVisitationTeacher());
+
         return Inertia::render('Dashboard');
     }
 }

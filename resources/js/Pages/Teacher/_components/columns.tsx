@@ -22,28 +22,28 @@ import {StatusBadge} from "@/Pages/Teacher/_components/status-badge";
 
 
 export const columns: ColumnDef<User>[] = [
+
     {
-      id: "avatar",
-      header: "Foto",
-      cell: ({row}) => {
-          const { ziggy } = usePage<SharedInertiaData>().props;
-          return(
-              <Avatar className="w-10 h-10 ">
-                  {
-                      row.original.profile_picture !== null && (
-                          <AvatarImage src={ziggy?.url + "/storage/" + row.original?.profile_picture}/>
-                      )
-                  }
-                  <AvatarFallback className="bg-blue-100">
-                     G
-                  </AvatarFallback>
-              </Avatar>
-          )
-      }
-    },
-    {
-        accessorKey: "name",
+        id: "name",
         header: "Nama",
+        cell: ({row}) => {
+            const { ziggy } = usePage<SharedInertiaData>().props;
+            return(
+                <div className="flex items-center gap-x-4">
+                    <Avatar className="w-10 h-10 ">
+                        {
+                            row.original.profile_picture !== null && (
+                                <AvatarImage src={ziggy?.url + "/storage/" + row.original?.profile_picture}/>
+                            )
+                        }
+                        <AvatarFallback className="bg-blue-100">
+                            G
+                        </AvatarFallback>
+                    </Avatar>
+                    <p>{row.original.name}</p>
+                </div>
+            )
+        }
     },
     {
         accessorKey: "email",

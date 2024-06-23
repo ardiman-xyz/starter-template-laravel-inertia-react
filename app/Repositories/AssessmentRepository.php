@@ -24,6 +24,8 @@ class AssessmentRepository
             "academic_semester_id" => $entity->academicSemesterId,
             "title" => $entity->title,
             "status" => $entity->status,
+            "final_score" => $entity->finalScore,
+            "evaluation" => $entity->evaluation,
             "started_at" => $entity->startedAt,
             "finished_at" => $entity->finishedAt
         ]);

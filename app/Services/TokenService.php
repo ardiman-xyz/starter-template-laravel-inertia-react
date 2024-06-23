@@ -48,7 +48,7 @@ class TokenService
         return JWT::decode($token, new Key($this->key, 'HS256'));
     }
 
-    public function checkToken()
+    public function checkToken(): array|string|null
     {
         return Cookie::get('vistoken');
     }
