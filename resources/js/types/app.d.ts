@@ -1,3 +1,16 @@
+
+export type VisitationTrend = {
+    year: number;
+    ganjil: number;
+    genap: number ;
+};
+
+export type VisitationTrendCategories = {
+    name: string;
+    value: number;
+    percent: number ;
+};
+
 export interface Role {
     id: string;
     name: string;

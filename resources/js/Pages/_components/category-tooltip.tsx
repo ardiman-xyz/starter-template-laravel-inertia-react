@@ -6,14 +6,27 @@ export const CategoryTooltip = ({active, payload}: any) => {
 
     const name = payload[0].payload.name;
     const value = payload[0].value;
+    const percent = payload[0].payload.percent;
+    const color = payload[0].payload.fill;
 
     return (
         <div className="rounded-sm bg-white shadow-sm border overflow-hidden">
             <div className="text-sm p-2 px-3 bg-muted text-muted-foreground">
-                {name}
+                {name !== ""? name : "Lainya"}
             </div>
             <Separator/>
             <div className="p-2 px-3 space-y-1">
+                <div className="flex items-center justify-between gap-x-4">
+                    <div className="flex items-center gap-x-2">
+                        <div className={`p-2 rounded-full`} style={{backgroundColor: color}}/>
+                        <p className="text-sm text-muted-foreground">
+                           Jumlah
+                        </p>
+                    </div>
+                    <p className="text-sm text-right font-medium">
+                        {value}
+                    </p>
+                </div>
                 <div className="flex items-center justify-between gap-x-4">
                     <div className="flex items-center gap-x-2">
                         <div className="p-2 rounded-full bg-black"/>
@@ -22,10 +35,9 @@ export const CategoryTooltip = ({active, payload}: any) => {
                         </p>
                     </div>
                     <p className="text-sm text-right font-medium">
-                        {value} %
+                        {percent} %
                     </p>
                 </div>
-
             </div>
         </div>
     )

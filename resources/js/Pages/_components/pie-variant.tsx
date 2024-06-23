@@ -3,27 +3,30 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recha
 
 import {Card, CardContent, CardHeader, CardTitle} from "@/Components/ui/card"
 import {CategoryTooltip} from "@/Pages/_components/category-tooltip";
+import {useDashboardStore} from "@/Context/useDashboardStore";
 
-const data = [
-    { name: 'Sangat Baik', value: 30 },
-    { name: 'Baik', value: 45 },
-    { name: 'Cukup', value: 20 },
-    { name: 'Perlu Perbaikan', value: 5 },
-];
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#334155'];
 
 export const PieVariant = () => {
+
+    const categoryDistribution = useDashboardStore(state => state.categoryDistribution);
+
+    if (categoryDistribution.length === 0) {
+        return <div>Loading...</div>;
+    }
+
     return (<>
         <Card>
             <CardHeader className="flex flex-row justify-between">
                 <CardTitle>Kategori Penilaian</CardTitle>
             </CardHeader>
             <CardContent>
-                <ResponsiveContainer width={"100%"} height={300}>
+                <ResponsiveContainer width={"100%"} height={350}>
                     <PieChart>
                         <Pie
-                            data={data}
+                            data={categoryDistribution}
                             cx="50%"
                             cy="50%"
                             labelLine={false}
@@ -32,7 +35,7 @@ export const PieVariant = () => {
                             fill="#8884d8"
                             dataKey="value"
                         >
-                            {data.map((entry, index) => (
+                            {categoryDistribution.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                             ))}
                         </Pie>
@@ -57,10 +60,10 @@ export const PieVariant = () => {
                                                     />
                                                     <div className="space-x-1">
                                                         <span className="text-sm text-muted-foreground">
-                                                            {entry.value}
+                                                            {entry.value === "" ? "Lainnya" : entry.value}
                                                         </span>
                                                         <span className="text-sm">
-                                                            {entry.payload.percent * 100} %
+                                                            {entry.payload.percent} %
                                                         </span>
                                                     </div>
                                                 </li>

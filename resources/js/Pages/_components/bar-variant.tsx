@@ -1,46 +1,15 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import {CustomTooltip} from "@/Components/CustomTooltip";
-
-interface PerubahanData {
-    tahun: string;
-    peningkatan: number;
-    penurunan: number;
-    tetap: number;
-}
-
-const data = [
-    {
-        year: 2020,
-        ganjil: 75.5,
-        genap: 76.2,
-    },
-    {
-        year: 2021,
-        ganjil: 77.8,
-        genap: 78.5,
-    },
-    {
-        year: 2022,
-        ganjil: 76.9,
-        genap: 75.6,
-    },
-    {
-        year: 2023,
-        ganjil: 74.1,
-        genap: 75.8,
-    },
-    {
-        year: 2024,
-        ganjil: 77.3,
-        genap: 78.0,
-    },
-];
+import {useDashboardStore} from "@/Context/useDashboardStore";
 
 export const BarVariant: React.FC = () => {
+
+    const trendVisitation = useDashboardStore(state => state.trendVisitation);
+
     return (
-        <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data}>
+        <ResponsiveContainer width="100%" height={350}>
+            <BarChart data={trendVisitation}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
                     dataKey="year"

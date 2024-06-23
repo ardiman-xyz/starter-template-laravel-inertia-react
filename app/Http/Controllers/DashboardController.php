@@ -7,6 +7,7 @@ use App\Services\DashboardService;
 use App\Services\TokenService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class DashboardController extends Controller
 {
@@ -20,11 +21,15 @@ class DashboardController extends Controller
         $this->dashboardService = new DashboardService($schoolRepository, $tokenService);
     }
 
-    public function index()
+    public function index(): Response
     {
 
-//        dd($this->dashboardService->getTrendVisitationTeacher());
+        $trendVisitation = $this->dashboardService->getTrendVisitationTeacher();
+        $categories = $this->dashboardService->getCategoryDistribution();
 
-        return Inertia::render('Dashboard');
+        return Inertia::render('Dashboard', [
+            'trendVisitation' => $trendVisitation,
+            'categories' => $categories
+        ]);
     }
 }

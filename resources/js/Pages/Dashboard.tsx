@@ -1,14 +1,29 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
-import { PageProps } from "@/types";
 
 import {Chart} from "@/Pages/_components/chart";
 import {AvatarProfile} from "@/Pages/_components/avatar-profile";
 import {PieVariant} from "@/Pages/_components/pie-variant";
 import {SchoolProfile} from "@/Pages/_components/school-profile";
+import {VisitationTrend, VisitationTrendCategories} from "@/types/app";
+import {useDashboardStore} from "@/Context/useDashboardStore";
+import {useEffect} from "react";
 
+interface DashboardProps {
+    trendVisitation: VisitationTrend[];
+    categories: VisitationTrendCategories[]
+}
 
-export default function Dashboard({ auth }: PageProps) {
+const Dashboard = ({trendVisitation, categories}: DashboardProps) => {
+
+    const setTrendVisitation = useDashboardStore((state) => state.setTrendVisitation);
+    const setCategoryDistribution = useDashboardStore(state => state.setCategoryDistribution);
+
+    useEffect(() => {
+        setTrendVisitation(trendVisitation);
+        setCategoryDistribution(categories);
+    }, [trendVisitation, setTrendVisitation, setTrendVisitation, setCategoryDistribution]);
+
     return (
         <AuthenticatedLayout>
             <Head title="Dashboard"/>
@@ -34,3 +49,5 @@ export default function Dashboard({ auth }: PageProps) {
         </AuthenticatedLayout>
     );
 }
+
+export default Dashboard;
