@@ -1,13 +1,7 @@
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/Components/ui/card"
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/Components/ui/select";
-import {AreaChartIcon, BarChartIcon, LineChartIcon} from "lucide-react";
-import {AreaVariant} from "@/Pages/_components/area-variant";
-import {LineVariant} from "@/Pages/_components/line-variant";
-import {BarVariant} from "@/Pages/_components/bar-variant";
-import {CustomTooltip} from "@/Components/CustomTooltip";
+import {Card, CardContent, CardHeader, CardTitle} from "@/Components/ui/card"
 import {CategoryTooltip} from "@/Pages/_components/category-tooltip";
 
 const data = [
@@ -18,19 +12,6 @@ const data = [
 ];
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-
-const RADIAN = Math.PI / 180;
-const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: any) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    return (
-        <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-            {`${(percent * 100).toFixed(0)}%`}
-        </text>
-    );
-};
 
 export const PieVariant = () => {
     return (<>
@@ -79,7 +60,7 @@ export const PieVariant = () => {
                                                             {entry.value}
                                                         </span>
                                                         <span className="text-sm">
-                                                            {entry.payload.percent * 100}
+                                                            {entry.payload.percent * 100} %
                                                         </span>
                                                     </div>
                                                 </li>

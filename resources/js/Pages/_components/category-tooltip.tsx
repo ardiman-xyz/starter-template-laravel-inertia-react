@@ -22,7 +22,7 @@ export const CategoryTooltip = ({active, payload}: any) => {
                         </p>
                     </div>
                     <p className="text-sm text-right font-medium">
-                        {value}
+                        {value} %
                     </p>
                 </div>
 

@@ -1,7 +1,7 @@
 import { SharedInertiaData } from "@/types/inertia";
 import { usePage } from "@inertiajs/react";
 import {
-    BookLock,
+    BookLock, Calendar,
     ClipboardCheck,
     Inbox, InfoIcon,
     Layout,
@@ -42,6 +42,12 @@ const Routes = [
         icon: LibraryBig,
         label: "Visitasi",
         href: "/visitation",
+        requiredRoles: ["Headmaster"],
+    },
+    {
+        icon: Calendar,
+        label: "Kalender",
+        href: "/calendar",
         requiredRoles: ["Headmaster"],
     },
 

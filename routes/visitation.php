@@ -31,6 +31,10 @@ Route::middleware(["cekCookie"])->group(function () {
             Route::put("{id}/update", [AcademicSemesterController::class, "update"])->name("academic_year.update");
             Route::delete("{id}", [AcademicSemesterController::class, "destroy"])->name("academic_year.destroy");
         });
+
+        Route::prefix("calendar")->group(function () {
+            Route::get("/", [\App\Http\Controllers\CalendarController::class, "index"])->name("calendar.index");
+        });
     });
 });
 
