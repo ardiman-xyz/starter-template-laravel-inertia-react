@@ -28,7 +28,7 @@ export const columns: ColumnDef<User>[] = [
       cell: ({row}) => {
           const { ziggy } = usePage<SharedInertiaData>().props;
           return(
-              <Avatar className="w-16 h-16 ">
+              <Avatar className="w-10 h-10 ">
                   {
                       row.original.profile_picture !== null && (
                           <AvatarImage src={ziggy?.url + "/storage/" + row.original?.profile_picture}/>

@@ -1,6 +1,5 @@
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/Components/ui/card";
 import {AreaVariant} from "@/Pages/_components/area-variant";
-import {PieVariant} from "@/Pages/_components/pie-variant";
 import {BarVariant} from "@/Pages/_components/bar-variant";
 import {LineVariant} from "@/Pages/_components/line-variant";
 
@@ -25,7 +24,7 @@ export const Chart = () => {
     return (
         <div className="flex flex-col gap-y-10">
             <Card>
-                <CardHeader className="flex flex-row justify-between">
+                <CardHeader className="flex lg:flex-row flex-col justify-between lg:gap-2 gap-0">
                    <div className='space-y-1'>
                        <CardTitle>Trend Visitasi Guru</CardTitle>
                        <CardDescription className="max-w-[600px] text-xs">Visualisasi performa mengajar berdasarkan hasil visitasi semester ganjil dan genap
@@ -66,7 +65,6 @@ export const Chart = () => {
                     {chartType === "bar" && <BarVariant/>}
                 </CardContent>
             </Card>
-            {/*<PieVariant />*/}
         </div>
     )
 }
