@@ -23,7 +23,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
     );
 };
 
-const DistribusiPenilaianPie = () => {
+export const PieVariant = () => {
     return (
         <div style={{ width: '100%', height: 400 }}>
             <h2>Distribusi Kategori Penilaian Guru</h2>
@@ -51,4 +51,3 @@ const DistribusiPenilaianPie = () => {
     );
 };
 
-export default DistribusiPenilaianPie;

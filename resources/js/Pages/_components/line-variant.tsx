@@ -1,5 +1,16 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer,
+    LineChart,
+    Line
+} from 'recharts';
 import {CustomTooltip} from "@/Components/CustomTooltip";
 
 interface PerubahanData {
@@ -37,10 +48,10 @@ const data = [
     },
 ];
 
-export const BarVariant: React.FC = () => {
+export const LineVariant: React.FC = () => {
     return (
         <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data}>
+            <LineChart data={data}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
                     dataKey="year"
@@ -55,9 +66,9 @@ export const BarVariant: React.FC = () => {
                     tickLine={false}
                 />
                 <Tooltip content={<CustomTooltip />}/>
-                <Bar dataKey="genap" fill="#3d82f6" name="genap" className="drop-shadow-sm" />
-                <Bar dataKey="ganjil" fill="#82ca9d" name="ganjil" className="drop-shadow-sm"/>
-            </BarChart>
+                <Line dataKey="genap" fill="#3d82f6" name="genap" className="drop-shadow-sm" />
+                <Line dataKey="ganjil" fill="#82ca9d" name="ganjil" className="drop-shadow-sm"/>
+            </LineChart>
         </ResponsiveContainer>
     );
 };
