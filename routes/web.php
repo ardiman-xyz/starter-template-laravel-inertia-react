@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Redirect;
 
+
+//Route::get('/', [\App\Http\Controllers\WebController::class, 'index'])->name("home");
+
 Route::get('/', function () {
    return Redirect::to("/auth");
 });
@@ -66,6 +69,11 @@ Route::middleware(["cekCookie"])->group(function () {
             Route::get("dashboard", [\App\Http\Controllers\DashboardController::class, "index"])->name("dashboard.teacher");
         });
     });
+
+    Route::prefix("/information")->group(function () {
+        Route::get("/", [\App\Http\Controllers\InformationController::class, 'index'])->name('information.index');
+    });
+
 });
 
 

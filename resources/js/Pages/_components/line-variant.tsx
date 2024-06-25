@@ -26,7 +26,7 @@ export const LineVariant: React.FC = () => {
                     tickMargin={16}
                 />
                 <YAxis
-                    domain={[70, 100]}
+                    domain={[10, 100]}
                     tickMargin={16}
                     axisLine={false}
                     tickLine={false}

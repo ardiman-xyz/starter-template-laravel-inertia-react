@@ -3,15 +3,13 @@ import { usePage } from "@inertiajs/react";
 import {
     BookLock, Calendar,
     ClipboardCheck,
-    Inbox, InfoIcon,
+    Inbox,
     Layout,
     LibraryBig,
-    Play, Settings,
     UserCog,
     Users,
 } from "lucide-react";
 import SidebarItem from "./SIdebarItem";
-import { Separator } from "./ui/separator";
 
 const Routes = [
     {
@@ -71,20 +69,6 @@ const Routes = [
     },
 ];
 
-const Routes2 = [
-    {
-        icon: InfoIcon,
-        label: "Informasi",
-        href: "/booker",
-        requiredRoles: ["Headmaster", "Teacher"],
-    },
-    {
-        icon: Settings,
-        label: "Pengaturan",
-        href: "/booker",
-        requiredRoles: ["Headmaster"],
-    },
-];
 
 const SidebarRoutes = () => {
     const { auth } = usePage<SharedInertiaData>().props;
@@ -111,27 +95,7 @@ const SidebarRoutes = () => {
                         )
                 )}
             </div>
-            <Separator className="my-2" />
 
-            <div className="flex flex-col w-full mt-1">
-                {Routes2.map(
-                    (route, index) =>
-                        (!route.requiredRoles ||
-                            (auth &&
-                                route.requiredRoles.some(
-                                    (role) =>
-                                        auth.user && auth.roles.includes(role)
-                                ))) && (
-                            <SidebarItem
-                                key={index}
-                                icon={route.icon}
-                                href={route.href}
-                                label={route.label}
-                                requiredRoles={route.requiredRoles}
-                            />
-                        )
-                )}
-            </div>
         </>
     );
 };
