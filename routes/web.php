@@ -74,6 +74,16 @@ Route::middleware(["cekCookie"])->group(function () {
         Route::get("/", [\App\Http\Controllers\InformationController::class, 'index'])->name('information.index');
     });
 
+
+    Route::prefix("/settings")->group(function () {
+        Route::get("/", [\App\Http\Controllers\Settings\SettingController::class, "index"])->name("settings.index");
+
+        Route::prefix("general")->group(function () {
+            Route::put("{id}", [\App\Http\Controllers\Settings\GeneralSettingController::class, "update"])->name("setting.general.update");
+        });
+
+    });
+
 });
 
 
@@ -95,6 +105,7 @@ Route::middleware('auth')->group(function () {
         Route::delete("{id}", [\App\Http\Controllers\UserController::class, 'destroy']);
         Route::put("{id}", [\App\Http\Controllers\UserController::class, 'update']);
     });
+
 
 });
 

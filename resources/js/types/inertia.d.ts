@@ -1,8 +1,10 @@
 import { User } from ".";
+import {School} from "@/types/app";
 
 interface Auth {
     user: User | null;
     roles: string[];
+    school: School
 }
 
 interface Ziggy {

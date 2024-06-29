@@ -13,7 +13,7 @@ const Routes2 = [
     {
         icon: Settings,
         label: "Pengaturan",
-        href: "/booker",
+        href: "/settings",
         requiredRoles: ["Headmaster"],
     },
     {

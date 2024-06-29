@@ -65,8 +65,14 @@ export type School = {
     name: string;
     leader_name: string;
     address?: string;
+    npsn: string | null;
+    education_level: string | null;
+    status: string | null;
+    email: string | null;
+    school_image: string | null;
     create_at?: string;
     updated_at?: string;
+    user: User;
 }
 
 export type StageSchedule = {
