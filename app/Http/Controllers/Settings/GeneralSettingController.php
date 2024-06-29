@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Settings;
 
 use App\DTO\Settings\UpdateGeneralInformationDTO;
+use App\Http\Requests\UpdateCoverRequest;
 use App\Http\Requests\UpdateGeneralInfoRequest;
 use App\Services\SettingService;
 use App\Services\TokenService;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class GeneralSettingController
@@ -39,6 +41,31 @@ class GeneralSettingController
                 "message" => "Data berhasil diupdate",
                 "data" => $res
             ], 201);
+
+
+        }catch (Exception $exception){
+            return response()->json([
+                "status" => false,
+                "message" => $exception->getMessage(),
+                "data" => null
+            ], 400);
+        }
+    }
+
+    public function updateCover(UpdateCoverRequest $request, string $id): JsonResponse
+    {
+        $data = $request->validated();
+        $image = $data['image'];
+
+        try {
+
+            $res = $this->settingService->updateCoverSchool($image, $id);
+
+            return response()->json([
+                "status" => false,
+                "message" => "Data berhasil diupdate",
+                "data" => $res
+            ]);
 
 
         }catch (Exception $exception){

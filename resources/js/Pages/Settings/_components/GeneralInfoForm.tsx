@@ -28,7 +28,6 @@ import {useState} from "react";
 import {toast} from "sonner";
 import axios from "axios";
 import {router, usePage} from "@inertiajs/react";
-import {PageProps} from "@/types";
 import {SharedInertiaData} from "@/types/inertia";
 
 export const GeneralInfoForm = () => {
@@ -194,7 +193,6 @@ export const GeneralInfoForm = () => {
                         </FormItem>
                     )}
                 />
-                <br/>
                 <Button type="submit" disabled={isLoading}>Simpan informasi</Button>
             </form>
         </Form>

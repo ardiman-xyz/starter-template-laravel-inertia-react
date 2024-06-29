@@ -80,6 +80,7 @@ Route::middleware(["cekCookie"])->group(function () {
 
         Route::prefix("general")->group(function () {
             Route::put("{id}", [\App\Http\Controllers\Settings\GeneralSettingController::class, "update"])->name("setting.general.update");
+            Route::post("{id}/cover", [\App\Http\Controllers\Settings\GeneralSettingController::class, "updateCover"])->name("setting.general.cover");
         });
 
     });
