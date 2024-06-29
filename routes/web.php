@@ -83,6 +83,10 @@ Route::middleware(["cekCookie"])->group(function () {
             Route::post("{id}/cover", [\App\Http\Controllers\Settings\GeneralSettingController::class, "updateCover"])->name("setting.general.cover");
         });
 
+        Route::prefix("account")->group(function () {
+            Route::put("{schoolId}/password", [\App\Http\Controllers\Settings\AccountSetting::class, "updatePassword"])->name("setting.password.update");
+        });
+
     });
 
 });

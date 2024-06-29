@@ -46,3 +46,18 @@ export const GeneralInfoSchema = z
             message: "Email tidak valid"
         }),
     });
+
+
+export const AccountFormSchema = z
+    .object({
+        old_password: z.string().min(1, "Kata sandi lama harus diisi"),
+        new_password: z
+            .string()
+            .min(1, "Kata sandi baru harus diisi")
+            .min(8, "Kata sandi baru harus memiliki minimal 8 karakter"),
+        confirm_password: z.string().min(1, "Konfirmasi kata sandi harus diisi"),
+    })
+    .refine((data) => data.new_password === data.confirm_password, {
+        message: "Konfirmasi kata sandi tidak cocok dengan kata sandi baru",
+        path: ["confirm_password"],
+    });

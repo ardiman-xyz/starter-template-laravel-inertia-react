@@ -3,11 +3,12 @@
 namespace App\Services;
 
 use App\DTO\Settings\UpdateGeneralInformationDTO;
+use App\DTO\Settings\UpdatePasswordUserDto;
 use App\Repositories\SettingRepository;
 use App\Repositories\UserRepository;
 use Exception;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class SettingService
@@ -61,6 +62,39 @@ class SettingService
         $information->save();
 
         return $information;
+
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function updateUserPassword(UpdatePasswordUserDto $dto)
+    {
+        $user = $this->userRepository->getById($dto->userId);
+        if (!$user) {
+            throw new Exception("User tidak ditemukan");
+        }
+
+        if (!Hash::check($dto->oldPassword, $user->password)) {
+            throw new Exception("Password lama tidak sesuai");
+        }
+
+        if ($dto->oldPassword === $dto->newPassword) {
+            throw new Exception("Password baru harus berbeda dari password lama");
+        }
+
+        $hashedPassword = Hash::make($dto->newPassword);
+
+        $user->password = $hashedPassword;
+        $user->save();
+
+        // You might want to perform additional actions here, such as:
+        // - Logging the password change
+        // - Sending a notification email to the user
+        // - Invalidating other sessions (if you want to force re-login after password change)
+
+        return $user;
+
 
     }
 }
