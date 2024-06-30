@@ -86,6 +86,7 @@ Route::middleware(["cekCookie"])->group(function () {
         Route::prefix("account")->group(function () {
             Route::put("{schoolId}/password", [\App\Http\Controllers\Settings\AccountSetting::class, "updatePassword"])->name("setting.password.update");
             Route::put("{userId}/email", [\App\Http\Controllers\Settings\AccountSetting::class, "updateEmail"])->name("user.email.update");
+            Route::post("{userId}/avatar", [\App\Http\Controllers\Settings\AccountSetting::class, "updateAvatar"])->name("user.avatar.update");
         });
 
     });

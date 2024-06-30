@@ -1,6 +1,7 @@
 import {AccountForm} from "@/Pages/Settings/_components/AccountForm";
 import {Separator} from "@/Components/ui/separator";
 import {Personalnfo} from "@/Pages/Settings/_components/Personalnfo";
+import {AvatarForm} from "@/Pages/Settings/_components/AvatarForm";
 
 export const AccountSetting = () => {
     return (
@@ -13,7 +14,7 @@ export const AccountSetting = () => {
                     <AccountForm />
                 </div>
                 <div>
-                    kaan
+                    <AvatarForm />
                 </div>
             </div>
         </>

@@ -10,7 +10,7 @@ import {Button} from "@/Components/ui/button";
 
 export const AvatarForm = () => {
 
-    const {auth, ziggy, app} = usePage<SharedInertiaData>().props;
+    const {auth, ziggy} = usePage<SharedInertiaData>().props;
 
     const fileRef = useRef<HTMLInputElement>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);

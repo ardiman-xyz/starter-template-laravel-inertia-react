@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Settings;
 
 use App\DTO\Settings\UpdatePasswordUserDto;
+use App\Http\Requests\UpdateAvatarRequest;
 use App\Http\Requests\UpdateEmailRequest;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\Services\SettingService;
@@ -58,6 +59,30 @@ class AccountSetting
             return response()->json([
                 "status" => false,
                 "message" => "Email berhasil di update",
+                "data" => $res
+            ]);
+
+
+        }catch (Exception $exception){
+            return response()->json([
+                "status" => false,
+                "message" => $exception->getMessage(),
+                "data" => null
+            ], 400);
+        }
+    }
+
+    public function updateAvatar(UpdateAvatarRequest $request, string $userId)
+    {
+        $image = $request->file("avatar");
+
+        try {
+
+            $res = $this->settingService->updateAvatarUser($image, $userId);
+
+            return response()->json([
+                "status" => false,
+                "message" => "Avatar berhasil di update",
                 "data" => $res
             ]);
 

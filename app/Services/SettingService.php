@@ -110,4 +110,28 @@ class SettingService
         return $user;
     }
 
+    public function updateAvatarUser(UploadedFile $file, string $userId)
+    {
+        $user = $this->userRepository->getById($userId);
+        if (!$user) throw new Exception("User tidak ditemukan");
+
+        $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+        if (!in_array($file->getMimeType(), $allowedMimeTypes)) {
+            throw new Exception("Tipe file tidak diizinkan. Harap unggah file gambar (JPEG, PNG, atau WebP).");
+        }
+
+        $path = $file->store('users', 'public');
+
+        if ($user->profile_picture !== null) {
+            Storage::disk('public')->delete($user->profile_picture);
+        }
+
+        $user->profile_picture = $path;
+        $user->save();
+
+        return $user;
+
+    }
+
 }
