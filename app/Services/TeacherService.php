@@ -139,6 +139,15 @@ class TeacherService
         return $this->userRepository->update($teacher->id, $teacher);
     }
 
+    public function getById(string $id)
+    {
+        $user = $this->userRepository->getById($id);
+        if(!$user) throw new Exception("Data not found");
+
+        return $user;
+    }
+
+
     /**
      * @throws Exception
      */

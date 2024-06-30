@@ -36,9 +36,10 @@ Route::middleware(["cekCookie"])->group(function () {
         Route::prefix("teacher")->group(function () {
             Route::get("/", [\App\Http\Controllers\TeacherController::class, "index"])->name("teacher.index");
             Route::post("/", [\App\Http\Controllers\TeacherController::class, "store"])->name("teacher.store");
-            Route::get("invitations/{id}", [\App\Http\Controllers\TeacherController::class, "invitations"]);
-            Route::put("{id}", [\App\Http\Controllers\TeacherController::class, "update"]);
-            Route::delete("{id}", [\App\Http\Controllers\TeacherController::class, "destroy"]);
+            Route::get("invitations/{id}", [\App\Http\Controllers\TeacherController::class, "invitations"])->name("teacher.invitations");
+            Route::put("{id}", [\App\Http\Controllers\TeacherController::class, "update"])->name("teacher.update");
+            Route::delete("{id}", [\App\Http\Controllers\TeacherController::class, "destroy"])->name("teacher.destroy");
+            Route::get("{id}/details", [\App\Http\Controllers\TeacherController::class, "statistic"])->name("teacher.statistic");
         });
 
         Route::prefix("instrumental")->group(function () {
@@ -64,31 +65,26 @@ Route::middleware(["cekCookie"])->group(function () {
         });
     });
 
-    Route::middleware(["role:Teacher"])->group(function () {
-        Route::prefix("teacher")->group(function () {
-            Route::get("dashboard", [\App\Http\Controllers\DashboardController::class, "index"])->name("dashboard.teacher");
-        });
-    });
-
     Route::prefix("/information")->group(function () {
         Route::get("/", [\App\Http\Controllers\InformationController::class, 'index'])->name('information.index');
     });
 
+    Route::middleware(["role:Headmaster"])->group(function () {
+        Route::prefix("/settings")->group(function () {
+            Route::get("/", [\App\Http\Controllers\Settings\SettingController::class, "index"])->name("settings.index");
 
-    Route::prefix("/settings")->group(function () {
-        Route::get("/", [\App\Http\Controllers\Settings\SettingController::class, "index"])->name("settings.index");
+            Route::prefix("general")->group(function () {
+                Route::put("{id}", [\App\Http\Controllers\Settings\GeneralSettingController::class, "update"])->name("setting.general.update");
+                Route::post("{id}/cover", [\App\Http\Controllers\Settings\GeneralSettingController::class, "updateCover"])->name("setting.general.cover");
+            });
 
-        Route::prefix("general")->group(function () {
-            Route::put("{id}", [\App\Http\Controllers\Settings\GeneralSettingController::class, "update"])->name("setting.general.update");
-            Route::post("{id}/cover", [\App\Http\Controllers\Settings\GeneralSettingController::class, "updateCover"])->name("setting.general.cover");
+            Route::prefix("account")->group(function () {
+                Route::put("{schoolId}/password", [\App\Http\Controllers\Settings\AccountSetting::class, "updatePassword"])->name("setting.password.update");
+                Route::put("{userId}/email", [\App\Http\Controllers\Settings\AccountSetting::class, "updateEmail"])->name("user.email.update");
+                Route::post("{userId}/avatar", [\App\Http\Controllers\Settings\AccountSetting::class, "updateAvatar"])->name("user.avatar.update");
+            });
+
         });
-
-        Route::prefix("account")->group(function () {
-            Route::put("{schoolId}/password", [\App\Http\Controllers\Settings\AccountSetting::class, "updatePassword"])->name("setting.password.update");
-            Route::put("{userId}/email", [\App\Http\Controllers\Settings\AccountSetting::class, "updateEmail"])->name("user.email.update");
-            Route::post("{userId}/avatar", [\App\Http\Controllers\Settings\AccountSetting::class, "updateAvatar"])->name("user.avatar.update");
-        });
-
     });
 
 });

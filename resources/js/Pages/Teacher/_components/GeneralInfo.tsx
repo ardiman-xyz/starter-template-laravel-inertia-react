@@ -1,86 +1,63 @@
-import { useState } from "react";
-import axios from "axios";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { toast } from "sonner";
-import {router, usePage} from "@inertiajs/react";
+import React, {useEffect, useState} from "react";
+import {UserIcon} from "lucide-react";
+import { z } from "zod"
 
-import { Button } from "@/Components/ui/button";
-import { Input } from "@/Components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+
+import { Button } from "@/Components/ui/button"
 import {
     Form,
-    FormControl, FormDescription,
+    FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
-} from "@/Components/ui/form";
-import {RotateCw} from "lucide-react";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/Components/ui/select"
-import Heading from "@/Components/Heading";
-import {Textarea} from "@/Components/ui/textarea";
-import {SharedInertiaData} from "@/types/inertia";
+} from "@/Components/ui/form"
+import { Input } from "@/Components/ui/input"
 import {UserFormSchema} from "@/Schemas";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/Components/ui/select";
+import {Textarea} from "@/Components/ui/textarea";
 
+interface GeneralInfoProps {
+    id: number;
+}
 
-
-export const InformationForm = () => {
-
-    const {auth, ziggy} = usePage<SharedInertiaData>().props;
+export const GeneralInfo = ({id}: GeneralInfoProps) => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        getUserInfo();
+    }, []);
+
+    const getUserInfo = () => {
+        console.info(id)
+    }
 
     const form = useForm<z.infer<typeof UserFormSchema>>({
         resolver: zodResolver(UserFormSchema),
         defaultValues: {
-            name: auth?.user?.name,
-            email: auth?.user?.email,
-            gender: auth?.user?.gender ?? "",
-            address: auth?.user?.address ?? "",
-            nip: auth?.user?.nip ?? "",
-            phone: auth?.user?.phone_number ?? ""
+            name: "",
         },
-    });
+    })
 
-    async function onSubmit(values: z.infer<typeof UserFormSchema>) {
-        setIsLoading(true);
-        await axios
-            .put("/teachers/profile/account", values)
-            .then((data) => {
-                const { message } = data.data;
-                toast.success(`${message}`);
-                router.reload();
-            })
-            .catch((err) => {
-                const { data, status, statusText } = err.response;
-                toast.error(`${statusText} ${status}`, {
-                    description: `${data.message}`,
-                });
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
+    function onSubmit(values: z.infer<typeof UserFormSchema>) {
+        console.log(values)
     }
 
     return (
-        <div className="mt-10">
-
-            <Heading title="Personal" description="Lengkapi data diri anda" />
-
-            <br/>
+        <div className="flex flex-col gap-10 mb-10">
+            <div>
+                <p className="mb-3">Profile Picture</p>
+                <div
+                    className="w-[100px] h-[100px] bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+                    <UserIcon className="stroke-gray-400 h-[80px] w-[80px]"/>
+                </div>
+            </div>
             <Form {...form}>
-                <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-4"
-                >
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                     <FormField
                         control={form.control}
                         name="name"
@@ -189,17 +166,7 @@ export const InformationForm = () => {
                             </FormItem>
                         )}
                     />
-                    <div className="w-full flex items-center gap-x-3">
-                        <Button
-                            type="submit"
-                            disabled={isLoading}
-                        >
-                            {isLoading && (
-                                <RotateCw className="mr-2 h-4 w-4 animate-spin"/>
-                            )}
-                            Simpan
-                        </Button>
-                    </div>
+                    <Button type="submit">Submit</Button>
                 </form>
             </Form>
         </div>

@@ -1,5 +1,4 @@
 import {ChangeEvent, useRef, useState} from "react";
-import {isValidImage, isValidSize} from "@/helper";
 import {toast} from "sonner";
 import axios from "axios";
 import {router, usePage} from "@inertiajs/react";

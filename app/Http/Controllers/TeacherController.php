@@ -70,7 +70,7 @@ class TeacherController extends Controller
                 'data' => [
                     "link" => $response
                 ]
-            ], 201);
+            ]);
         }catch (Exception $exception)
         {
             return response()->json([
@@ -97,13 +97,28 @@ class TeacherController extends Controller
                 'data' => [
                     "link" => $response
                 ]
-            ], 200);
+            ]);
         }catch (Exception $exception)
         {
             return response()->json([
                 'success'    => false,
                 'message'   => $exception->getMessage()
             ], 400);
+        }
+    }
+
+
+    public function statistic(string $id){
+        try {
+
+            $user = $this->teacherService->getById($id);
+
+            return Inertia::render("Teacher/Statistic", [
+                "user" => $user
+            ]);
+        }catch (Exception $exception)
+        {
+            abort(404);
         }
     }
 
@@ -124,4 +139,5 @@ class TeacherController extends Controller
             ], 400);
         }
     }
+
 }

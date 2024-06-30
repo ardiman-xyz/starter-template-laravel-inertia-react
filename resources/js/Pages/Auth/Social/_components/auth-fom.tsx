@@ -62,7 +62,7 @@ const AuthFomAction = ({ variant }: AuthForm) => {
                 const { role } = data.data.data;
 
                 if (role === "Teacher") {
-                    router.visit("/teacher/dashboard");
+                    router.visit("/teachers/dashboard");
                     return;
                 }
                 window.location.reload();

@@ -28,9 +28,6 @@ export const NavbarRoutes = () => {
                     <DropdownMenuLabel>
                         <div>{auth?.user ? auth?.user.name : "Guest"}</div>
                     </DropdownMenuLabel>
-                    <DropdownMenuItem asChild>
-                        <Link href="/profile">Profile</Link>
-                    </DropdownMenuItem>
                     <DropdownMenuItem
                         onClick={() => {
                             router.get("/logout");

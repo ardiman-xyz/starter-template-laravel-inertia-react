@@ -16,9 +16,10 @@ import EditModal from "./edit-modal";
 import DeleteConfirm from "./delete-confirm";
 import {Avatar, AvatarFallback, AvatarImage} from "@/Components/ui/avatar";
 import {getFirstTwoLettersOfLastName} from "@/helper";
-import {usePage} from "@inertiajs/react";
+import {Link, usePage} from "@inertiajs/react";
 import {SharedInertiaData} from "@/types/inertia";
 import {StatusBadge} from "@/Pages/Teacher/_components/status-badge";
+import {Hint} from "@/Components/Hint";
 
 
 export const columns: ColumnDef<User>[] = [
@@ -29,7 +30,7 @@ export const columns: ColumnDef<User>[] = [
         cell: ({row}) => {
             const { ziggy } = usePage<SharedInertiaData>().props;
             return(
-                <div className="flex items-center gap-x-4">
+                <div className="flex items-center gap-x-4 cursor-pointer group">
                     <Avatar className="w-10 h-10 ">
                         {
                             row.original.profile_picture !== null && (
@@ -40,7 +41,11 @@ export const columns: ColumnDef<User>[] = [
                             G
                         </AvatarFallback>
                     </Avatar>
-                    <p>{row.original.name}</p>
+                    <Hint description={"Klik untuk melihat statistik"} >
+                        <Link href={route("teacher.statistic", row.original.id)}>
+                            <p className="group-hover:underline">{row.original.name}</p>
+                        </Link>
+                    </Hint>
                 </div>
             )
         }

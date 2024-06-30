@@ -12,8 +12,6 @@ interface IProps {
 
 const AcademicSemesterPage = ({data}: IProps) => {
 
-    console.info(data)
-
     return (
         <Authenticated>
             <Head title="Akademik semester"/>

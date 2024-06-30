@@ -68,7 +68,7 @@ class AuthController
                 'data' => [
                     "role" => $response
                 ]
-            ], 201);
+            ]);
         }catch (Exception $exception)
         {
             return response()->json([

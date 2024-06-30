@@ -69,3 +69,25 @@ export const PersonalInfoSchema = z
         }).min(1, "Username lama harus diisi"),
     })
 
+export const UserFormSchema =  z
+    .object({
+        name: z
+            .string()
+            .min(2, {
+                message: "Nama wajib di isi!",
+            }),
+        email: z
+            .string()
+            .min(2, {
+                message: "Email wajib di isi",
+            }).email({
+                message: "Email tidak valid"
+            }),
+        gender: z.string().min(1, {
+            message: "Jenis kelamin wajib di isi!"
+        }),
+        address: z.string().optional(),
+        nip: z.string().optional(),
+        phone: z.string().optional(),
+    })
+

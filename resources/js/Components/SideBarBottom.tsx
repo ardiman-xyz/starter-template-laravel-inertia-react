@@ -8,7 +8,7 @@ const Routes2 = [
         icon: InfoIcon,
         label: "Informasi",
         href: "/information",
-        requiredRoles: ["Headmaster"],
+        requiredRoles: ["Headmaster", 'Teacher'],
     },
     {
         icon: Settings,

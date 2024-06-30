@@ -52,7 +52,7 @@ const Routes = [
     {
         icon: Layout,
         label: "Dasbor",
-        href: "/teacher/dashboard",
+        href: "/teachers/dashboard",
         requiredRoles: ["Teacher"],
     },
     {
