@@ -20,6 +20,7 @@ import axios from "axios";
 import {router, usePage} from "@inertiajs/react";
 import {SharedInertiaData} from "@/types/inertia";
 import {FormError} from "@/Components/FormError";
+import Heading from "@/Components/Heading";
 
 export const AccountForm = () => {
 
@@ -65,6 +66,11 @@ export const AccountForm = () => {
 
     return (
        <>
+           <Heading
+               title="Keamanan Password"
+               description="Perbarui password Anda secara berkala untuk melindungi akun"
+               className="mb-7"
+           />
            <Form {...form}>
                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                    <FormField
@@ -137,7 +143,7 @@ export const AccountForm = () => {
                    <div className="mt-2">
                        <FormError message={error} />
                    </div>
-                   <Button type="submit" disabled={isLoading}>Simpan akun</Button>
+                   <Button type="submit" disabled={isLoading}>Simpan password</Button>
                </form>
            </Form>
        </>

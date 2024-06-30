@@ -94,7 +94,20 @@ class SettingService
         // - Invalidating other sessions (if you want to force re-login after password change)
 
         return $user;
-
-
     }
+
+    public function updateEmail(string $email, string $userId)
+    {
+        $user = $this->userRepository->getById($userId);
+        if (!$user) throw new Exception("User tidak ditemukan");
+
+        $existingUser = $this->userRepository->isDuplicateEmail($email, $userId);
+        if ($existingUser)  throw new Exception("Email sudah digunakan oleh pengguna lain");
+
+        $user->email = $email;
+        $user->save();
+
+        return $user;
+    }
+
 }

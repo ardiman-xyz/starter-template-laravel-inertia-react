@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Settings;
 
 use App\DTO\Settings\UpdatePasswordUserDto;
+use App\Http\Requests\UpdateEmailRequest;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\Services\SettingService;
 use App\Services\TokenService;
@@ -34,6 +35,31 @@ class AccountSetting
                 "message" => "Password berhasil di update",
                 "data" => $res
             ], 201);
+
+
+        }catch (Exception $exception){
+            return response()->json([
+                "status" => false,
+                "message" => $exception->getMessage(),
+                "data" => null
+            ], 400);
+        }
+    }
+
+    public function updateEmail(UpdateEmailRequest $request, string $userId)
+    {
+        $data = $request->validated();
+        $email = $data['email'];
+
+        try {
+
+            $res = $this->settingService->updateEmail($email, $userId);
+
+            return response()->json([
+                "status" => false,
+                "message" => "Email berhasil di update",
+                "data" => $res
+            ]);
 
 
         }catch (Exception $exception){

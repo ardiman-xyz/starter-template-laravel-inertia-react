@@ -61,3 +61,11 @@ export const AccountFormSchema = z
         message: "Konfirmasi kata sandi tidak cocok dengan kata sandi baru",
         path: ["confirm_password"],
     });
+
+export const PersonalInfoSchema = z
+    .object({
+        email: z.string().email({
+            message: "Email tidak valid"
+        }).min(1, "Username lama harus diisi"),
+    })
+
