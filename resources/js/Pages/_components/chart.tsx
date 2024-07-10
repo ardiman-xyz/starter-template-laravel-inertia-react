@@ -1,7 +1,13 @@
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/Components/ui/card";
-import {AreaVariant} from "@/Pages/_components/area-variant";
-import {BarVariant} from "@/Pages/_components/bar-variant";
-import {LineVariant} from "@/Pages/_components/line-variant";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/Components/ui/card";
+import { AreaVariant } from "@/Pages/_components/area-variant";
+import { BarVariant } from "@/Pages/_components/bar-variant";
+import { LineVariant } from "@/Pages/_components/line-variant";
 
 import {
     Select,
@@ -9,27 +15,29 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/Components/ui/select"
-import {useState} from "react";
-import {AreaChartIcon, BarChartIcon, LineChartIcon} from "lucide-react";
+} from "@/Components/ui/select";
+import { useState } from "react";
+import { AreaChartIcon, BarChartIcon, LineChartIcon } from "lucide-react";
 
 export const Chart = () => {
-
     const [chartType, setChartType] = useState<string>("area");
 
     const onTypeChange = (value: string) => {
-        setChartType(value)
-    }
+        setChartType(value);
+    };
 
     return (
         <div className="flex flex-col gap-y-10">
             <Card>
                 <CardHeader className="flex lg:flex-row flex-col justify-between lg:gap-2 gap-0">
-                   <div className='space-y-1'>
-                       <CardTitle>Trend Visitasi Guru</CardTitle>
-                       <CardDescription className="max-w-[600px] text-xs">Visualisasi performa mengajar berdasarkan hasil visitasi semester ganjil dan genap
-                           selama 5 tahun terakhir</CardDescription>
-                   </div>
+                    <div className="space-y-1">
+                        <CardTitle>Trend Supervisi Guru</CardTitle>
+                        <CardDescription className="max-w-[600px] text-xs">
+                            Visualisasi performa mengajar berdasarkan hasil
+                            supervisi semester ganjil dan genap selama 5 tahun
+                            terakhir
+                        </CardDescription>
+                    </div>
                     <Select
                         defaultValue={chartType}
                         onValueChange={onTypeChange}
@@ -60,11 +68,11 @@ export const Chart = () => {
                     </Select>
                 </CardHeader>
                 <CardContent>
-                    {chartType === "area" && <AreaVariant/>}
-                    {chartType === "line" && <LineVariant/>}
-                    {chartType === "bar" && <BarVariant/>}
+                    {chartType === "area" && <AreaVariant />}
+                    {chartType === "line" && <LineVariant />}
+                    {chartType === "bar" && <BarVariant />}
                 </CardContent>
             </Card>
         </div>
-    )
-}
+    );
+};
