@@ -1,21 +1,27 @@
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-import {Head, Link, router} from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import Heading from "@/Components/Heading";
-import {Table, TableBody, TableHeader, TableRow, TableHead, TableCell} from "@/Components/ui/table";
-import {CreateModal} from "./_components/create-modal";
-import {Component} from "@/types/app";
-import {Button} from "@/Components/ui/button";
-import {Settings} from "lucide-react";
+import {
+    Table,
+    TableBody,
+    TableHeader,
+    TableRow,
+    TableHead,
+    TableCell,
+} from "@/Components/ui/table";
+import { CreateModal } from "./_components/create-modal";
+import { Component } from "@/types/app";
+import { Button } from "@/Components/ui/button";
+import { Settings } from "lucide-react";
 
 interface IProps {
-    instruments: Component []
+    instruments: Component[];
 }
 
-const InstrumentsPage = ({instruments}: IProps) => {
-
+const InstrumentsPage = ({ instruments }: IProps) => {
     const handleClick = (id: number) => {
-        router.visit(route("instrument.detail", id))
-    }
+        router.visit(route("instrument.detail", id));
+    };
 
     return (
         <Authenticated>
@@ -39,31 +45,37 @@ const InstrumentsPage = ({instruments}: IProps) => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {
-                        instruments.map((item, index) => (
-                            <TableRow key={index} onClick={() => handleClick(item.id)} className="cursor-pointer group">
-                                <TableCell className="font-medium">{index + 1}</TableCell>
-                                <TableCell className="capitalize">
-                                    <span className="group-hover:underline group-hover:text-blue-800 transition-colors">
-                                        {item.name}
-                                    </span>
-                                </TableCell>
-                                <TableCell>10</TableCell>
-                                <TableCell>
-                                    <Link href={route("instrument.detail", item.id)}>
-                                        <Button>
-                                            <Settings className="w-4 h-4 mr-2"/>
-                                            Setting
-                                        </Button>
-                                    </Link>
-                                </TableCell>
-                            </TableRow>
-                        ))
-                    }
+                    {instruments.map((item, index) => (
+                        <TableRow
+                            key={index}
+                            onClick={() => handleClick(item.id)}
+                            className="cursor-pointer group"
+                        >
+                            <TableCell className="font-medium">
+                                {index + 1}
+                            </TableCell>
+                            <TableCell className="capitalize">
+                                <span className="group-hover:underline group-hover:text-blue-800 transition-colors">
+                                    {item.name}
+                                </span>
+                            </TableCell>
+                            <TableCell>-</TableCell>
+                            <TableCell>
+                                <Link
+                                    href={route("instrument.detail", item.id)}
+                                >
+                                    <Button>
+                                        <Settings className="w-4 h-4 mr-2" />
+                                        Setting
+                                    </Button>
+                                </Link>
+                            </TableCell>
+                        </TableRow>
+                    ))}
                 </TableBody>
             </Table>
         </Authenticated>
-    )
-}
+    );
+};
 
 export default InstrumentsPage;

@@ -1,4 +1,4 @@
-import {Head} from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
 
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import Heading from "@/Components/Heading";
@@ -9,60 +9,58 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/Components/ui/table"
-import {Assessment} from "@/types/app";
-import {TableItem} from "./_components/table-item";
+} from "@/Components/ui/table";
+import { Assessment } from "@/types/app";
+import { TableItem } from "./_components/table-item";
 
 interface IProps {
-    assessments : Assessment[]
+    assessments: Assessment[];
 }
 
-const VisitationIndexPage = ({assessments}: IProps) => {
+const VisitationIndexPage = ({ assessments }: IProps) => {
     return (
         <Authenticated
-            breadCrumbs={
-                [
-                    {
-                        title : "Visitasi",
-                        url: "",
-                        disabled: true,
-                    },
-                ]
-            }
+            breadCrumbs={[
+                {
+                    title: "Visitasi",
+                    url: "",
+                    disabled: true,
+                },
+            ]}
         >
             <Head title="Visitasi" />
             <div>
-                <Heading title="Supervisi" description="List supervisi yang pernah anda lakukan" />
+                <Heading
+                    title="Supervisi"
+                    description="List supervisi yang pernah anda lakukan"
+                />
 
                 <Table className="mt-7 border">
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="w-[100px]">No.</TableHead>
+                            <TableHead className="w-[100px] text-center">
+                                No.
+                            </TableHead>
                             <TableHead>Tahun akademik</TableHead>
                             <TableHead>Semester</TableHead>
                             <TableHead>Status</TableHead>
+                            <TableHead>Aksi</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {
-                            assessments.length > 0 &&
+                        {assessments.length > 0 &&
                             assessments.map((assessment, index) => (
                                 <TableItem
-                                    id={assessment.id}
-                                    year={assessment.academic_semester.year}
-                                    semester={assessment.academic_semester.semester}
+                                    data={assessment}
+                                    key={assessment.id}
                                     index={index}
-                                    key={index}
                                 />
-                            ))
-                        }
+                            ))}
                     </TableBody>
                 </Table>
-
             </div>
-
         </Authenticated>
-    )
-}
+    );
+};
 
 export default VisitationIndexPage;

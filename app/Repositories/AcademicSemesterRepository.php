@@ -17,6 +17,15 @@ class AcademicSemesterRepository
             ->get();
     }
 
+    public function findBySchoolId(string $id)
+    {
+        return DB::table('academic_semesters')
+            ->select('academic_year')
+            ->where("school_id", $id)
+            ->distinct()
+            ->get();
+    }
+
     public function getAll()
     {
         return Model::latest()->get();
@@ -26,9 +35,12 @@ class AcademicSemesterRepository
         return Model::where("school_id", $id)->get();
     }
 
-    public function getByYearSemester(string $academic_year, string $semester)
+    public function getByYearSemester(string $academic_year, string $semester, string $schoolId)
     {
-        return Model::where("academic_year", $academic_year)->where("semester", $semester)->first();
+        return Model::where("school_id", $schoolId)
+                ->where("academic_year", $academic_year)
+                ->where("semester", $semester)
+                ->first();
     }
 
     public function getById(int $id)

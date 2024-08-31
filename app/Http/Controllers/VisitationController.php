@@ -22,6 +22,7 @@ use App\Repositories\InstrumentRepository;
 use App\Repositories\SchoolRepository;
 use App\Repositories\UserRepository;
 use App\Services\TokenService;
+use App\Services\UserService;
 use App\Services\VisitationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -31,6 +32,8 @@ use Exception;
 class VisitationController extends Controller
 {
     private VisitationService $visitationService;
+    private TokenService $tokenService;
+    private UserService $userService;
 
     public function __construct()
     {
@@ -61,11 +64,19 @@ class VisitationController extends Controller
             $assessmentAnswerRepository,
             $assessmentScoreRepository
         );
+
+        $this->tokenService =  new TokenService();
+        $this->userService =  new UserService();
     }
 
     public function index(): \Inertia\Response
     {
-        $data = $this->visitationService->getAcademicSemester();
+
+        $user = $this->tokenService->currentUser();
+
+        $school = $this->userService->getById($user->id)->school;
+
+        $data = $this->visitationService->getAcademicSemester($school->id);
         return Inertia::render("Visitation/Index", [
             "data" => $data
         ]);
@@ -73,6 +84,10 @@ class VisitationController extends Controller
 
     public function filter(Request $request)
     {
+        $user = $this->tokenService->currentUser();
+
+        $school = $this->userService->getById($user->id)->school;
+
         $academic_year = $request->query('academic_year');
         $semester = $request->query('smt');
 
@@ -82,7 +97,7 @@ class VisitationController extends Controller
 
         try {
 
-            $data = $this->visitationService->getFilterByAcademicSemester($academic_year, $semester);
+            $data = $this->visitationService->getFilterByAcademicSemester($academic_year, $semester, $school->id);
 
             return Inertia::render("Visitation/Filter", [
                 "data"  => $data,
@@ -122,8 +137,12 @@ class VisitationController extends Controller
         $dto->dateEnd = $validated['dateForm']['date_end'];
         $dto->timeEnd = $validated['dateForm']['time_end'];
 
+        $user = $this->tokenService->currentUser();
+
+        $school = $this->userService->getById($user->id)->school;
+
         try {
-            $response = $this->visitationService->create($dto);
+            $response = $this->visitationService->create($dto, $school->id);
             return response()->json([
                 'status' => true,
                 'message' => 'Visitation successfully created',

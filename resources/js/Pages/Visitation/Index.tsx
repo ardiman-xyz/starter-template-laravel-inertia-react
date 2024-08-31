@@ -6,13 +6,12 @@ import Heading from "@/Components/Heading";
 import FilterForm from "@/Pages/Visitation/_components/filter-form";
 
 interface IProps {
-    data : {
-        academic_year: string
-    }[]
+    data: {
+        academic_year: string;
+    }[];
 }
 
 const IndexPage = ({ data }: IProps) => {
-
     return (
         <Authenticated
             breadCrumbs={[
@@ -31,7 +30,6 @@ const IndexPage = ({ data }: IProps) => {
             />
             <div className="w-full mt-8">
                 <FilterForm data={data} />
-                <div className="w-full mt-8">List agenda visitasi</div>
             </div>
         </Authenticated>
     );

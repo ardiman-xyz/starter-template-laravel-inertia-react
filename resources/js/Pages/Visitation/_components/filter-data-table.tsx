@@ -7,18 +7,17 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/Components/ui/table"
+} from "@/Components/ui/table";
 
-import {DataEmpty} from "@/Components/data-empty";
-import {Assessment} from "@/types/app";
+import { DataEmpty } from "@/Components/data-empty";
+import { Assessment } from "@/types/app";
 import FilterDataItem from "@/Pages/Visitation/_components/filter-data-item";
 
 interface IProps {
     assessments: Assessment[];
 }
 
-const FilterDataTable = ({assessments}: IProps) => {
-
+const FilterDataTable = ({ assessments }: IProps) => {
     return (
         <div>
             <Table className="border">
@@ -33,34 +32,28 @@ const FilterDataTable = ({assessments}: IProps) => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {
-                        assessments.length < 1 && (
-                            <TableRow >
-                                <TableCell colSpan={5} >
-                                    <div className="font-medium text-center flex items-center justify-center my-10">
-                                        <DataEmpty />
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        )
-                    }
+                    {assessments.length < 1 && (
+                        <TableRow>
+                            <TableCell colSpan={5}>
+                                <div className="font-medium text-center flex items-center justify-center my-10">
+                                    <DataEmpty />
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    )}
 
-                    {
-                        assessments.length > 0 && (
-                            assessments.map((assessment, index) => (
-                                <FilterDataItem
-                                    assessment={assessment}
-                                    index={index}
-                                    key={index}
-                                />
-                            ))
-                        )
-                    }
+                    {assessments.length > 0 &&
+                        assessments.map((assessment, index) => (
+                            <FilterDataItem
+                                assessment={assessment}
+                                index={index}
+                                key={index}
+                            />
+                        ))}
                 </TableBody>
             </Table>
-
         </div>
-    )
-}
+    );
+};
 
 export default FilterDataTable;

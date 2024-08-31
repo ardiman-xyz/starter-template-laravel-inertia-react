@@ -27,7 +27,8 @@ class AssessmentRepository
             "final_score" => $entity->finalScore,
             "evaluation" => $entity->evaluation,
             "started_at" => $entity->startedAt,
-            "finished_at" => $entity->finishedAt
+            "finished_at" => $entity->finishedAt,
+            "updated_at" => null
         ]);
     }
 

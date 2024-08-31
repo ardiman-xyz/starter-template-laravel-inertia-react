@@ -73,17 +73,17 @@ class VisitationService
         $this->assessmentScoreRepository = $assessmentScoreRepository;
     }
 
-    public function getAcademicSemester()
+    public function getAcademicSemester(string $schoolId)
     {
-        return $this->academicSemesterRepository->findAll();
+        return $this->academicSemesterRepository->findBySchoolId($schoolId);
     }
 
     /**
      * @throws Exception
      */
-    public function getFilterByAcademicSemester(string $academic_year, string $semester)
+    public function getFilterByAcademicSemester(string $academic_year, string $semester, string $schoolId)
     {
-        $yearAcademic = $this->academicSemesterRepository->getByYearSemester($academic_year, $semester);
+        $yearAcademic = $this->academicSemesterRepository->getByYearSemester($academic_year, $semester, $schoolId);
         if(!$yearAcademic) {
             return [];
         }
@@ -115,15 +115,15 @@ class VisitationService
     /**
      * @throws Exception
      */
-    public function create(CreateAssessmentDTO $dto)
+    public function create(CreateAssessmentDTO $dto, string $schollId)
     {
         $teacher = $this->userRepository->getById($dto->teacherId);
         if(!$teacher) throw new Exception("Teacher not found");
 
-        $academic = $this->academicSemesterRepository->getByYearSemester($dto->academicYear, $dto->academicSemester);
+        $academic = $this->academicSemesterRepository->getByYearSemester($dto->academicYear, $dto->academicSemester, $schollId);
         if(!$academic) throw new Exception("Year and semester not found");
 
-        $school = $this->schoolRepository->getByUserId($this->tokenService->userId());
+        $school = $this->schoolRepository->getById($schollId);
         if(!$school) throw new Exception("School not found");
 
         try {
