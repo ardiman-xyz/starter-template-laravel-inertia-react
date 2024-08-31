@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DTO\CreateTokenDTO;
 use App\Http\Requests\ResetPasswordRequest;
+use App\Models\School;
 use App\Models\User;
 use App\Services\TokenService;
 use Illuminate\Http\Request;
@@ -31,12 +32,14 @@ class InvitationController extends Controller
        }
 
        $user = User::find($data->id);
+       $school = School::where("id", $user->school_id)->first();
+
 
        if($user->is_password_changed !== 1)
        {
            return Inertia::render("Invitation", [
                "user"   => $data,
-               "school" => $user->school
+               "school" => $school
            ]);
        }
 

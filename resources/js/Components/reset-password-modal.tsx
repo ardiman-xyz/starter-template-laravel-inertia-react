@@ -17,7 +17,7 @@ import {
 } from "@/Components/ui/form";
 
 import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
-import {AlertCircle, PlusCircle, RotateCw} from "lucide-react";
+import { AlertCircle, PlusCircle, RotateCw } from "lucide-react";
 import { toast } from "sonner";
 import { router } from "@inertiajs/react";
 
@@ -29,7 +29,6 @@ const formSchema = z
         confirm_password: z.string().min(4, {
             message: "konfirmasi password baru wajib di isi!",
         }),
-
     })
     .refine((data) => data.password === data.confirm_password, {
         message: "Password baru dan konfirmasi password harus sama!",
@@ -41,8 +40,7 @@ interface IProps {
     userId: string;
 }
 
-
-const ResetPasswordModal = ({onClose, userId}: IProps) => {
+const ResetPasswordModal = ({ onClose, userId }: IProps) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isOpenModalAdd, setIsOpenModalAdd] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -65,7 +63,7 @@ const ResetPasswordModal = ({onClose, userId}: IProps) => {
             .then((data) => {
                 const { message } = data.data;
                 toast.success(`${message}`);
-                router.visit("/teacher/dashboard")
+                router.visit("/teacher/dashboard");
             })
             .catch((err) => {
                 const { data, status, statusText } = err.response;
@@ -97,7 +95,9 @@ const ResetPasswordModal = ({onClose, userId}: IProps) => {
                             <AlertCircle className="h-4 w-4" />
                             <AlertTitle>Perhatian!</AlertTitle>
                             <AlertDescription className="text-gray-600 text-xs mt-1">
-                                Demi keamanan akun anda, diharuskan untuk mereset password untuk login yang pertama kali, silahkan gunakan email dan password untuk login.
+                                Demi keamanan akun anda, diharuskan untuk
+                                mereset password untuk login yang pertama kali,
+                                silahkan gunakan email dan password untuk login.
                             </AlertDescription>
                         </Alert>
 
@@ -106,7 +106,6 @@ const ResetPasswordModal = ({onClose, userId}: IProps) => {
                                 onSubmit={form.handleSubmit(onSubmit)}
                                 className="space-y-4"
                             >
-
                                 <FormField
                                     control={form.control}
                                     name="password"
