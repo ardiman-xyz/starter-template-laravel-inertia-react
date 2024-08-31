@@ -5,29 +5,42 @@ import {
     XAxis,
     YAxis,
     Tooltip,
-    ResponsiveContainer
-} from 'recharts';
-import {CustomTooltip} from "@/Components/CustomTooltip";
-import {useDashboardStore} from "@/Context/useDashboardStore";
+    ResponsiveContainer,
+} from "recharts";
+import { CustomTooltip } from "@/Components/CustomTooltip";
+import { useDashboardStore } from "@/Context/useDashboardStore";
 
 export const AreaVariant = () => {
-
-    const trendVisitation = useDashboardStore(state => state.trendVisitation);
+    const trendVisitation = useDashboardStore((state) => state.trendVisitation);
 
     return (
         <ResponsiveContainer width="100%" height={350}>
-            <AreaChart
-                data={trendVisitation}
-            >
+            <AreaChart data={trendVisitation}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <defs>
                     <linearGradient id="genap" x1="0" x2="0" y2={"1"}>
-                        <stop offset="2%" stopColor="#3d82f6" stopOpacity={0.8}/>
-                        <stop offset="98%" stopColor="#3d82f6" stopOpacity={0.8}/>
+                        <stop
+                            offset="2%"
+                            stopColor="#3d82f6"
+                            stopOpacity={0.8}
+                        />
+                        <stop
+                            offset="98%"
+                            stopColor="#3d82f6"
+                            stopOpacity={0.8}
+                        />
                     </linearGradient>
                     <linearGradient id="ganjil" x1="0" x2="0" y2={"1"}>
-                        <stop offset="2%" stopColor="#82ca9d" stopOpacity={0.8}/>
-                        <stop offset="98%" stopColor="#82ca9d" stopOpacity={0.8}/>
+                        <stop
+                            offset="2%"
+                            stopColor="#82ca9d"
+                            stopOpacity={0.8}
+                        />
+                        <stop
+                            offset="98%"
+                            stopColor="#82ca9d"
+                            stopOpacity={0.8}
+                        />
                     </linearGradient>
                 </defs>
                 <XAxis
@@ -42,7 +55,7 @@ export const AreaVariant = () => {
                     axisLine={false}
                     tickLine={false}
                 />
-                <Tooltip content={<CustomTooltip />}/>
+                <Tooltip content={<CustomTooltip />} />
                 <Area
                     type="monotone"
                     dataKey="genap"
@@ -67,4 +80,3 @@ export const AreaVariant = () => {
         </ResponsiveContainer>
     );
 };
-

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTO\CreateTokenDTO;
+use App\DTO\UserLoginDto;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Exception;
@@ -42,10 +43,26 @@ class TokenService
         }
     }
 
-    public function currentUser()
+    public function currentUser(): ?UserLoginDto
     {
-        $token  = Cookie::get('vistoken');
-        return JWT::decode($token, new Key($this->key, 'HS256'));
+        $token = Cookie::get('vistoken');
+
+        if (!$token) {
+            return null;
+        }
+
+        try {
+            $decodedToken = JWT::decode($token, new Key($this->key, 'HS256'));
+
+            return new UserLoginDto(
+                isset($decodedToken->id) ? (int)$decodedToken->id : null,
+                $decodedToken->name ?? null,
+                $decodedToken->email ?? null
+            );
+
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     public function checkToken(): array|string|null
