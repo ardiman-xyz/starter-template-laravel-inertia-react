@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\DTO\AcademicSemesterDTO;
 use App\Http\Requests\AcademicSemesterRequest;
 use App\Services\AcademicSemesterService;
+use App\Services\TokenService;
+use App\Services\UserService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,13 +16,21 @@ use Inertia\Response as InertiaResponse;
 class AcademicSemesterController extends Controller
 {
     public function __construct(
-        protected AcademicSemesterService $academicSemesterService
+        protected AcademicSemesterService $academicSemesterService,
+        protected $tokenService = new TokenService(),
+        protected  $userService = new UserService(),
     ){}
 
     public function index(): InertiaResponse
     {
-        $data = $this->academicSemesterService->all();
 
+        $user = $this->tokenService->currentUser();
+
+        $school = $this->userService->getById($user->id)->school;
+
+
+        $data = $this->academicSemesterService->all($school->id);
+       
         return Inertia::render("AcademicSemester/Index", [
             "data" => $data
         ]);
@@ -28,6 +38,10 @@ class AcademicSemesterController extends Controller
 
     public function store(AcademicSemesterRequest $request, AcademicSemesterDTO $dto): JsonResponse
     {
+        $user = $this->tokenService->currentUser();
+
+        $school = $this->userService->getById($user->id)->school;
+
         $data = $request->validationData();
 
         $dto->year = $data['year'];
@@ -35,6 +49,8 @@ class AcademicSemesterController extends Controller
         $dto->semester = $data['semester'];
         $dto->startDate = $data['start_date'];
         $dto->endDate = $data['end_date'];
+        $dto->schoolId = $school->id;
+
 
         try {
             $this->academicSemesterService->create($dto);
@@ -54,8 +70,14 @@ class AcademicSemesterController extends Controller
 
     public function update(AcademicSemesterRequest $request, AcademicSemesterDTO $dto, string $id): JsonResponse
     {
+
+        $user = $this->tokenService->currentUser();
+
+        $school = $this->userService->getById($user->id)->school;
+
         $data = $request->validationData();
 
+        $dto->schoolId = $school->id;
         $dto->year = $data['year'];
         $dto->academicYear = $data['academic_year'];
         $dto->semester = $data['semester'];

@@ -2,13 +2,11 @@
 
 namespace App\DTO;
 
-class AcademicSemesterDTO
+class AcademicCreateDTO
 {
     public string $schoolId;
     public string $year;
     public string $academicYear;
     public string $semester;
-    public string $startDate;
-    public string $endDate;
 
 }

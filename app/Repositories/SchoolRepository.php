@@ -21,4 +21,9 @@ class SchoolRepository
     {
         return Model::where("user_id", $id)->first();
     }
+
+    public function getById(string $id)
+    {
+        return Model::find($id);
+    }
 }

@@ -24,12 +24,12 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/Components/ui/select"
+} from "@/Components/ui/select";
 
 import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
-import {AlertCircle, PlusCircle, RotateCw} from "lucide-react";
+import { AlertCircle, PlusCircle, RotateCw } from "lucide-react";
 import { router } from "@inertiajs/react";
-import {AcademicSemesterSchema} from "@/Schemas";
+import { AcademicSemesterSchema } from "@/Schemas";
 
 const CreateModal = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -54,7 +54,6 @@ const CreateModal = () => {
     };
 
     async function onSubmit(values: z.infer<typeof AcademicSemesterSchema>) {
-
         setIsLoading(true);
         await axios
             .post(route("academic_year.store"), values)
@@ -80,7 +79,8 @@ const CreateModal = () => {
         <div>
             <Button onClick={toggleModalAdd}>
                 <PlusCircle className="h-4 w-4 mr-2" />
-                Tambah</Button>
+                Tambah
+            </Button>
             <Modal
                 onClose={toggleModalAdd}
                 show={isOpenModalAdd}
@@ -112,7 +112,9 @@ const CreateModal = () => {
                                     name="academic_year"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Tahun Akademik</FormLabel>
+                                            <FormLabel>
+                                                Tahun Akademik
+                                            </FormLabel>
                                             <FormControl>
                                                 <Input
                                                     placeholder="ex: 2022/2024"
@@ -130,15 +132,22 @@ const CreateModal = () => {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Semester</FormLabel>
-                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <Select
+                                                onValueChange={field.onChange}
+                                                defaultValue={field.value}
+                                            >
                                                 <FormControl>
                                                     <SelectTrigger>
                                                         <SelectValue placeholder="Pilih semester" />
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent>
-                                                    <SelectItem value="ganjil">Ganjil</SelectItem>
-                                                    <SelectItem value="genap">Genap</SelectItem>
+                                                    <SelectItem value="ganjil">
+                                                        Ganjil
+                                                    </SelectItem>
+                                                    <SelectItem value="genap">
+                                                        Genap
+                                                    </SelectItem>
                                                 </SelectContent>
                                             </Select>
                                             <FormMessage />
@@ -187,7 +196,9 @@ const CreateModal = () => {
                                     name="end_date"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Tanggal Berakhir</FormLabel>
+                                            <FormLabel>
+                                                Tanggal Berakhir
+                                            </FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...field}

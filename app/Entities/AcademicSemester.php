@@ -4,6 +4,7 @@ namespace App\Entities;
 
 class AcademicSemester
 {
+    public string $schoolId;
     public string $year;
     public string $academicYear;
     public string $semester;

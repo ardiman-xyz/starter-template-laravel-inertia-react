@@ -2,19 +2,23 @@
 
 namespace App\Services;
 
+use App\DTO\AcademicCreateDTO;
 use App\DTO\AcademicSemesterDTO;
 use App\Entities\AcademicSemester;
 use App\Repositories\AcademicSemesterRepository;
+use App\Repositories\SchoolRepository;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
 class AcademicSemesterService
 {
     private AcademicSemesterRepository $academicSemesterRepository;
+    private SchoolRepository $schoolRepository;
 
-    public function __construct(AcademicSemesterRepository $academicSemesterRepository)
+    public function __construct(AcademicSemesterRepository $academicSemesterRepository, SchoolRepository $schoolRepository)
     {
         $this->academicSemesterRepository = $academicSemesterRepository;
+        $this->schoolRepository = $schoolRepository;
     }
 
     public function getaAll()
@@ -22,14 +26,27 @@ class AcademicSemesterService
         return $this->academicSemesterRepository->findAll();
     }
 
-    public function all()
+    public function all(string $schoolId)
     {
-        return $this->academicSemesterRepository->getAll();
+        return $this->academicSemesterRepository->getBySchoolId($schoolId);
     }
 
     public function create(AcademicSemesterDTO $data)
     {
-        $isAcademicSemesterAlreadyExist = $this->academicSemesterRepository->academicAlreadyExists($data->year, $data->semester, $data->academicYear);
+
+        $isSchoolExist = $this->schoolRepository->getById($data->schoolId);
+
+        if(!$isSchoolExist) throw new Exception("Sekolah tidak ditemukan");
+
+        $createDto = new AcademicCreateDTO();
+        $createDto->schoolId = $data->schoolId;
+        $createDto->year = $data->year;
+        $createDto->semester = $data->semester;
+        $createDto->academicYear = $data->academicYear;
+
+        $isAcademicSemesterAlreadyExist = $this->academicSemesterRepository->academicAlreadyExists($createDto);
+
+
         if ($isAcademicSemesterAlreadyExist) throw new Exception("Tahun akademik dan semester sudah ada di tahun $data->year");
 
         if (!in_array($data->semester, ['ganjil', 'genap'])) {
@@ -39,6 +56,7 @@ class AcademicSemesterService
         try {
 
             $dataStore = new AcademicSemester();
+            $dataStore->schoolId = $data->schoolId;
             $dataStore->year = $data->year;
             $dataStore->semester = $data->semester;
             $dataStore->academicYear = $data->academicYear;
@@ -64,7 +82,15 @@ class AcademicSemesterService
 
     public function update(AcademicSemesterDTO $data, string $id)
     {
-        $isAcademicSemesterAlreadyExist = $this->academicSemesterRepository->academicAlreadyExistsExcept($data->year, $data->semester, $data->academicYear, $id);
+
+        $createDto = new AcademicCreateDTO();
+        $createDto->schoolId = $data->schoolId;
+        $createDto->year = $data->year;
+        $createDto->semester = $data->semester;
+        $createDto->academicYear = $data->academicYear;
+
+
+        $isAcademicSemesterAlreadyExist = $this->academicSemesterRepository->academicAlreadyExistsExcept($createDto, $id);
         if ($isAcademicSemesterAlreadyExist) {
             throw new Exception("Tahun akademik dan semester sudah ada di tahun $data->year");
         }

@@ -26,6 +26,7 @@ class DashboardController
     {
 
         $user = $this->login->currentUser();
+        
 
         $trendVisitation = $this->service->getTrendVisitationTeacher($user->id);
         $categories = $this->service->getCategoryDistribution($user->id);

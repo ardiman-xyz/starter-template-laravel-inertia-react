@@ -1,29 +1,30 @@
-
-import { ColumnDef } from "@tanstack/react-table"
-import {AcademicSemester} from "@/types/app";
+import { ColumnDef } from "@tanstack/react-table";
+import { AcademicSemester } from "@/types/app";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuSeparator,
-    DropdownMenuTrigger
+    DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
-import {Button} from "@/Components/ui/button";
-import {ClipboardEdit, MoreHorizontal, Trash2} from "lucide-react";
-import {useState} from "react";
+import { Button } from "@/Components/ui/button";
+import { ClipboardEdit, MoreHorizontal, Trash2 } from "lucide-react";
+import { useState } from "react";
 import DeleteConfirm from "@/Pages/AcademicSemester/_components/delete-confirm";
-import {EditModal} from "@/Pages/AcademicSemester/_components/edit-modal";
-import {router} from "@inertiajs/react";
+import { EditModal } from "@/Pages/AcademicSemester/_components/edit-modal";
+import { router } from "@inertiajs/react";
 
 export const columns: ColumnDef<AcademicSemester>[] = [
-
     {
         accessorKey: "academic_year",
         header: "Tahun Akademik",
     },
     {
-        accessorKey: "semester",
+        id: "semester",
         header: "Semester",
+        cell: ({ row }) => {
+            return <div className="capitalize">{row.original.semester}</div>;
+        },
     },
     {
         accessorKey: "year",
@@ -40,19 +41,16 @@ export const columns: ColumnDef<AcademicSemester>[] = [
     {
         id: "action",
         header: "aksi",
-        cell: ({row}) => {
-            return <ActionMenu data={row.original} />
-        }
+        cell: ({ row }) => {
+            return <ActionMenu data={row.original} />;
+        },
     },
-]
-
-
+];
 
 const ActionMenu = ({ data }: { data: AcademicSemester }) => {
-
     const [isModalInviteOpen, setIsModalInviteOpen] = useState<boolean>(false);
-    const [isModalEditOpen, setIsModalEditOpen] = useState<boolean>(false)
-    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState<boolean>(false)
+    const [isModalEditOpen, setIsModalEditOpen] = useState<boolean>(false);
+    const [isModalDeleteOpen, setIsModalDeleteOpen] = useState<boolean>(false);
 
     const toggleModalInvite = () => setIsModalInviteOpen(!isModalInviteOpen);
 
@@ -83,23 +81,26 @@ const ActionMenu = ({ data }: { data: AcademicSemester }) => {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                         className="cursor-pointer"
-                        onClick={()=> setIsModalDeleteOpen(true)}
+                        onClick={() => setIsModalDeleteOpen(true)}
                     >
                         <Trash2 className="h-4 w-4 mr-2" />
                         Delete
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
-            {
-                isModalEditOpen && (
-                    <EditModal data={data} isOpen={isModalEditOpen} onClose={(isCancelled) => handleModalEditClose(isCancelled)}   />
-                )
-            }
-            {
-                isModalDeleteOpen && (
-                    <DeleteConfirm data={data} onClose={() => setIsModalDeleteOpen(false)}  />
-                )
-            }
+            {isModalEditOpen && (
+                <EditModal
+                    data={data}
+                    isOpen={isModalEditOpen}
+                    onClose={(isCancelled) => handleModalEditClose(isCancelled)}
+                />
+            )}
+            {isModalDeleteOpen && (
+                <DeleteConfirm
+                    data={data}
+                    onClose={() => setIsModalDeleteOpen(false)}
+                />
+            )}
         </div>
     );
 };
