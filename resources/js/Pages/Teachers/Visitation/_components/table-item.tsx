@@ -1,7 +1,9 @@
-import React from "react";
+import { FileDown, Info, MoreHorizontal } from "lucide-react";
 import { router } from "@inertiajs/react";
+import { cn } from "@/lib/utils";
 
 import { Assessment } from "@/types/app";
+import VisitationStatus from "./visitation-status";
 
 import { TableCell, TableRow } from "@/Components/ui/table";
 import {
@@ -12,18 +14,25 @@ import {
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
 import { Button } from "@/Components/ui/button";
-import { FileDown, Info, MoreHorizontal } from "lucide-react";
-import { cn } from "@/lib/utils";
-import VisitationStatus from "./visitation-status";
 
 interface TableItemProps {
     data: Assessment;
     index: number;
+    togglePreviewReport: (event: React.MouseEvent) => void;
 }
 
-export const TableItem = ({ data, index }: TableItemProps) => {
+export const TableItem = ({
+    data,
+    index,
+    togglePreviewReport,
+}: TableItemProps) => {
     const handleClick = () => {
         return router.visit(route("teacher.visitation.show", data.id));
+    };
+
+    const handleDownload = (event: React.MouseEvent) => {
+        event.stopPropagation();
+        router.visit(route("report.teacher"));
     };
 
     return (
@@ -59,9 +68,12 @@ export const TableItem = ({ data, index }: TableItemProps) => {
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         {data.status === "finish" && (
-                            <DropdownMenuItem className="cursor-pointer">
+                            <DropdownMenuItem
+                                onClick={handleDownload}
+                                className="cursor-pointer"
+                            >
                                 <FileDown className="h-4 w-4 mr-2" />
-                                Donwload report
+                                Report
                             </DropdownMenuItem>
                         )}
                     </DropdownMenuContent>

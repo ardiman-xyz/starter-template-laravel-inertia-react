@@ -9,7 +9,7 @@ export default function Modal({
     onClose = () => {},
 }: PropsWithChildren<{
     show: boolean;
-    maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl"| "xxl";
+    maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "xxl" | "full";
     closeable?: boolean;
     onClose: CallableFunction;
 }>) {
@@ -25,7 +25,8 @@ export default function Modal({
         lg: "sm:max-w-lg w-full",
         xl: "sm:max-w-xl",
         "2xl": "sm:max-w-2xl",
-        xxl: "sm:max-w-5xl w-full"
+        xxl: "sm:max-w-5xl w-full",
+        full: "w-full h-full",
     }[maxWidth];
 
     return (
@@ -33,7 +34,7 @@ export default function Modal({
             <Dialog
                 as="div"
                 id="modal"
-                className="fixed inset-0 flex overflow-y-auto px-4 py-6 sm:px-0 items-center z-50 transform transition-all"
+                className="fixed inset-0 flex overflow-y-auto px-4 sm:px-0 items-center z-50 transform transition-all"
                 onClose={close}
             >
                 <Transition.Child
@@ -58,7 +59,7 @@ export default function Modal({
                     leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 >
                     <Dialog.Panel
-                        className={`mb-6 bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:mx-auto ${maxWidthClass}`}
+                        className={` bg-white overflow-hidden shadow-xl transform transition-all sm:w-full sm:mx-auto ${maxWidthClass}`}
                     >
                         {children}
                     </Dialog.Panel>

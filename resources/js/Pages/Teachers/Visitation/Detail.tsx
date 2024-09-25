@@ -1,37 +1,40 @@
-import {useEffect, useState} from "react";
-import {ChevronDown} from "lucide-react";
-import {cn} from "@/lib/utils";
-import {Head} from "@inertiajs/react";
+import { useEffect, useState } from "react";
+import { ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Head } from "@inertiajs/react";
 
-import {Assessment, Component} from "@/types/app";
+import { Assessment, Component } from "@/types/app";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import Heading from "@/Components/Heading";
-import {Hint} from "@/Components/Hint";
-import {Table, TableBody, TableHead, TableHeader, TableRow} from "@/Components/ui/table";
+import { Hint } from "@/Components/Hint";
+import {
+    Table,
+    TableBody,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/Components/ui/table";
 
-import {Answer} from "./_components/answer";
-import {Note} from "./_components/note";
-import {InstrumentItem} from "./_components/instrument-item";
+import { Answer } from "./_components/answer";
+import { Note } from "./_components/note";
+import { InstrumentItem } from "./_components/instrument-item";
 import useAssessmentStore from "@/Context/teacher/useAssessmentStore";
-import {Score} from "./_components/score";
+import { Score } from "./_components/score";
 
 interface DetailProps {
     data: {
         assessment: Assessment;
-        instruments: Component [];
+        instruments: Component[];
         component_max_score: number;
         total_score: number;
         final_score: {
             evaluate: string;
             final_score: number;
-        }
-    }
+        };
+    };
 }
 
-const DetailVisitationPageTeacher = ({data}: DetailProps) => {
-
-    console.info(data)
-
+const DetailVisitationPageTeacher = ({ data }: DetailProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(true);
 
     const handleClick = () => {
@@ -41,25 +44,23 @@ const DetailVisitationPageTeacher = ({data}: DetailProps) => {
     const { setAssessmentId } = useAssessmentStore();
 
     useEffect(() => {
-        setAssessmentId(data.assessment.id)
-    }, [])
+        setAssessmentId(data.assessment.id);
+    }, []);
 
-    return(
+    return (
         <Authenticated
-            breadCrumbs={
-                [
-                    {
-                        title : "Supervisi",
-                        url: "teacher.visitation.index",
-                        disabled: false,
-                    },
-                    {
-                        title : "Detail",
-                        url: "",
-                        disabled: true,
-                    },
-                ]
-            }
+            breadCrumbs={[
+                {
+                    title: "Supervisi",
+                    url: "teacher.visitation.index",
+                    disabled: false,
+                },
+                {
+                    title: "Detail",
+                    url: "",
+                    disabled: true,
+                },
+            ]}
         >
             <Head title="Supervisi detail" />
 
@@ -79,35 +80,66 @@ const DetailVisitationPageTeacher = ({data}: DetailProps) => {
                             title={`Instrumen Evaluasi Visitasi Guru`}
                             description={`Silakan berikan penilaian Anda menggunakan instrumen ini untuk guru yang sedang Anda visitasi.`}
                         />
-                        <Hint description={isOpen ? "Close section" : "Open section"}>
-                            <ChevronDown onClick={handleClick}
-                                         className={`transition-transform duration-500 ${isOpen ? "" : "transform -rotate-90"}`}/>
+                        <Hint
+                            description={
+                                isOpen ? "Close section" : "Open section"
+                            }
+                        >
+                            <ChevronDown
+                                onClick={handleClick}
+                                className={`transition-transform duration-500 ${
+                                    isOpen ? "" : "transform -rotate-90"
+                                }`}
+                            />
                         </Hint>
                     </div>
-                    <Table className={cn("border mt-4 transition-all duration-500", !isOpen && "hidden")}>
+                    <Table
+                        className={cn(
+                            "border mt-4 transition-all duration-500",
+                            !isOpen && "hidden"
+                        )}
+                    >
                         <TableHeader>
                             <TableRow>
-                                <TableHead rowSpan={2} className="border text-center">No</TableHead>
-                                <TableHead rowSpan={2} className="border">Sub Komponen dan Butir komponen</TableHead>
-                                <TableHead colSpan={4} className="text-center border">Skor Nilai</TableHead>
+                                <TableHead
+                                    rowSpan={2}
+                                    className="border text-center"
+                                >
+                                    No
+                                </TableHead>
+                                <TableHead rowSpan={2} className="border">
+                                    Sub Komponen dan Butir komponen
+                                </TableHead>
+                                <TableHead
+                                    colSpan={4}
+                                    className="text-center border"
+                                >
+                                    Skor Nilai
+                                </TableHead>
                             </TableRow>
                             <TableRow>
-                                <TableHead className="border text-center">1</TableHead>
-                                <TableHead className="border text-center">2</TableHead>
-                                <TableHead className="border text-center">3</TableHead>
-                                <TableHead className="border text-center">4</TableHead>
+                                <TableHead className="border text-center">
+                                    1
+                                </TableHead>
+                                <TableHead className="border text-center">
+                                    2
+                                </TableHead>
+                                <TableHead className="border text-center">
+                                    3
+                                </TableHead>
+                                <TableHead className="border text-center">
+                                    4
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {
-                                data.instruments.map((instrument, index) => (
-                                    <InstrumentItem
-                                        instrument={instrument}
-                                        index={index}
-                                        key={index}
-                                    />
-                                ))
-                            }
+                            {data.instruments.map((instrument, index) => (
+                                <InstrumentItem
+                                    instrument={instrument}
+                                    index={index}
+                                    key={index}
+                                />
+                            ))}
                         </TableBody>
                     </Table>
                 </div>
@@ -124,14 +156,15 @@ const DetailVisitationPageTeacher = ({data}: DetailProps) => {
                     <Note
                         data={{
                             findings: data.assessment.findings,
-                            action_plan: data.assessment.action_plan
+                            action_plan: data.assessment.action_plan,
                         }}
                     />
                 </div>
             </div>
-            <br/><br/>
+            <br />
+            <br />
         </Authenticated>
-    )
-}
+    );
+};
 
 export default DetailVisitationPageTeacher;
