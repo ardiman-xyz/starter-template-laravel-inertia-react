@@ -1,7 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 
-Route::get("report", [\App\Http\Controllers\Teacher\ReportController::class, "index"])->name("report.teacher");
+Route::get("report", [\App\Http\Controllers\Teacher\ReportController::class, "preview"])->name("report.teacher");
 
 
 Route::middleware(["cekCookie"])->group(function () {

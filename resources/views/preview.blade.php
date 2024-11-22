@@ -61,7 +61,7 @@
             <br>
             <div className="bg-gray-100 p-4 rounded-lg mt-10">
                 <h2 className="text-xl font-semibold mb-4">Penilaian Akhir</h2>
-                <p className="mb-2"><strong>Nilai Rata-rata:</strong> {86.25}</p>
+                <p className="mb-2"><strong>Nilai Rata-rata:</strong> 86.25</p>
                 <p className="mb-2"><strong>Kategori:</strong> Sangat Baik</p>
                 <br>
                 <div className="mt-4">
