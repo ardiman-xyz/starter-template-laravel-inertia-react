@@ -50,4 +50,6 @@ class User extends Authenticatable
             'id'        // Nama kolom local key di tabel users
         );
     }
+
+    
 }

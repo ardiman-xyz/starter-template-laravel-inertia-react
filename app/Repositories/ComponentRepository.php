@@ -12,11 +12,17 @@ class ComponentRepository
         return Model::all();
     }
 
-    public function create(string $name, string $description = null)
+    public function findAllBySchoolId(string $id)
+    {
+        return Model::where("school_id", $id)->with("details")->get();
+    }
+
+    public function create(string $name, string $schoolId)
     {
         return Model::create([
-           "name"           => $name ,
-            "description"   => $description
+            "school_id" => $schoolId,
+            "name"           => $name ,
+            "description"   => null
         ]);
     }
 

@@ -37,6 +37,8 @@ class InstrumentalController extends Controller
         $stage = AssessmentStage::findOrFail($stageId);
         $instruments = $this->instrumentService->getByAssessmentStageId($stageId);
 
+        dd($instruments);
+
         return Inertia::render("Instrumental/InstrumentController", [
             "stage" => $stage,
             "instruments" => $instruments

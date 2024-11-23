@@ -1,35 +1,38 @@
-import {User} from "@/types/app";
-import {AlertCircle, AlertTriangle, RotateCw} from "lucide-react";
-import {Alert, AlertDescription, AlertTitle} from "@/Components/ui/alert";
-import {cn} from "@/lib/utils";
+import { User } from "@/types/app";
+import { AlertCircle, AlertTriangle, RotateCw } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
+import { cn } from "@/lib/utils";
 import Modal from "@/Components/Modal";
-import {useState} from "react";
-import {Button} from "@/Components/ui/button";
+import { useState } from "react";
+import { Button } from "@/Components/ui/button";
 import axios from "axios";
-import {router} from "@inertiajs/react";
-import {toast} from "sonner";
+import { router } from "@inertiajs/react";
+import { toast } from "sonner";
 
 interface DeleteConfirmProps {
     id: number;
-    onClose: () => void
+    onClose: () => void;
 }
 
-const DeleteConfirm = ({id, onClose}: DeleteConfirmProps) => {
-
+const DeleteConfirm = ({ id, onClose }: DeleteConfirmProps) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleDelete = async () => {
-        setIsLoading(true)
-        await axios.delete(`/instruments/${id}/item`)
+        setIsLoading(true);
+        await axios
+            .delete(`/instruments/${id}/item`)
             .then((data) => {
                 toast.success(` Item berhasil dihapus`);
-                router.reload()
-            }).catch((err) => {
-                console.info(err)
-            }).finally(() => {
-                setIsLoading(false)
+                router.reload();
+                onClose();
             })
-    }
+            .catch((err) => {
+                console.info(err);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    };
 
     return (
         <Modal
@@ -43,8 +46,13 @@ const DeleteConfirm = ({id, onClose}: DeleteConfirmProps) => {
                     <div className="bg-red-100 p-3 rounded-full">
                         <AlertTriangle className="h-5 w-5 stroke-red-700" />
                     </div>
-                    <h2 className="font-semibold mt-3 text-gray-700">Apakah anda yakin ?</h2>
-                    <p className="text-sm text-muted-foreground mt-2 text-center">Aksi ini tidak dapat di kembalikan, data akan dihapus secara permanen di database!</p>
+                    <h2 className="font-semibold mt-3 text-gray-700">
+                        Apakah anda yakin ?
+                    </h2>
+                    <p className="text-sm text-muted-foreground mt-2 text-center">
+                        Aksi ini tidak dapat di kembalikan, data akan dihapus
+                        secara permanen di database!
+                    </p>
                 </div>
                 <div className="w-full flex flex-col gap-y-2 mt-6 mb-3">
                     <Button
@@ -58,13 +66,17 @@ const DeleteConfirm = ({id, onClose}: DeleteConfirmProps) => {
                         )}
                         Hapus
                     </Button>
-                    <Button disabled={isLoading} variant="outline" onClick={onClose}>
+                    <Button
+                        disabled={isLoading}
+                        variant="outline"
+                        onClick={onClose}
+                    >
                         Batalkan
                     </Button>
                 </div>
             </div>
         </Modal>
-    )
-}
+    );
+};
 
 export default DeleteConfirm;

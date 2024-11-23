@@ -56,7 +56,7 @@ class InstrumentItemController extends Controller
         $dto = new UpdateComponentItemDTO();
         $dto->id = $data['id'];
         $dto->name = $data['name'];
-        $dto->maxScore = $data['max_score'];
+        $dto->maxScore = $data['max_Score'];
 
         try {
             $this->componentDetailService->update($dto);

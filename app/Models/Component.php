@@ -22,4 +22,5 @@ class Component extends Model
     {
         return $this->hasMany(AssessmentAnswer::class, 'component_id', 'id');
     }
+
 }

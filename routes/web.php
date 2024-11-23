@@ -19,7 +19,7 @@ Route::prefix("auth")->middleware("guest")->group(function () {
     Route::get("/", [\App\Http\Controllers\Auth\Social\AuthController::class, 'create'])->name("social.auth.google");
     Route::get("social/redirect", [\App\Http\Controllers\Auth\Social\AuthController::class, 'redirect'])->name("social.auth.redirect");
     Route::get("social/callback", [\App\Http\Controllers\Auth\Social\AuthController::class, 'callback'])->name("social.auth.callback");
-    Route::post("login", [\App\Http\Controllers\Auth\Social\AuthController::class, "login"]);
+    Route::post("login", [\App\Http\Controllers\Auth\Social\AuthController::class, "login"])->name("auth.login");
     Route::post("register", [\App\Http\Controllers\Auth\Social\AuthController::class, "register"]);
 });
 
@@ -60,8 +60,10 @@ Route::middleware(["cekCookie"])->group(function () {
             Route::post("/", [\App\Http\Controllers\InstrumentController::class, "store"]);
             Route::get("{id}", [\App\Http\Controllers\InstrumentController::class, "show"])->name("instrument.detail");
             Route::post("{instrument_id}/item", [\App\Http\Controllers\InstrumentItemController::class, "store"]);
+            Route::put("{id}/item", [\App\Http\Controllers\InstrumentController::class, "update"])->name("instrument.update");
             Route::put("{id}/item", [\App\Http\Controllers\InstrumentItemController::class, "edit"]);
             Route::delete("{id}/item", [\App\Http\Controllers\InstrumentItemController::class, "destroy"]);
+            Route::post("run-migration", [\App\Http\Controllers\InstrumentController::class, "runMigration"])->name('components.run-migration');;
         });
     });
 
