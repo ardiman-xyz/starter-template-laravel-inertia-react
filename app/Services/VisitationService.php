@@ -11,6 +11,7 @@ use App\Entities\AssessmentScheduleEntity;
 use App\Entities\ScoredEntity;
 use App\Models\Assessment;
 use App\Models\AssessmentScore;
+use App\Models\User;
 use App\Repositories\AcademicSemesterRepository;
 use App\Repositories\AssessmentAnswerRepository;
 use App\Repositories\AssessmentRepository;
@@ -27,6 +28,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use DateTime;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
 
 class VisitationService
@@ -153,7 +155,28 @@ class VisitationService
      */
     public function getById(string $id): array
     {
-        $assessment = $this->assessmentRepository->getById($id);
+
+        $currentUser = $this->tokenService->currentUser();
+
+        if(!$currentUser)
+        {
+            Cookie::forget('vistoken');
+
+            return redirect()->route('auth.login');
+        }
+
+        $user = User::find($currentUser->id);
+
+        if(!$user)
+        {
+            Cookie::forget('vistoken');
+
+            return redirect()->route('auth.login');
+        }
+
+
+        $assessment = $this->assessmentRepository->getByIdForSchool($id, $user->school->id);
+        
         if(!$assessment) throw new Exception("Assessment not found");
 
         $components = $this->componentRepository->findall();

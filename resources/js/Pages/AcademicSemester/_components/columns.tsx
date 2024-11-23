@@ -13,6 +13,7 @@ import { useState } from "react";
 import DeleteConfirm from "@/Pages/AcademicSemester/_components/delete-confirm";
 import { EditModal } from "@/Pages/AcademicSemester/_components/edit-modal";
 import { router } from "@inertiajs/react";
+import { formatDate } from "@/lib/date";
 
 export const columns: ColumnDef<AcademicSemester>[] = [
     {
@@ -31,12 +32,18 @@ export const columns: ColumnDef<AcademicSemester>[] = [
         header: "Tahun",
     },
     {
-        accessorKey: "start_date",
+        id: "start_date",
         header: "Mulai",
+        cell: ({ row }) => {
+            return formatDate(row.original.start_date);
+        },
     },
     {
-        accessorKey: "end_date",
+        id: "end_date",
         header: "Berakhir",
+        cell: ({ row }) => {
+            return formatDate(row.original.end_date);
+        },
     },
     {
         id: "action",

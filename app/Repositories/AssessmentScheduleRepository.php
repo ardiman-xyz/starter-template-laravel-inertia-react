@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Entities\AssessmentScheduleEntity;
+use App\Entities\AssessmentEntity;
 use App\Models\AssessmentSchedule as Model;
 
 class AssessmentScheduleRepository
@@ -13,11 +13,10 @@ class AssessmentScheduleRepository
         return Model::find($id);
     }
 
-    public function create(AssessmentScheduleEntity $entity)
+    public function create(AssessmentEntity $entity)
     {
         return Model::create([
             "assessment_id"         => $entity->assessmentId,
-            "assessment_stage_id"   => $entity->assessmentStageId,
             "instrument_id"         => $entity->instrumentId,
             "status"                => $entity->status,
             "started_at"            => $entity->startedAt,

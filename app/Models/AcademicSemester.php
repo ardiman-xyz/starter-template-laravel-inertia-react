@@ -8,7 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class AcademicSemester extends Model
 {
     use HasFactory;
-
+    
     protected $table = "academic_semesters";
     protected $guarded = [];
+
+    // protected $casts = [
+    //     'start_date' => 'datetime:d F Y', 
+    //     'end_date' => 'datetime:d F Y',
+    // ];
 }

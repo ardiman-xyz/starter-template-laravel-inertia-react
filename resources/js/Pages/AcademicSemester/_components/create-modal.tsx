@@ -117,7 +117,7 @@ const CreateModal = () => {
                                             </FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    placeholder="ex: 2022/2024"
+                                                    placeholder="contoh: 2022/2024"
                                                     {...field}
                                                     disabled={isLoading}
                                                 />
@@ -163,7 +163,7 @@ const CreateModal = () => {
                                             <FormLabel>Tahun</FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    placeholder="2024"
+                                                    placeholder="contoh: 2024"
                                                     {...field}
                                                     disabled={isLoading}
                                                 />

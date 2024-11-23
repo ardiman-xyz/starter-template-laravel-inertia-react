@@ -38,6 +38,13 @@ class AssessmentRepository
 
     }
 
+    public function getByIdForSchool(string $id, string $userId)
+    {
+        return Model::with(['school', 'teacher', 'academicSemester', 'assessmentAnswers'])
+            ->where('school_id', $userId)
+            ->find($id);
+    }
+
     public function findById(string $id)
     {
         return Model::find($id);
