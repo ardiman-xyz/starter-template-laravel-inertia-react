@@ -43,9 +43,9 @@ class Assessment extends Model
         return $this->belongsTo(School::class, "school_id");
     }
 
-    public function assessmentAnswers(): HasOne
+    public function assessmentAnswers(): HasMany
     {
-        return $this->hasOne(AssessmentAnswer::class, 'assessment_id', 'id');
+        return $this->hasMany(AssessmentAnswer::class, 'assessment_id', 'id');
     }
 
     public function assessmentScores(): HasMany

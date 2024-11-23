@@ -4,6 +4,8 @@ namespace App\Services\Teachers;
 
 use App\Entities\AssessmentAnswerEntity;
 use App\Models\AssessmentAnswer;
+use App\Models\Component;
+use App\Models\User;
 use App\Repositories\AssessmentAnswerRepository;
 use App\Repositories\AssessmentRepository;
 use App\Repositories\AssessmentScoreRepository;
@@ -13,6 +15,7 @@ use App\Repositories\UserRepository;
 use App\Services\TokenService;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\Cookie;
 
 class VisitationService
 {
@@ -63,7 +66,10 @@ class VisitationService
         $assessment = $this->assessmentRepository->getById($assessmentId);
         if(!$assessment) throw new Exception("Assessment not found");
 
-        $components = $this->componentRepository->findall();
+        $userSchoollId = $this->tokenService->getCurrentSchoolId();
+
+
+        $components = $this->componentRepository->findAllBySchoolId($userSchoollId);
         $result = [];
 
         foreach ($components as $component) {
@@ -132,18 +138,22 @@ class VisitationService
     /**
      * @throws Exception
      */
-    public function answer(string $link, string $assessmentId)
+    public function answer(string $link, string $assessmentId, string $componentId)
     {
         $assessment = $this->assessmentRepository->getById($assessmentId);
         if(!$assessment) throw new Exception("Assessment not found");
 
         if(!$link) throw new Exception("Link tidak boleh kosong");
 
-        $answer = $this->assessmentAnswerRepository->findByAssessmentId($assessmentId);
+        $answer = $this->assessmentAnswerRepository->findByAssessmentId($assessmentId, $componentId);
+
+        $component = Component::find($componentId);
+
+        if(!$component) throw new Exception("Instrument tidak ditemukan");
 
         if(!$answer)
         {
-           return $this->create_answer($link, $assessmentId);
+           return $this->create_answer($link, $assessmentId, $component);
         }else{
             return $this->update_answer($answer, $link);
         }
@@ -153,12 +163,14 @@ class VisitationService
     /**
      * @throws Exception
      */
-    private function create_answer(string $link, string $assessmentId)
+    private function create_answer(string $link, string $assessmentId, Component $component)
     {
         try {
 
             $answerEntity = new AssessmentAnswerEntity();
             $answerEntity->assessmentId = $assessmentId;
+            $answerEntity->componentId = $component->id;
+            $answerEntity->componentName = $component->name;
             $answerEntity->answer = $link;
             $answerEntity->createdAt = Carbon::now();
 

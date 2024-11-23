@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { AlertCircle, ChevronDown } from "lucide-react";
 
-import { AssessmentAnswer } from "@/types/app";
+import {
+    Assessment,
+    AssessmentAnswer,
+    Component,
+    Instrument,
+} from "@/types/app";
 
 import Heading from "@/Components/Heading";
 import {
@@ -18,20 +23,15 @@ import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
 import { formatDate } from "@/helper";
 import { AnswerStoreModal } from "./answer-store-modal";
 import { Badge } from "@/Components/ui/badge";
+import AnswerItem from "./answer-item";
 
 interface AnswerProps {
-    startedAt: string;
-    finishedAt: string;
-    defaultData?: AssessmentAnswer;
     status: string;
+    instruments: Component[];
+    assessmentAnswers: AssessmentAnswer[];
 }
 
-export const Answer = ({
-    startedAt,
-    finishedAt,
-    defaultData,
-    status,
-}: AnswerProps) => {
+export const Answer = ({ instruments, assessmentAnswers }: AnswerProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(true);
 
     const handleClick = () => {
@@ -39,7 +39,7 @@ export const Answer = ({
     };
 
     return (
-        <div>
+        <div className="w-full">
             <div className="flex justify-between bg-gray-100 rounded border-t-2 border-sky-700 p-4">
                 <Heading
                     title={`Tanggapan Guru`}
@@ -61,77 +61,33 @@ export const Answer = ({
                     !isOpen && "hidden"
                 )}
             >
-                {!defaultData?.answer && (
+                {/* {!defaultData?.answer && (
                     <Alert className="mt-4 bg-yellow-100 border border-yellow-400">
                         <AlertCircle className="h-4 w-4" />
                         <AlertTitle>Pemberitahuan!</AlertTitle>
                         <AlertDescription>
-                            Anda belum mengupload link, klik upload sekarang
-                            untuk
+                            Anda belum mengupload link
                         </AlertDescription>
                     </Alert>
-                )}
+                )} */}
 
                 <Table className={"border mt-3"}>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Jadwal</TableHead>
-                            <TableHead>Link video</TableHead>
-                            <TableHead>Tanggal submit</TableHead>
-                            <TableHead>
-                                {status === "schedule"
-                                    ? "Aksi"
-                                    : "Status Supervisi"}
-                            </TableHead>
+                            <TableHead>Item</TableHead>
+                            <TableHead>Video</TableHead>
+                            <TableHead>Tanggal Submit</TableHead>
+                            <TableHead>Aksi</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow>
-                            <TableCell className="w-[300px]">
-                                <span className="font-sans font-semibold">
-                                    {formatDate(startedAt)}
-                                    <span className="text-orange-700 mx-3">
-                                        s/d
-                                    </span>
-                                    {formatDate(finishedAt)}
-                                </span>
-                            </TableCell>
-                            <TableCell>
-                                {defaultData === null && "-"}
-
-                                <Hint description={"Klik untuk lihat"}>
-                                    <a
-                                        href={defaultData?.answer}
-                                        target="_blank"
-                                        className="underline cursor-pointer text-blue-800"
-                                    >
-                                        {defaultData?.answer}
-                                    </a>
-                                </Hint>
-                            </TableCell>
-                            <TableCell>
-                                {defaultData?.created_at === null ||
-                                defaultData?.created_at === undefined
-                                    ? "-"
-                                    : formatDate(defaultData?.created_at)}
-                            </TableCell>
-                            <TableCell>
-                                {status === "schedule" ? (
-                                    <AnswerStoreModal
-                                        defaultData={{
-                                            link: defaultData?.answer,
-                                        }}
-                                        alreadyAnswer={
-                                            defaultData?.answer !== null
-                                        }
-                                    />
-                                ) : (
-                                    <Badge className="bg-green-600 text-white">
-                                        Selesai
-                                    </Badge>
-                                )}
-                            </TableCell>
-                        </TableRow>
+                        {instruments.map((instrument) => (
+                            <AnswerItem
+                                key={instrument.id}
+                                component={instrument}
+                                assessmentAnswers={assessmentAnswers}
+                            />
+                        ))}
                     </TableBody>
                 </Table>
             </div>

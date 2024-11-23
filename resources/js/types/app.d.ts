@@ -1,14 +1,13 @@
-
 export type VisitationTrend = {
     year: number;
     ganjil: number;
-    genap: number ;
+    genap: number;
 };
 
 export type VisitationTrendCategories = {
     name: string;
     value: number;
-    percent: number ;
+    percent: number;
 };
 
 export interface Role {
@@ -33,10 +32,10 @@ export interface User {
 export type Schedule = {
     id: number;
     status: boolean;
-    started_at? : string;
+    started_at?: string;
     finished_at?: string;
     progress?: string;
-}
+};
 
 export interface Instrument {
     id: number;
@@ -47,7 +46,7 @@ export interface Instrument {
     allowed_extension: [];
     max_size?: string;
     is_multiple?: number;
-    scheduled? : Schedule
+    scheduled?: Schedule;
 }
 
 export type AcademicSemester = {
@@ -59,7 +58,7 @@ export type AcademicSemester = {
     end_date: string;
     create_at?: string;
     updated_at?: string;
-}
+};
 export type School = {
     id: number;
     name: string;
@@ -73,40 +72,42 @@ export type School = {
     create_at?: string;
     updated_at?: string;
     user: User;
-}
+};
 
 export type StageSchedule = {
     name: string;
     isAllFinished: boolean;
-    instruments: Instrument[]
-}
+    instruments: Instrument[];
+};
 
 export type Assessment = {
     id: string;
-    academic_semester_id : number;
+    academic_semester_id: number;
     academic_semester: AcademicSemester;
     school: School;
-    teacher : User;
+    teacher: User;
     title?: null;
     created_at: string;
     updated_at: string;
     started_at: string;
     finished_at: string;
     status: "schedule" | "finish";
-    action_plan?: string|null;
-    findings?: string|null;
-    assessment_answers: AssessmentAnswer;
-    final_score : {
+    action_plan?: string | null;
+    findings?: string | null;
+    assessment_answers: AssessmentAnswer[];
+    final_score: {
         final_score: number;
         evaluate: string;
-    }
-}
+    };
+};
 
 export type AssessmentAnswer = {
-    answer : string;
+    answer: string;
+    id: number;
+    component_id: number;
     notes?: string;
     created_at: string;
-}
+};
 
 export type Component = {
     id: number;
@@ -116,19 +117,18 @@ export type Component = {
     allowed_extension?: [];
     max_size?: string;
     is_multiple?: number;
-    details: ComponentDetail [];
-}
+    details: ComponentDetail[];
+};
 
 export type ComponentDetail = {
     id: number;
     name: string;
     max_Score: number;
-    scored: ComponentScore
-}
+    scored: ComponentScore;
+};
 
 export type ComponentScore = {
     id: number;
     status: boolean;
     score: number;
-}
-
+};

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Teacher;
 
+use App\Http\Requests\AnswerAssessmentRequest;
 use App\Repositories\AssessmentAnswerRepository;
 use App\Repositories\AssessmentRepository;
 use App\Repositories\AssessmentScoreRepository;
@@ -61,12 +62,12 @@ class VisitationController
         }
     }
 
-    public function answer(Request $request, string $assessmentId): \Illuminate\Http\JsonResponse
+    public function answer(AnswerAssessmentRequest $request, string $assessmentId): \Illuminate\Http\JsonResponse
     {
-        $link = $request->input("link");
+       $validatedData = $request->validated();
 
         try {
-            $data = $this->visitationService->answer($link, $assessmentId);
+            $data = $this->visitationService->answer($validatedData['link'], $assessmentId, $validatedData['componentId']);
             return response()->json([
                 'status' => true,
                 'message' => 'successfully upload',

@@ -20,6 +20,7 @@ import { Note } from "./_components/note";
 import { InstrumentItem } from "./_components/instrument-item";
 import useAssessmentStore from "@/Context/teacher/useAssessmentStore";
 import { Score } from "./_components/score";
+import { AssesmentInfo } from "./_components/AssesmentInfo";
 
 interface DetailProps {
     data: {
@@ -64,101 +65,106 @@ const DetailVisitationPageTeacher = ({ data }: DetailProps) => {
         >
             <Head title="Supervisi detail" />
 
-            <div className="mt-4 container mx-auto max-w-6xl mb-20 space-y-10">
-                <div className="">
-                    <Answer
-                        startedAt={data.assessment.started_at}
-                        finishedAt={data.assessment.finished_at}
-                        defaultData={data.assessment.assessment_answers ?? null}
-                        status={data.assessment.status}
-                    />
-                </div>
-
-                <div className="border-t-2 border-sky-700  rounded ">
-                    <div className="flex justify-between bg-gray-100 p-4">
-                        <Heading
-                            title={`Instrumen Evaluasi Supervisi Guru`}
-                            description={`Silakan berikan penilaian Anda menggunakan instrumen ini untuk guru yang sedang Anda Supervisi.`}
+            <div className="mt-4 container mx-auto max-w-7xl mb-10 flex md:flex-row flex-col md:gap-x-10 gap-x-0">
+                <div className="md:w-1/4 w-full">
+                    <div className="sticky top-4">
+                        <AssesmentInfo
+                            assessment={data.assessment}
+                            component_max_score={data.component_max_score}
+                            total_score={data.total_score}
+                            final_score={data.final_score}
                         />
-                        <Hint
-                            description={
-                                isOpen ? "Close section" : "Open section"
-                            }
-                        >
-                            <ChevronDown
-                                onClick={handleClick}
-                                className={`transition-transform duration-500 ${
-                                    isOpen ? "" : "transform -rotate-90"
-                                }`}
-                            />
-                        </Hint>
                     </div>
-                    <Table
-                        className={cn(
-                            "border mt-4 transition-all duration-500",
-                            !isOpen && "hidden"
-                        )}
-                    >
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead
-                                    rowSpan={2}
-                                    className="border text-center"
-                                >
-                                    No
-                                </TableHead>
-                                <TableHead rowSpan={2} className="border">
-                                    Sub Komponen dan Butir komponen
-                                </TableHead>
-                                <TableHead
-                                    colSpan={4}
-                                    className="text-center border"
-                                >
-                                    Skor Nilai
-                                </TableHead>
-                            </TableRow>
-                            <TableRow>
-                                <TableHead className="border text-center">
-                                    1
-                                </TableHead>
-                                <TableHead className="border text-center">
-                                    2
-                                </TableHead>
-                                <TableHead className="border text-center">
-                                    3
-                                </TableHead>
-                                <TableHead className="border text-center">
-                                    4
-                                </TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {data.instruments.map((instrument, index) => (
-                                <InstrumentItem
-                                    instrument={instrument}
-                                    index={index}
-                                    key={index}
+                </div>
+                <div className="md:w-3/4 w-full space-y-10">
+                    <div>
+                        <Answer
+                            status={data.assessment.status}
+                            instruments={data.instruments}
+                            assessmentAnswers={
+                                data.assessment.assessment_answers
+                            }
+                        />
+                    </div>
+
+                    <div className="border-t-2 border-sky-700  rounded ">
+                        <div className="flex justify-between bg-gray-100 p-4">
+                            <Heading
+                                title={`Instrumen Evaluasi Supervisi Guru`}
+                                description={`Silakan berikan penilaian Anda menggunakan instrumen ini untuk guru yang sedang Anda Supervisi.`}
+                            />
+                            <Hint
+                                description={
+                                    isOpen ? "Close section" : "Open section"
+                                }
+                            >
+                                <ChevronDown
+                                    onClick={handleClick}
+                                    className={`transition-transform duration-500 ${
+                                        isOpen ? "" : "transform -rotate-90"
+                                    }`}
                                 />
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
+                            </Hint>
+                        </div>
+                        <Table
+                            className={cn(
+                                "border mt-4 transition-all duration-500",
+                                !isOpen && "hidden"
+                            )}
+                        >
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead
+                                        rowSpan={2}
+                                        className="border text-center"
+                                    >
+                                        No
+                                    </TableHead>
+                                    <TableHead rowSpan={2} className="border">
+                                        Butir komponen
+                                    </TableHead>
+                                    <TableHead
+                                        colSpan={4}
+                                        className="text-center border"
+                                    >
+                                        Skor Nilai
+                                    </TableHead>
+                                </TableRow>
+                                <TableRow>
+                                    <TableHead className="border text-center">
+                                        1
+                                    </TableHead>
+                                    <TableHead className="border text-center">
+                                        2
+                                    </TableHead>
+                                    <TableHead className="border text-center">
+                                        3
+                                    </TableHead>
+                                    <TableHead className="border text-center">
+                                        4
+                                    </TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {data.instruments.map((instrument, index) => (
+                                    <InstrumentItem
+                                        instrument={instrument}
+                                        index={index}
+                                        key={index}
+                                    />
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
 
-                <div className="w-full mt-10">
-                    <Score
-                        component_max_score={data.component_max_score}
-                        total_score={data.total_score}
-                        final_score={data.final_score}
-                    />
-                </div>
-
-                <div>
-                    <Note
-                        data={{
-                            findings: data.assessment.findings,
-                            action_plan: data.assessment.action_plan,
-                        }}
-                    />
+                    <div>
+                        <Note
+                            data={{
+                                findings: data.assessment.findings,
+                                action_plan: data.assessment.action_plan,
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
             <br />

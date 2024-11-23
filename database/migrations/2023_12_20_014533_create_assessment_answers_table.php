@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid("assessment_id");
             $table->unsignedBigInteger("component_id")->nullable();
+            $table->string("component_name")->nullable();
             $table->text("answer");
             $table->longText("notes")->nullable();
             $table->dateTime("created_at");

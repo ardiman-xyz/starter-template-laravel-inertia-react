@@ -14,13 +14,7 @@ class AssessmentAnswer extends Model
 
     protected $table = 'assessment_answers';
 
-    protected $fillable = [
-        'assessment_id',
-        'component_id',
-        'answer',
-        'notes',
-        'created_at',
-    ];
+    protected $guarded = [];
 
     public function assessment(): BelongsTo
     {

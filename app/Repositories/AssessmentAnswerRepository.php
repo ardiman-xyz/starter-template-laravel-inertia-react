@@ -7,9 +7,9 @@ use App\Models\AssessmentAnswer as Model;
 
 class AssessmentAnswerRepository
 {
-    public function findByAssessmentId(string $id)
+    public function findByAssessmentId(string $id, string $componentId)
     {
-        return Model::where("assessment_id", $id)->first();
+        return Model::where(["assessment_id" =>  $id, "component_id" => $componentId])->first();
     }
 
     public function create(AssessmentAnswerEntity $entity)
@@ -19,7 +19,8 @@ class AssessmentAnswerRepository
            "component_id"   => $entity->componentId,
             "answer"        => $entity->answer,
             "notes"         => $entity->notes,
-            "created_at"    => $entity->createdAt
+            "created_at"    => $entity->createdAt,
+            "component_name" => $entity->componentName
         ]);
     }
 
