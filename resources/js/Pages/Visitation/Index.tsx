@@ -22,11 +22,11 @@ const IndexPage = ({ data }: IProps) => {
                 },
             ]}
         >
-            <Head title="Visitasi" />
+            <Head title="Supervisi" />
 
             <Heading
-                title="Visitasi"
-                description="Manajemen visitasi di akun anda"
+                title="Supervisi"
+                description="Manajemen Supervisi di akun anda"
             />
             <div className="w-full mt-8">
                 <FilterForm data={data} />

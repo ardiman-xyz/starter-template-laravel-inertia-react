@@ -27,11 +27,11 @@ const FilterPage = ({ data, year, semester }: FilterProps) => {
                 },
             ]}
         >
-            <Head title={`Visitasi tahun ${year} ${semester}`} />
+            <Head title={`Supervisi tahun ${year} ${semester}`} />
             <div className="w-full flex items-center justify-between">
                 <Heading
-                    title={`Visitasi tahun ${year} - ${semester}`}
-                    description="Laporan visitasi anda"
+                    title={`Supervisi tahun ${year} - ${semester}`}
+                    description="Laporan Supervisi anda"
                 />
                 <div className="hidden md:flex md:flex-row flex-col  items-center md:gap-x-4 gap-x-0 gap-y-2 md:gap-y-0">
                     <CreateFormAssessment semester={semester} year={year} />

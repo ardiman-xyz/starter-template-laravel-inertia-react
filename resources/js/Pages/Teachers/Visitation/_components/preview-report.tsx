@@ -10,7 +10,7 @@ const PreviewReport = ({ isOpen, onClose }: IProps) => {
         <PrintReportModal
             isOpen={isOpen}
             onClose={onClose}
-            title="Cetak laporan visitasi"
+            title="Cetak laporan Supervisi"
         >
             <div className="container mx-auto max-w-screen-2xl"></div>
         </PrintReportModal>

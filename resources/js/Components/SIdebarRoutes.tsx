@@ -1,7 +1,8 @@
 import { SharedInertiaData } from "@/types/inertia";
 import { usePage } from "@inertiajs/react";
 import {
-    BookLock, Calendar,
+    BookLock,
+    Calendar,
     ClipboardCheck,
     Inbox,
     Layout,
@@ -38,7 +39,7 @@ const Routes = [
     },
     {
         icon: LibraryBig,
-        label: "Visitasi",
+        label: "Supervisi",
         href: "/visitation",
         requiredRoles: ["Headmaster"],
     },
@@ -57,7 +58,7 @@ const Routes = [
     },
     {
         icon: ClipboardCheck,
-        label: "Visitasi",
+        label: "Supervisi",
         href: "/teachers/visitation",
         requiredRoles: ["Teacher"],
     },
@@ -68,7 +69,6 @@ const Routes = [
         requiredRoles: ["Teacher"],
     },
 ];
-
 
 const SidebarRoutes = () => {
     const { auth } = usePage<SharedInertiaData>().props;
@@ -95,7 +95,6 @@ const SidebarRoutes = () => {
                         )
                 )}
             </div>
-
         </>
     );
 };

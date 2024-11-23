@@ -77,8 +77,8 @@ const DetailVisitationPageTeacher = ({ data }: DetailProps) => {
                 <div className="border-t-2 border-sky-700  rounded ">
                     <div className="flex justify-between bg-gray-100 p-4">
                         <Heading
-                            title={`Instrumen Evaluasi Visitasi Guru`}
-                            description={`Silakan berikan penilaian Anda menggunakan instrumen ini untuk guru yang sedang Anda visitasi.`}
+                            title={`Instrumen Evaluasi Supervisi Guru`}
+                            description={`Silakan berikan penilaian Anda menggunakan instrumen ini untuk guru yang sedang Anda Supervisi.`}
                         />
                         <Hint
                             description={

@@ -63,7 +63,7 @@ const ResetPasswordModal = ({ onClose, userId }: IProps) => {
             .then((data) => {
                 const { message } = data.data;
                 toast.success(`${message}`);
-                router.visit("/teacher/dashboard");
+                router.get(route("dashboard.teacher"));
             })
             .catch((err) => {
                 const { data, status, statusText } = err.response;

@@ -31,7 +31,7 @@ export const Chart = () => {
             <Card>
                 <CardHeader className="flex lg:flex-row flex-col justify-between lg:gap-2 gap-0">
                     <div className="space-y-1">
-                        <CardTitle>Trend Visitasi</CardTitle>
+                        <CardTitle>Trend Supervisi</CardTitle>
                         <CardDescription className="max-w-[600px] text-xs">
                             Visualisasi performa mengajar berdasarkan hasil
                             supervisi semester ganjil dan genap selama 5 tahun

@@ -30,13 +30,13 @@ const VisitationIndexPage = ({ assessments }: IProps) => {
         <Authenticated
             breadCrumbs={[
                 {
-                    title: "Visitasi",
+                    title: "Supervisi",
                     url: "",
                     disabled: true,
                 },
             ]}
         >
-            <Head title="Visitasi" />
+            <Head title="Supervisi" />
             <div>
                 <Heading
                     title="Supervisi"

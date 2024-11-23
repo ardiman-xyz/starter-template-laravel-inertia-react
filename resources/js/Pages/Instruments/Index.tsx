@@ -1,5 +1,9 @@
-import Authenticated from "@/Layouts/AuthenticatedLayout";
+import { Menu, Settings } from "lucide-react";
 import { Head, Link, router } from "@inertiajs/react";
+
+import { Component } from "@/types/app";
+
+import Authenticated from "@/Layouts/AuthenticatedLayout";
 import Heading from "@/Components/Heading";
 import {
     Table,
@@ -10,9 +14,8 @@ import {
     TableCell,
 } from "@/Components/ui/table";
 import { CreateModal } from "./_components/create-modal";
-import { Component } from "@/types/app";
-import { Button } from "@/Components/ui/button";
-import { Settings } from "lucide-react";
+
+import { TableItem } from "./_components/TableItem";
 
 interface IProps {
     instruments: Component[];
@@ -41,36 +44,12 @@ const InstrumentsPage = ({ instruments }: IProps) => {
                         <TableHead className="w-[100px]">No.</TableHead>
                         <TableHead>Nama</TableHead>
                         <TableHead>Jumlah instrumen</TableHead>
-                        <TableHead>Aksi</TableHead>
+                        <TableHead className="text-center">Aksi</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {instruments.map((item, index) => (
-                        <TableRow
-                            key={index}
-                            onClick={() => handleClick(item.id)}
-                            className="cursor-pointer group"
-                        >
-                            <TableCell className="font-medium">
-                                {index + 1}
-                            </TableCell>
-                            <TableCell className="capitalize">
-                                <span className="group-hover:underline group-hover:text-blue-800 transition-colors">
-                                    {item.name}
-                                </span>
-                            </TableCell>
-                            <TableCell>-</TableCell>
-                            <TableCell>
-                                <Link
-                                    href={route("instrument.detail", item.id)}
-                                >
-                                    <Button>
-                                        <Settings className="w-4 h-4 mr-2" />
-                                        Setting
-                                    </Button>
-                                </Link>
-                            </TableCell>
-                        </TableRow>
+                        <TableItem key={item.id} item={item} index={index} />
                     ))}
                 </TableBody>
             </Table>
