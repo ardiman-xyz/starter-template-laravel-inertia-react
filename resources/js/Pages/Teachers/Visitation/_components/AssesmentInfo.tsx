@@ -1,3 +1,5 @@
+import { Alert, AlertDescription } from "@/Components/ui/alert";
+import { Badge } from "@/Components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import { formatDateTime } from "@/lib/datetime";
 import { Assessment } from "@/types/app";
@@ -14,6 +16,7 @@ import {
 
 interface Props {
     assessment: Assessment;
+    status: string;
     component_max_score: number;
     total_score: number;
     final_score: {
@@ -72,6 +75,7 @@ export const AssesmentInfo = ({
     component_max_score,
     total_score,
     final_score,
+    status,
 }: Props) => {
     const scoreStyle = getScoreStyle(final_score.evaluate);
 
@@ -81,6 +85,18 @@ export const AssesmentInfo = ({
         if (score >= 70) return "bg-blue-500";
         if (score >= 55) return "bg-yellow-500";
         return "bg-red-500";
+    };
+
+    // Status visitasi badge
+    const getStatusBadge = () => {
+        switch (status) {
+            case "schedule":
+                return <Badge variant="secondary">Dijadwalkan</Badge>;
+            case "ongoing":
+                return <Badge variant="warning">Sedang Berlangsung</Badge>;
+            case "completed":
+                return <Badge variant="success">Selesai</Badge>;
+        }
     };
 
     return (
@@ -187,6 +203,12 @@ export const AssesmentInfo = ({
                         </div>
                     </div>
                 </div>
+
+                <Alert>
+                    <AlertDescription>
+                        Status Visitasi: {getStatusBadge()}
+                    </AlertDescription>
+                </Alert>
             </CardContent>
         </Card>
     );

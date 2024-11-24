@@ -13,25 +13,26 @@ import Heading from "@/Components/Heading";
 import {
     Table,
     TableBody,
-    TableCell,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/Components/ui/table";
 import { Hint } from "@/Components/Hint";
-import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
-import { formatDate } from "@/helper";
-import { AnswerStoreModal } from "./answer-store-modal";
-import { Badge } from "@/Components/ui/badge";
 import AnswerItem from "./answer-item";
 
 interface AnswerProps {
     status: string;
     instruments: Component[];
     assessmentAnswers: AssessmentAnswer[];
+    assessment: Assessment;
 }
 
-export const Answer = ({ instruments, assessmentAnswers }: AnswerProps) => {
+export const Answer = ({
+    instruments,
+    assessmentAnswers,
+    status,
+    assessment,
+}: AnswerProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(true);
 
     const handleClick = () => {
@@ -86,6 +87,13 @@ export const Answer = ({ instruments, assessmentAnswers }: AnswerProps) => {
                                 key={instrument.id}
                                 component={instrument}
                                 assessmentAnswers={assessmentAnswers}
+                                status={status}
+                                evaluationStatus={{
+                                    isEvaluated: Boolean(
+                                        assessment.final_score
+                                    ),
+                                    score: Number(assessment.final_score),
+                                }}
                             />
                         ))}
                     </TableBody>

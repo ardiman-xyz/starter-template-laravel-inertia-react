@@ -48,6 +48,8 @@ const DetailVisitationPageTeacher = ({ data }: DetailProps) => {
         setAssessmentId(data.assessment.id);
     }, []);
 
+    console.info(data);
+
     return (
         <Authenticated
             breadCrumbs={[
@@ -73,6 +75,7 @@ const DetailVisitationPageTeacher = ({ data }: DetailProps) => {
                             component_max_score={data.component_max_score}
                             total_score={data.total_score}
                             final_score={data.final_score}
+                            status={data.assessment.status}
                         />
                     </div>
                 </div>
@@ -84,6 +87,7 @@ const DetailVisitationPageTeacher = ({ data }: DetailProps) => {
                             assessmentAnswers={
                                 data.assessment.assessment_answers
                             }
+                            assessment={data.assessment}
                         />
                     </div>
 

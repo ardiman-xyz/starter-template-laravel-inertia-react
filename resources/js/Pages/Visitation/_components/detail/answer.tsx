@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { AlertCircle, ChevronDown } from "lucide-react";
 
-import { AssessmentAnswer } from "@/types/app";
+import { Assessment, AssessmentAnswer, Component } from "@/types/app";
 
 import Heading from "@/Components/Heading";
 import {
@@ -16,14 +16,20 @@ import {
 import { Hint } from "@/Components/Hint";
 import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
 import { formatDate } from "@/helper";
+import AnswerItem from "./answer-item";
 
 interface AnswerProps {
-    startedAt: string;
-    finishedAt: string;
-    defaultData?: AssessmentAnswer;
+    status: string;
+    instruments: Component[];
+    assessmentAnswers: AssessmentAnswer[];
+    assessment: Assessment;
 }
-
-export const Answer = ({ startedAt, finishedAt, defaultData }: AnswerProps) => {
+export const Answer = ({
+    instruments,
+    assessmentAnswers,
+    status,
+    assessment,
+}: AnswerProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(true);
 
     const handleClick = () => {
@@ -53,54 +59,30 @@ export const Answer = ({ startedAt, finishedAt, defaultData }: AnswerProps) => {
                     !isOpen && "hidden"
                 )}
             >
-                {!defaultData?.answer && (
-                    <Alert className="mt-4 bg-yellow-100 border border-yellow-400">
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertDescription>
-                            Guru belum submit Supervisi
-                        </AlertDescription>
-                    </Alert>
-                )}
-
                 <Table className={"border mt-3"}>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Jadwal</TableHead>
-                            <TableHead>Link video</TableHead>
-                            <TableHead>Tanggal submit</TableHead>
+                            <TableHead>Item</TableHead>
+                            <TableHead>Video</TableHead>
+                            <TableHead>Tanggal Submit</TableHead>
+                            <TableHead>Aksi</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow>
-                            <TableCell className="w-[300px]">
-                                <span className="font-sans font-semibold">
-                                    {formatDate(startedAt)}
-                                    <span className="text-orange-700 mx-3">
-                                        s/d
-                                    </span>
-                                    {formatDate(finishedAt)}
-                                </span>
-                            </TableCell>
-                            <TableCell>
-                                {defaultData === null && "-"}
-
-                                <Hint description={"Klik untuk lihat"}>
-                                    <a
-                                        href={defaultData?.answer}
-                                        target="_blank"
-                                        className="underline cursor-pointer text-blue-800"
-                                    >
-                                        {defaultData?.answer}
-                                    </a>
-                                </Hint>
-                            </TableCell>
-                            <TableCell>
-                                {defaultData?.created_at === null ||
-                                defaultData?.created_at === undefined
-                                    ? "-"
-                                    : formatDate(defaultData?.created_at)}
-                            </TableCell>
-                        </TableRow>
+                        {instruments.map((instrument) => (
+                            <AnswerItem
+                                key={instrument.id}
+                                component={instrument}
+                                assessmentAnswers={assessmentAnswers}
+                                status={status}
+                                evaluationStatus={{
+                                    isEvaluated: Boolean(
+                                        assessment.final_score
+                                    ),
+                                    score: Number(assessment.final_score),
+                                }}
+                            />
+                        ))}
                     </TableBody>
                 </Table>
             </div>

@@ -16,6 +16,7 @@ use App\Services\TokenService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Log;
 
 class VisitationService
 {
@@ -68,16 +69,24 @@ class VisitationService
 
         $userSchoollId = $this->tokenService->getCurrentSchoolId();
 
-
+        
+        
         $components = $this->componentRepository->findAllBySchoolId($userSchoollId);
         $result = [];
-
+        
         foreach ($components as $component) {
             $items = $this->componentDetailRepository->findByComponentId($component->id);
-
+            
             $componentItems = [];
-            foreach ($items as $item) {
-                $answer = $this->assessmentScoreRepository->findByAssessmentAndItemId($assessment->id, $component->id, $item->id);
+            foreach ($component->details as $item) {
+               
+                $answer = $this->assessmentScoreRepository->findByAssessmentAndItemId(
+                    $assessmentId, 
+                    $component->id, 
+                    $item->id
+                );
+                
+                
                 $componentItems[] = [
                     'id' => $item->id,
                     'name' => $item->name,
@@ -87,12 +96,11 @@ class VisitationService
                     ],
                 ];
             }
-
+    
             $result[] = [
                 'id' => $component->id,
                 'name' => $component->name,
                 'details' => $componentItems,
-
             ];
         }
 

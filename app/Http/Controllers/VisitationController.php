@@ -10,6 +10,7 @@ use App\Http\Requests\CreateAssessmentRequest;
 use App\Http\Requests\SetUpDateRequest;
 use App\Http\Requests\StoreScoreRequest;
 use App\Http\Requests\UpdateAnalysisRequest;
+use App\Models\AssessmentAnswer;
 use App\Repositories\AcademicSemesterRepository;
 use App\Repositories\AssessmentAnswerRepository;
 use App\Repositories\AssessmentRepository;
@@ -341,6 +342,54 @@ class VisitationController extends Controller
                 'success' => false,
                 'message' => $exception->getMessage()
             ], 400);
+        }
+    }
+
+    public function updateProgress(Request $request)
+    {
+
+        try {
+            $validated = $request->validate([
+                'assessmentId' => 'required|string',
+                'componentId' => 'required|integer',
+                'progress' => 'required|numeric',
+                'percentage' => 'required|integer|between:0,100',
+                'checkpoint' => 'required|integer|between:0,4'
+            ]);
+    
+            // Update progress di tabel assessment_answers
+            $answer = AssessmentAnswer::where('assessment_id', $validated['assessmentId'])
+                ->where('component_id', $validated['componentId'])
+                ->first();
+    
+            if (!$answer) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Answer not found'
+                ], 404);
+            }
+    
+            $answer->progress = $validated['progress'];
+            $answer->percentage = $validated['percentage'];
+            $answer->last_checkpoint = $validated['checkpoint'];
+            
+            if ($validated['percentage'] >= 95) {
+                $answer->is_done = true;
+            }
+    
+            $answer->save();
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Progress updated successfully',
+                'data' => $answer
+            ]);
+    
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 }

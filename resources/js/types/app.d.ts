@@ -91,7 +91,7 @@ export type Assessment = {
     updated_at: string;
     started_at: string;
     finished_at: string;
-    status: "schedule" | "finish";
+    status: string;
     action_plan?: string | null;
     findings?: string | null;
     assessment_answers: AssessmentAnswer[];

@@ -16,6 +16,11 @@ class AssessmentAnswer extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'is_done' => 'boolean',
+        'playback_position' => 'float'
+    ];
+
     public function assessment(): BelongsTo
     {
         return $this->belongsTo(Assessment::class, 'assessment_id', 'id');

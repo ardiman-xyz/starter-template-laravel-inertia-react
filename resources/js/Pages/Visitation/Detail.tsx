@@ -91,11 +91,12 @@ const DetailVisitationPage = ({ data }: DetailProps) => {
                     <ScrollArea className="h-[700px] w-full px-4">
                         <div className="">
                             <Answer
-                                startedAt={data.assessment.started_at}
-                                finishedAt={data.assessment.finished_at}
-                                defaultData={
-                                    data.assessment.assessment_answers ?? null
+                                status={data.assessment.status}
+                                instruments={data.instruments}
+                                assessmentAnswers={
+                                    data.assessment.assessment_answers
                                 }
+                                assessment={data.assessment}
                             />
                         </div>
                         <div className="border-t-2 border-sky-700  rounded mt-10 ">
@@ -174,14 +175,6 @@ const DetailVisitationPage = ({ data }: DetailProps) => {
                                 </TableBody>
                             </Table>
                         </div>
-
-                        {/* <div className="w-full mt-10">
-                            <Score
-                                component_max_score={data.component_max_score}
-                                total_score={data.total_score}
-                                final_score={data.final_score}
-                            />
-                        </div> */}
 
                         <div className="mt-10">
                             <Note

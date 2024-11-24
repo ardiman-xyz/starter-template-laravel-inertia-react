@@ -4,25 +4,33 @@ import { Component, AssessmentAnswer } from "@/types/app";
 import React, { useState } from "react";
 import { AnswerStoreModal } from "./answer-store-modal";
 import { Badge } from "@/Components/ui/badge";
-import { CalendarIcon, Link2Icon } from "lucide-react";
+import { AlertCircle, CalendarIcon, Link2Icon } from "lucide-react";
+import { Alert, AlertDescription } from "@/Components/ui/alert";
 
 interface AnswerItemProps {
     component: Component;
     assessmentAnswers?: AssessmentAnswer[];
+    status: string;
+    evaluationStatus?: {
+        isEvaluated: boolean;
+        score?: number;
+    };
 }
 
-const AnswerItem = ({ component, assessmentAnswers = [] }: AnswerItemProps) => {
+const AnswerItem = ({
+    component,
+    assessmentAnswers = [],
+    status,
+    evaluationStatus,
+}: AnswerItemProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const answer = assessmentAnswers?.find(
         (answer) => Number(answer.component_id) === Number(component.id)
     );
 
-    console.log("Found Answer:", answer);
-
     const isAnswered = Boolean(answer);
 
-    // Format the date for display
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString("id-ID", {
             day: "2-digit",
@@ -35,6 +43,34 @@ const AnswerItem = ({ component, assessmentAnswers = [] }: AnswerItemProps) => {
 
     return (
         <>
+            {component.id === 12 && ( // Hanya tampilkan di komponen pertama
+                <TableRow>
+                    <TableCell colSpan={4}>
+                        <div className="mb-4 space-y-4">
+                            {/* Evaluation Status Alert */}
+                            {!evaluationStatus?.isEvaluated && (
+                                <Alert className="bg-red-50 text-red-500 border-none">
+                                    <AlertCircle className="h-4 w-4 stroke-500" />
+                                    <AlertDescription>
+                                        Supervisi belum dievaluasi oleh kepala
+                                        sekolah
+                                    </AlertDescription>
+                                </Alert>
+                            )}
+                            {evaluationStatus?.isEvaluated && (
+                                <Alert variant="success">
+                                    <AlertCircle className="h-4 w-4" />
+                                    <AlertDescription>
+                                        Supervisi telah dievaluasi - Skor:{" "}
+                                        {evaluationStatus.score}
+                                    </AlertDescription>
+                                </Alert>
+                            )}
+                        </div>
+                    </TableCell>
+                </TableRow>
+            )}
+
             <TableRow>
                 <TableCell className="font-medium">
                     <div>
@@ -72,7 +108,10 @@ const AnswerItem = ({ component, assessmentAnswers = [] }: AnswerItemProps) => {
                 <TableCell>
                     <div className="flex items-center gap-2">
                         {isAnswered ? (
-                            <Badge variant="secondary" className="capitalize">
+                            <Badge
+                                variant="secondary"
+                                className="capitalize bg-green-100 text-green-700"
+                            >
                                 Terjawab
                             </Badge>
                         ) : (
