@@ -1,15 +1,20 @@
 import React from "react";
 
-import { Component } from "@/types/app";
+import { AssessmentAnswer, Component } from "@/types/app";
 import { TableCell, TableRow } from "@/Components/ui/table";
 import { TableItemDetail } from "../detail/table-item-detail";
 
 interface TableItemProps {
     instrument: Component;
     index: number;
+    assessmentAnswers?: AssessmentAnswer[];
 }
 
-export const TableItem = ({ instrument, index }: TableItemProps) => {
+export const TableItem = ({
+    instrument,
+    index,
+    assessmentAnswers,
+}: TableItemProps) => {
     return (
         <>
             <TableRow>
@@ -29,6 +34,7 @@ export const TableItem = ({ instrument, index }: TableItemProps) => {
                     key={itemIndex}
                     data={item}
                     instrument={instrument}
+                    assessmentAnswers={assessmentAnswers}
                 />
             ))}
         </>

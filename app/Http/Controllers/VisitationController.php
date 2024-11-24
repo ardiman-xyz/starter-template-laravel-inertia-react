@@ -370,10 +370,10 @@ class VisitationController extends Controller
             }
     
             $answer->progress = $validated['progress'];
-            $answer->percentage = $validated['percentage'];
+            $answer->percentage = $validated['percentage'] >= 99 ? 100 : $validated['percentage'];
             $answer->last_checkpoint = $validated['checkpoint'];
             
-            if ($validated['percentage'] >= 95) {
+            if ($validated['percentage'] >= 99) {
                 $answer->is_done = true;
             }
     

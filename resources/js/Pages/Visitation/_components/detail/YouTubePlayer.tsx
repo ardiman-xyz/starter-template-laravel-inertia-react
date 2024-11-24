@@ -77,7 +77,7 @@ export const YouTubePlayer = ({
     const hasInitialSeek = useRef(false);
 
     const [savedProgress, setSavedProgress] = useLocalStorage<VideoProgress>(
-        `video-progress-${videoId}`,
+        `${videoId}`,
         {
             lastPosition: initialProgress,
             checkpoints: [false, false, false, false],
@@ -93,6 +93,7 @@ export const YouTubePlayer = ({
             hasInitialSeek.current = true;
         }
     }, [savedProgress]);
+
     const handleVolumeChange = (value: number[]) => {
         const newVolume = value[0];
         setVolume(newVolume);
@@ -106,6 +107,16 @@ export const YouTubePlayer = ({
     }, [initialProgress]);
 
     useEffect(() => {
+        return () => {
+            if (progressUpdateTimeout.current) {
+                clearTimeout(progressUpdateTimeout.current);
+            }
+            // Force save progress on unmount
+            updateProgress(progress, true);
+        };
+    }, []);
+
+    useEffect(() => {
         if (savedProgress && !isCompleted) {
             setProgress(savedProgress.lastPosition);
             setCheckpoints(savedProgress.checkpoints);
@@ -115,23 +126,35 @@ export const YouTubePlayer = ({
         }
     }, []);
 
+    useEffect(() => {
+        if (!isOpen) {
+            hasInitialSeek.current = false;
+        }
+    }, [isOpen]);
+
     const updateProgress = (currentTime: number, force: boolean = false) => {
+        if (isCompleted) {
+            setSavedProgress({
+                lastPosition: currentTime,
+                checkpoints: [true, true, true, true],
+                isCompleted: true,
+                timestamp: Date.now(),
+            });
+            return;
+        }
+
         if (progressUpdateTimeout.current) {
             clearTimeout(progressUpdateTimeout.current);
         }
 
         progressUpdateTimeout.current = setTimeout(
             () => {
-                // Save to local storage
                 setSavedProgress({
                     lastPosition: currentTime,
                     checkpoints: checkpoints,
                     isCompleted: hasReachedEnd,
                     timestamp: Date.now(),
                 });
-
-                // Update server if needed
-                // onProgressUpdate?.(currentTime, checkpoints);
             },
             force ? 0 : 1000
         );
@@ -166,12 +189,6 @@ export const YouTubePlayer = ({
         setIsPlaying(!isPlaying);
     };
 
-    useEffect(() => {
-        if (!isOpen) {
-            hasInitialSeek.current = false;
-        }
-    }, [isOpen]);
-
     const toggleFullscreen = () => {
         if (!document.fullscreenElement) {
             containerRef.current?.requestFullscreen();
@@ -189,6 +206,8 @@ export const YouTubePlayer = ({
     };
 
     const updateCheckpoints = (currentTime: number) => {
+        if (isCompleted) return;
+
         const percentage = (currentTime / duration) * 100;
         const newCheckpoints = [...checkpoints];
         let updated = false;
@@ -211,7 +230,7 @@ export const YouTubePlayer = ({
 
             onProgressUpdate?.(currentTime, duration);
         }
-        if (percentage >= 95 && !newCheckpoints[3]) {
+        if (percentage >= 99 && !newCheckpoints[3]) {
             newCheckpoints[3] = true;
             updated = true;
             handleVideoComplete();
@@ -225,6 +244,8 @@ export const YouTubePlayer = ({
     };
 
     const handleVideoComplete = () => {
+        if (isCompleted) return;
+
         if (!hasReachedEnd) {
             setHasReachedEnd(true);
             setSavedProgress((prev) => ({
@@ -249,16 +270,6 @@ export const YouTubePlayer = ({
         updateCheckpoints(state.playedSeconds);
         updateProgress(state.playedSeconds);
     };
-    // Cleanup on unmount
-    useEffect(() => {
-        return () => {
-            if (progressUpdateTimeout.current) {
-                clearTimeout(progressUpdateTimeout.current);
-            }
-            // Force save progress on unmount
-            updateProgress(progress, true);
-        };
-    }, []);
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
@@ -266,18 +277,7 @@ export const YouTubePlayer = ({
                 <DialogHeader className="p-4 flex flex-row items-center justify-between">
                     <DialogTitle>{title}</DialogTitle>
                     <div className="flex items-center gap-2">
-                        {/* Checkpoint indicators */}
-                        <div className="flex gap-1 mr-4">
-                            {checkpoints.map((reached, index) => (
-                                <div
-                                    key={index}
-                                    className={`w-2 h-2 rounded-full ${
-                                        reached ? "bg-green-500" : "bg-gray-300"
-                                    }`}
-                                />
-                            ))}
-                        </div>
-                        {hasReachedEnd ? (
+                        {isCompleted ? (
                             <Badge
                                 variant="success"
                                 className="flex items-center gap-1"
@@ -286,10 +286,24 @@ export const YouTubePlayer = ({
                                 Completed
                             </Badge>
                         ) : (
-                            <Badge variant="secondary">
-                                {Math.round((progress / duration) * 100)}%
-                                watched
-                            </Badge>
+                            <>
+                                <div className="flex gap-1 mr-4">
+                                    {checkpoints.map((reached, index) => (
+                                        <div
+                                            key={index}
+                                            className={`w-2 h-2 rounded-full ${
+                                                reached
+                                                    ? "bg-green-500"
+                                                    : "bg-gray-300"
+                                            }`}
+                                        />
+                                    ))}
+                                </div>
+                                <Badge variant="secondary">
+                                    {Math.round((progress / duration) * 100)}%
+                                    watched
+                                </Badge>
+                            </>
                         )}
                     </div>
                 </DialogHeader>

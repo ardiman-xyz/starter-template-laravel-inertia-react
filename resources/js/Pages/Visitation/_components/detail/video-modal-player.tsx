@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { YouTubePlayer } from "./YouTubePlayer";
 import { DrivePlayer } from "./DrivePlayer";
 import axios from "axios";
@@ -11,6 +11,8 @@ interface VideoPlayerProps {
     url: string;
     title: string;
     componentId: number;
+    initialProgress: number;
+    isCompleted: boolean;
 }
 
 const VideoPlayer = ({
@@ -19,6 +21,8 @@ const VideoPlayer = ({
     url,
     title,
     componentId,
+    initialProgress,
+    isCompleted,
 }: VideoPlayerProps) => {
     const { assessmentId } = useVisitationContextNew();
 
@@ -32,6 +36,27 @@ const VideoPlayer = ({
         return "unknown";
     }, [url]);
 
+    useEffect(() => {
+        const storageKey = `video-progress-${componentId}`;
+        const existingProgress = localStorage.getItem(storageKey);
+
+        if (!existingProgress && initialProgress > 0) {
+            const initialData = {
+                lastPosition: initialProgress,
+                checkpoints: [
+                    initialProgress >= 25,
+                    initialProgress >= 50,
+                    initialProgress >= 75,
+                    initialProgress >= 95,
+                ],
+                isCompleted: isCompleted,
+                timestamp: Date.now(),
+            };
+
+            localStorage.setItem(storageKey, JSON.stringify(initialData));
+        }
+    }, [componentId, initialProgress, isCompleted]);
+
     const handleUpdate = async (currentTime: number, videoDuration: number) => {
         try {
             const percentage = (currentTime / videoDuration) * 100;
@@ -42,7 +67,7 @@ const VideoPlayer = ({
                 progress: currentTime,
                 percentage: Math.round(percentage),
                 checkpoint:
-                    percentage >= 95
+                    percentage >= 99
                         ? 4
                         : percentage >= 75
                         ? 3
@@ -54,7 +79,7 @@ const VideoPlayer = ({
             };
 
             await axios.post(route("visitation.video-progress"), progressData);
-            toast.success(`Saved ${Math.round(percentage)}%`);
+            toast(`Saved`);
         } catch (error) {
             console.error("Error updating progress:", error);
         }
@@ -67,7 +92,9 @@ const VideoPlayer = ({
                 onClose={onClose}
                 url={url}
                 title={title}
-                videoId="unique-video-id-yt"
+                videoId={`video-progress-${componentId}`}
+                initialProgress={initialProgress}
+                isCompleted={isCompleted}
                 onProgressUpdate={handleUpdate}
             />
         );

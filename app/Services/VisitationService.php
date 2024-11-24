@@ -183,15 +183,12 @@ class VisitationService
         $result = [];
 
         foreach ($components as $component) {
+            
             $items = $this->componentDetailRepository->findByComponentId($component->id);
 
             $componentItems = [];
             foreach ($items as $item) {
-                Log::info('Searching score for admin:', [
-                    'assessment_id' => $id,
-                    'component_id' => $component->id,
-                    'item_id' => $item->id
-                ]);
+              
                 $answer = $this->assessmentScoreRepository->findByAssessmentAndItemId($assessment->id, $component->id, $item->id);
                 $componentItems[] = [
                     'id' => $item->id,

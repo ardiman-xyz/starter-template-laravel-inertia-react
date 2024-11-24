@@ -107,6 +107,10 @@ export type AssessmentAnswer = {
     component_id: number;
     notes?: string;
     created_at: string;
+    is_done: boolean;
+    last_checkpoint: number;
+    percentage: number;
+    progress: number;
 };
 
 export type Component = {

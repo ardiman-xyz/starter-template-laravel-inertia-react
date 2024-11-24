@@ -2,7 +2,7 @@ import { TableCell, TableRow } from "@/Components/ui/table";
 import React, { useState } from "react";
 import axios from "axios";
 
-import { Component, ComponentDetail } from "@/types/app";
+import { AssessmentAnswer, Component, ComponentDetail } from "@/types/app";
 
 import useVisitationContextNew from "@/Context/useVisitationContextNew";
 import { toast } from "sonner";
@@ -12,6 +12,7 @@ interface IProps {
     index: number;
     data: ComponentDetail;
     instrument: Component;
+    assessmentAnswers?: AssessmentAnswer[]; // Tambahkan prop ini
 }
 
 type SelectedOption = {
@@ -20,10 +21,34 @@ type SelectedOption = {
     value: string;
 };
 
-export const TableItemDetail = ({ data, index, instrument }: IProps) => {
+export const TableItemDetail = ({
+    data,
+    index,
+    instrument,
+    assessmentAnswers = [],
+}: IProps) => {
     const { assessmentId } = useVisitationContextNew();
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    // Check apakah video untuk komponen ini sudah selesai
+    const isVideoCompleted =
+        assessmentAnswers?.find(
+            (answer) => Number(answer.component_id) === Number(instrument.id)
+        )?.is_done ?? false;
+
+    const currentIndex = assessmentAnswers.findIndex(
+        (a) => Number(a.component_id) === Number(instrument.id)
+    );
+
+    const previousVideosCompleted =
+        currentIndex === 0 ||
+        assessmentAnswers
+            .slice(0, currentIndex)
+            .every((answer) => answer.is_done);
+
+    // Video saat ini harus selesai dan video sebelumnya juga harus selesai
+    const canInputScore = isVideoCompleted && previousVideosCompleted;
 
     const handleRadioChange = (
         e: React.ChangeEvent<HTMLInputElement>,
@@ -55,105 +80,37 @@ export const TableItemDetail = ({ data, index, instrument }: IProps) => {
 
     return (
         <TableRow className="relative">
-            <TableCell className="border">{`${String.fromCharCode(
-                97 + index
-            )}. ${data.name}`}</TableCell>
-            <TableCell className="text-center border">
-                {data.scored.status && data.scored.score === 1 ? (
-                    <input
-                        type="radio"
-                        name={`item-${data.id}-${data.id}`}
-                        value="1"
-                        checked={data.scored.status && data.scored.score === 1}
-                        onChange={(e) =>
-                            handleRadioChange(e, instrument.id, data.id)
-                        }
-                        disabled={isLoading}
-                    />
-                ) : (
-                    <input
-                        type="radio"
-                        name={`item-${data.id}-${data.id}`}
-                        value="1"
-                        onChange={(e) =>
-                            handleRadioChange(e, instrument.id, data.id)
-                        }
-                        disabled={isLoading}
-                    />
+            <TableCell className="border">
+                {`${String.fromCharCode(97 + index)}. ${data.name}`}
+                {!canInputScore && (
+                    <span className="text-xs text-red-500 block">
+                        {!isVideoCompleted
+                            ? "Selesaikan video ini terlebih dahulu"
+                            : "Selesaikan video sebelumnya terlebih dahulu"}
+                    </span>
                 )}
             </TableCell>
-            <TableCell className="text-center border">
-                {data.scored.status && data.scored.score === 2 ? (
+            {[1, 2, 3, 4].map((score) => (
+                <TableCell key={score} className="text-center border">
                     <input
                         type="radio"
                         name={`item-${data.id}-${data.id}`}
-                        value="2"
-                        checked={data.scored.status && data.scored.score === 2}
+                        value={score}
+                        checked={
+                            data.scored.status && data.scored.score === score
+                        }
                         onChange={(e) =>
                             handleRadioChange(e, instrument.id, data.id)
                         }
-                        disabled={isLoading}
-                    />
-                ) : (
-                    <input
-                        type="radio"
-                        name={`item-${data.id}-${data.id}`}
-                        value="2"
-                        onChange={(e) =>
-                            handleRadioChange(e, instrument.id, data.id)
+                        disabled={isLoading || !canInputScore}
+                        className={
+                            !canInputScore
+                                ? "cursor-not-allowed opacity-50"
+                                : ""
                         }
-                        disabled={isLoading}
                     />
-                )}
-            </TableCell>
-            <TableCell className="text-center border">
-                {data.scored.status && data.scored.score === 3 ? (
-                    <input
-                        type="radio"
-                        name={`item-${data.id}-${data.id}`}
-                        value="3"
-                        checked={data.scored.status && data.scored.score === 3}
-                        onChange={(e) =>
-                            handleRadioChange(e, instrument.id, data.id)
-                        }
-                        disabled={isLoading}
-                    />
-                ) : (
-                    <input
-                        type="radio"
-                        name={`item-${data.id}-${data.id}`}
-                        value="3"
-                        onChange={(e) =>
-                            handleRadioChange(e, instrument.id, data.id)
-                        }
-                        disabled={isLoading}
-                    />
-                )}
-            </TableCell>
-            <TableCell className="text-center border">
-                {data.scored.status && data.scored.score === 4 ? (
-                    <input
-                        type="radio"
-                        name={`item-${data.id}-${data.id}`}
-                        value="4"
-                        checked={data.scored.status && data.scored.score === 4}
-                        onChange={(e) =>
-                            handleRadioChange(e, instrument.id, data.id)
-                        }
-                        disabled={isLoading}
-                    />
-                ) : (
-                    <input
-                        type="radio"
-                        name={`item-${data.id}-${data.id}`}
-                        value="4"
-                        onChange={(e) =>
-                            handleRadioChange(e, instrument.id, data.id)
-                        }
-                        disabled={isLoading}
-                    />
-                )}
-            </TableCell>
+                </TableCell>
+            ))}
         </TableRow>
     );
 };

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { AlertCircle, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 import { Assessment, AssessmentAnswer, Component } from "@/types/app";
 
@@ -14,8 +14,6 @@ import {
     TableRow,
 } from "@/Components/ui/table";
 import { Hint } from "@/Components/Hint";
-import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
-import { formatDate } from "@/helper";
 import AnswerItem from "./answer-item";
 
 interface AnswerProps {
@@ -40,8 +38,8 @@ export const Answer = ({
         <div>
             <div className="flex justify-between bg-gray-100 rounded border-t-2 border-sky-700 p-4">
                 <Heading
-                    title={`Tanggapan Guru`}
-                    description={`Silakan upload link video anda`}
+                    title={`Jawaban guru`}
+                    description={`Silakan lihat video dan berikan nilai anda.`}
                 />
                 <Hint description={isOpen ? "Close section" : "Open section"}>
                     <ChevronDown

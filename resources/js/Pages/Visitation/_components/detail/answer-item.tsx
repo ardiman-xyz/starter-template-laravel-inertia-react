@@ -24,13 +24,20 @@ const AnswerItem = ({ component, assessmentAnswers = [] }: AnswerItemProps) => {
 
     const isAnswered = Boolean(answer);
 
+    // Dapatkan indeks komponen saat ini
+    const currentIndex = assessmentAnswers.findIndex(
+        (a) => Number(a.component_id) === Number(component.id)
+    );
+
+    // Periksa apakah video sebelumnya sudah selesai
+    const canViewVideo =
+        currentIndex === 0 || assessmentAnswers[currentIndex - 1]?.is_done;
+
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString("id-ID", {
             day: "2-digit",
             month: "short",
             year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
         });
     };
 
@@ -39,17 +46,42 @@ const AnswerItem = ({ component, assessmentAnswers = [] }: AnswerItemProps) => {
             <TableRow>
                 <TableCell className="font-medium">
                     <div>
-                        <p className="font-semibold">{component.name}</p>
+                        <p className="font-semibold">
+                            {canViewVideo ? (
+                                component.name
+                            ) : (
+                                <span className="text-muted-foreground">
+                                    {component.name}
+                                </span>
+                            )}
+                        </p>
                     </div>
                 </TableCell>
                 <TableCell>
                     {isAnswered && (
-                        <div
-                            className="flex items-center gap-2 cursor-pointer text-blue-600 hover:underline"
-                            onClick={() => setIsVideoOpen(true)}
-                        >
-                            <Link2Icon className="w-4 h-4" />
-                            <span>Lihat Video</span>
+                        <div className="flex flex-col items-start gap-1">
+                            <div
+                                className={`flex items-center gap-2 ${
+                                    canViewVideo
+                                        ? "cursor-pointer text-blue-600 hover:underline"
+                                        : "text-gray-400"
+                                }`}
+                                onClick={() =>
+                                    canViewVideo && setIsVideoOpen(true)
+                                }
+                            >
+                                <Link2Icon className="w-4 h-4" />
+                                <span>
+                                    {canViewVideo
+                                        ? "Lihat Video"
+                                        : "Selesaikan Video Sebelumnya"}
+                                </span>
+                            </div>
+                            {answer?.percentage !== undefined && (
+                                <span className="text-xs text-gray-500">
+                                    Progress: {answer.percentage}%
+                                </span>
+                            )}
                         </div>
                     )}
                 </TableCell>
@@ -82,13 +114,15 @@ const AnswerItem = ({ component, assessmentAnswers = [] }: AnswerItemProps) => {
                 </TableCell>
             </TableRow>
 
-            {isAnswered && (
+            {isAnswered && canViewVideo && (
                 <VideoModalPlayer
                     isOpen={isVideoOpen}
                     onClose={() => setIsVideoOpen(false)}
                     title={component.name}
                     url={answer?.answer!!}
                     componentId={component.id}
+                    initialProgress={answer?.progress ?? 0}
+                    isCompleted={answer?.is_done!!}
                 />
             )}
         </>

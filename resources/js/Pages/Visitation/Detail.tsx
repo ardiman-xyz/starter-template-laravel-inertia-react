@@ -50,6 +50,8 @@ const DetailVisitationPage = ({ data }: DetailProps) => {
         setIsOpen(!isOpen);
     };
 
+    console.info(data);
+
     return (
         <Authenticated
             breadCrumbs={[
@@ -169,6 +171,10 @@ const DetailVisitationPage = ({ data }: DetailProps) => {
                                                 instrument={instrument}
                                                 index={index}
                                                 key={index}
+                                                assessmentAnswers={
+                                                    data.assessment
+                                                        .assessment_answers
+                                                }
                                             />
                                         )
                                     )}
