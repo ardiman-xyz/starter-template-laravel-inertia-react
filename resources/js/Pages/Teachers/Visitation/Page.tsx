@@ -51,6 +51,7 @@ const VisitationIndexPage = ({ assessments }: IProps) => {
                             </TableHead>
                             <TableHead>Tahun akademik</TableHead>
                             <TableHead>Semester</TableHead>
+                            <TableHead>Tahun</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead>Aksi</TableHead>
                         </TableRow>

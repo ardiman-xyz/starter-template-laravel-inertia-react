@@ -2,22 +2,23 @@ import { SharedInertiaData } from "@/types/inertia";
 import { usePage } from "@inertiajs/react";
 
 export const SchoolProfile = () => {
-    // const { auth } = usePage<SharedInertiaData>().props;
+    const { auth } = usePage<SharedInertiaData>().props;
 
-    // const school = auth?.school;
+    // Get school data based on role
+    const school = auth?.roles.includes("Teacher")
+        ? auth.teacher_school
+        : auth?.teacher_school;
 
-    // console.info(auth);
-
-    // if (!school) return;
+    if (!school) return null;
 
     return (
         <div className="rounded bg-gradient-to-r from-sky-100 to-sky-50 py-6 px-8 border border-sky-100 mb-10 flex justify-between relative overflow-hidden">
             <div className="md:w-1/2 w-full">
                 <h1 className="text-xl font-bold text-sky-800">
-                    SDN 1 KENDARI
+                    {school.name}
                 </h1>
                 <p className="text-sm font-albert text-gray-700">
-                    Selamat datang admin, di aplikasi{" "}
+                    Selamat datang aplikasi{" "}
                     <span className="font-semibold">sispeng-tk.id</span>
                 </p>
             </div>

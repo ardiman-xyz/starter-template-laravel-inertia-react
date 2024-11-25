@@ -45,11 +45,12 @@ export const TableItem = ({
         >
             <TableCell className="text-center">{index + 1}</TableCell>
             <TableCell className="text-blue-800 underline">
-                {data.academic_semester.year}
+                {data.academic_semester.academic_year}
             </TableCell>
             <TableCell className="capitalize">
                 {data.academic_semester.semester}
             </TableCell>
+            <TableCell>{data.academic_semester.year}</TableCell>
             <TableCell>
                 <VisitationStatus data={data} />
             </TableCell>

@@ -51,5 +51,14 @@ class User extends Authenticatable
         );
     }
 
+    public function teacherSchool(): HasOne
+    {
+        return $this->hasOne(
+            School::class,
+            'id' ,       // Nama kolom local key di tabel users
+            'school_id',  // Nama kolom foreign key di tabel schools
+        );
+    }
+
     
 }

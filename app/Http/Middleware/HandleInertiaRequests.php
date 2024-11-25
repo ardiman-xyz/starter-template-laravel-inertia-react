@@ -57,6 +57,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $user ?? null,
                 'roles'     => $user ? $user->getRoleNames(): [],
                 'school' => $user->school ?? null,
+                'teacher_school' => $user->teacherSchool ?? null
             ],
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),
