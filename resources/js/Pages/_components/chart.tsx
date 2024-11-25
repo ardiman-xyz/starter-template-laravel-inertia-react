@@ -2,6 +2,7 @@ import {
     Card,
     CardContent,
     CardDescription,
+    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/Components/ui/card";
@@ -19,6 +20,35 @@ import {
 import { useState } from "react";
 import { AreaChartIcon, BarChartIcon, LineChartIcon } from "lucide-react";
 
+import { TrendingUp } from "lucide-react";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import {
+    ChartConfig,
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
+} from "@/Components/ui/chart";
+
+const chartData = [
+    { month: "January", desktop: 186, mobile: 80 },
+    { month: "February", desktop: 305, mobile: 200 },
+    { month: "March", desktop: 237, mobile: 120 },
+    { month: "April", desktop: 73, mobile: 190 },
+    { month: "May", desktop: 209, mobile: 130 },
+    { month: "June", desktop: 214, mobile: 140 },
+];
+
+const chartConfig = {
+    desktop: {
+        label: "Desktop",
+        color: "hsl(var(--chart-1))",
+    },
+    mobile: {
+        label: "Mobile",
+        color: "hsl(var(--chart-2))",
+    },
+} satisfies ChartConfig;
+
 export const Chart = () => {
     const [chartType, setChartType] = useState<string>("area");
 
@@ -27,52 +57,48 @@ export const Chart = () => {
     };
 
     return (
-        <div className="flex flex-col gap-y-10">
-            <Card>
-                <CardHeader className="flex lg:flex-row flex-col justify-between lg:gap-2 gap-0">
-                    <div className="space-y-1">
-                        <CardTitle>Trend Supervisi Guru</CardTitle>
-                        <CardDescription className="max-w-[600px] text-xs">
-                            Visualisasi performa mengajar berdasarkan hasil
-                            supervisi semester ganjil dan genap selama 5 tahun
-                            terakhir
-                        </CardDescription>
-                    </div>
-                    <Select
-                        defaultValue={chartType}
-                        onValueChange={onTypeChange}
-                    >
-                        <SelectTrigger className="lg:w-auto h-9 rounded-md px-3">
-                            <SelectValue placeholder="Chart type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="area">
-                                <div className="flex items-center">
-                                    <AreaChartIcon className="h-4 w-4 mr-2 shrink-0" />
-                                    <p className="line-clamp-1">Area Chart</p>
-                                </div>
-                            </SelectItem>
-                            <SelectItem value="line">
-                                <div className="flex items-center">
-                                    <LineChartIcon className="h-4 w-4 mr-2 shrink-0" />
-                                    <p className="line-clamp-1">Line Chart</p>
-                                </div>
-                            </SelectItem>
-                            <SelectItem value="bar">
-                                <div className="flex items-center">
-                                    <BarChartIcon className="h-4 w-4 mr-2 shrink-0" />
-                                    <p className="line-clamp-1">Bar Chart</p>
-                                </div>
-                            </SelectItem>
-                        </SelectContent>
-                    </Select>
-                </CardHeader>
-                <CardContent>
-                    {chartType === "area" && <AreaVariant />}
-                    {chartType === "line" && <LineVariant />}
-                    {chartType === "bar" && <BarVariant />}
-                </CardContent>
-            </Card>
-        </div>
+        <Card>
+            <CardHeader>
+                <CardTitle>Bar Chart - Multiple</CardTitle>
+                <CardDescription>January - June 2024</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <ChartContainer config={chartConfig}>
+                    <BarChart accessibilityLayer data={chartData}>
+                        <CartesianGrid vertical={false} />
+                        <XAxis
+                            dataKey="month"
+                            tickLine={false}
+                            tickMargin={10}
+                            axisLine={false}
+                            tickFormatter={(value) => value.slice(0, 3)}
+                        />
+                        <ChartTooltip
+                            cursor={false}
+                            content={<ChartTooltipContent indicator="dashed" />}
+                        />
+                        <Bar
+                            dataKey="desktop"
+                            fill="var(--color-desktop)"
+                            radius={4}
+                        />
+                        <Bar
+                            dataKey="mobile"
+                            fill="var(--color-mobile)"
+                            radius={4}
+                        />
+                    </BarChart>
+                </ChartContainer>
+            </CardContent>
+            <CardFooter className="flex-col items-start gap-2 text-sm">
+                <div className="flex gap-2 font-medium leading-none">
+                    Trending up by 5.2% this month{" "}
+                    <TrendingUp className="h-4 w-4" />
+                </div>
+                <div className="leading-none text-muted-foreground">
+                    Showing total visitors for the last 6 months
+                </div>
+            </CardFooter>
+        </Card>
     );
 };

@@ -8,13 +8,30 @@ import { SchoolProfile } from "@/Pages/_components/school-profile";
 import { VisitationTrend, VisitationTrendCategories } from "@/types/app";
 import { useDashboardStore } from "@/Context/useDashboardStore";
 import { useEffect } from "react";
+import { SupervisiPieChart } from "./_components/SupervisiPieChart";
+import SupervisiBarChart from "./_components/supervisi-bar-chart";
+import { CategoryData } from "@/types/dashboard";
+
+type SupervisiAverageData = {
+    academic_year: string;
+    semester: string;
+    average_score: number;
+    total_supervisi: number;
+};
 
 interface DashboardProps {
     trendVisitation: VisitationTrend[];
-    categories: VisitationTrendCategories[];
+    categories: CategoryData[];
+    averages: SupervisiAverageData[];
 }
 
-const Dashboard = ({ trendVisitation, categories }: DashboardProps) => {
+const Dashboard = ({
+    trendVisitation,
+    categories,
+    averages,
+}: DashboardProps) => {
+    console.info("categories", categories);
+
     const setTrendVisitation = useDashboardStore(
         (state) => state.setTrendVisitation
     );
@@ -41,7 +58,7 @@ const Dashboard = ({ trendVisitation, categories }: DashboardProps) => {
                     <div className="col-span-1 lg:col-span-4">
                         <div className="w-full mb-8">
                             <SchoolProfile />
-                            <Chart />
+                            <SupervisiBarChart data={averages} />
                         </div>
                     </div>
                     <div className="col-span-1 lg:col-span-2">
@@ -49,7 +66,7 @@ const Dashboard = ({ trendVisitation, categories }: DashboardProps) => {
                             <AvatarProfile />
                         </div>
                         <div className="">
-                            <PieVariant />
+                            <SupervisiPieChart data={categories} />
                         </div>
                     </div>
                 </div>

@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { YouTubePlayer } from "./YouTubePlayer";
-import { DrivePlayer } from "./DrivePlayer";
 import axios from "axios";
 import useVisitationContextNew from "@/Context/useVisitationContextNew";
 import { toast } from "sonner";
+import { User } from "@/types/app";
 
 interface VideoPlayerProps {
     isOpen: boolean;
@@ -13,6 +13,7 @@ interface VideoPlayerProps {
     componentId: number;
     initialProgress: number;
     isCompleted: boolean;
+    user: User;
 }
 
 const VideoPlayer = ({
@@ -23,6 +24,7 @@ const VideoPlayer = ({
     componentId,
     initialProgress,
     isCompleted,
+    user,
 }: VideoPlayerProps) => {
     const { assessmentId } = useVisitationContextNew();
 
@@ -37,7 +39,7 @@ const VideoPlayer = ({
     }, [url]);
 
     useEffect(() => {
-        const storageKey = `video-progress-${componentId}`;
+        const storageKey = `video-progress-${componentId}-${user.id}`;
         const existingProgress = localStorage.getItem(storageKey);
 
         if (!existingProgress && initialProgress > 0) {
@@ -47,7 +49,7 @@ const VideoPlayer = ({
                     initialProgress >= 25,
                     initialProgress >= 50,
                     initialProgress >= 75,
-                    initialProgress >= 95,
+                    initialProgress >= 99,
                 ],
                 isCompleted: isCompleted,
                 timestamp: Date.now(),
@@ -92,7 +94,7 @@ const VideoPlayer = ({
                 onClose={onClose}
                 url={url}
                 title={title}
-                videoId={`video-progress-${componentId}`}
+                videoId={`video-progress-${componentId}-${user.id}`}
                 initialProgress={initialProgress}
                 isCompleted={isCompleted}
                 onProgressUpdate={handleUpdate}
@@ -100,16 +102,9 @@ const VideoPlayer = ({
         );
     }
 
-    if (videoType === "drive") {
-        return (
-            <DrivePlayer
-                isOpen={isOpen}
-                onClose={onClose}
-                url={url}
-                title={title}
-            />
-        );
-    }
+    // if (videoType === "drive") {
+    //     return <a href={url} target="blank"></a>;
+    // }
 
     return null;
 };

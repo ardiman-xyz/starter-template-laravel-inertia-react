@@ -117,12 +117,14 @@ const AnswerItem = ({
                                 Belum Dijawab
                             </Badge>
                         )}
-                        <Button
-                            variant={isAnswered ? "secondary" : "default"}
-                            onClick={() => setIsOpen(true)}
-                        >
-                            {isAnswered ? "Edit" : "Upload"}
-                        </Button>
+                        {status !== "finish" && (
+                            <Button
+                                variant={isAnswered ? "secondary" : "default"}
+                                onClick={() => setIsOpen(true)}
+                            >
+                                {isAnswered ? "Edit" : "Upload"}
+                            </Button>
+                        )}
                     </div>
                 </TableCell>
             </TableRow>

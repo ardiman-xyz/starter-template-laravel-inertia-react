@@ -43,7 +43,6 @@ const EditModal = ({ id, name, onClose }: EditModalProps) => {
     });
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        console.info(values);
         setError(null);
         setIsLoading(true);
         await axios

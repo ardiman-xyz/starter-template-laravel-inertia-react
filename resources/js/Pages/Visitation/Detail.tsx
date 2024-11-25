@@ -50,8 +50,6 @@ const DetailVisitationPage = ({ data }: DetailProps) => {
         setIsOpen(!isOpen);
     };
 
-    console.info(data);
-
     return (
         <Authenticated
             breadCrumbs={[

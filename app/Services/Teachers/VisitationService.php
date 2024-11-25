@@ -104,7 +104,10 @@ class VisitationService
             ];
         }
 
-        $sumMaxScore = (int)$this->componentDetailRepository->sumMaxScore();
+        $components = Component::where("school_id", $userSchoollId)
+                ->withSum('details', 'max_score')
+                ->get();
+        $sumMaxScore = $components->sum('details_sum_max_score');
         $totalScore = (int)$this->assessmentScoreRepository->totalScore($assessment->id);
 
         $final_score = $this->calculateFinalScore($totalScore, $sumMaxScore);

@@ -1,15 +1,33 @@
+// components/DrivePlayer.tsx
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
 } from "@/Components/ui/dialog";
+import { useState, useRef } from "react";
+import { Button } from "@/Components/ui/button";
+import { Badge } from "@/Components/ui/badge";
+import {
+    FileVideo,
+    Play,
+    Pause,
+    CheckCircle2,
+    Volume2,
+    VolumeX,
+} from "lucide-react";
+import { Slider } from "@/Components/ui/slider";
+import ReactPlayer from "react-player";
 
 interface DrivePlayerProps {
     isOpen: boolean;
     onClose: () => void;
     url: string;
     title: string;
+    videoId?: string;
+    initialProgress?: number;
+    isCompleted?: boolean;
+    onProgressUpdate?: (progress: number) => void;
 }
 
 export const DrivePlayer = ({
@@ -17,49 +35,72 @@ export const DrivePlayer = ({
     onClose,
     url,
     title,
+    videoId,
+    initialProgress = 0,
+    isCompleted = false,
+    onProgressUpdate,
 }: DrivePlayerProps) => {
-    const getEmbedUrl = (url: string) => {
-        try {
-            let fileId = "";
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const [volume, setVolume] = useState(1);
+    const [isMuted, setIsMuted] = useState(false);
+    const [showVolumeControl, setShowVolumeControl] = useState(false);
+    const playerRef = useRef<ReactPlayer>(null);
 
-            if (url.includes("/file/d/")) {
-                fileId = url.split("/file/d/")[1].split("/")[0];
-            } else if (url.includes("?id=")) {
-                fileId =
-                    new URLSearchParams(new URL(url).search).get("id") || "";
-            }
+    const handlePlayPause = () => {
+        setIsPlaying(!isPlaying);
+    };
 
-            if (!fileId) return url;
-            return `https://drive.google.com/file/d/${fileId}/preview`;
-        } catch (error) {
-            console.error("Error formatting Drive URL:", error);
-            return url;
-        }
+    const handleProgress = (state: {
+        played: number;
+        playedSeconds: number;
+    }) => {
+        setProgress(state.playedSeconds);
+        onProgressUpdate?.(state.playedSeconds);
+    };
+
+    const handleDuration = (duration: number) => {
+        setDuration(duration);
+    };
+
+    const handleVolumeChange = (value: number[]) => {
+        const newVolume = value[0];
+        setVolume(newVolume);
+        setIsMuted(newVolume === 0);
+    };
+
+    const handleSeek = (value: number[]) => {
+        const newTime = value[0];
+        playerRef.current?.seekTo(newTime);
+    };
+
+    const formatTime = (seconds: number) => {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = Math.floor(seconds % 60);
+        return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
     };
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-[800px] p-0">
-                <DialogHeader className="p-4">
+            <DialogContent className="max-w-[900px]">
+                <DialogHeader className="p-4 flex flex-row items-center justify-between">
                     <DialogTitle>{title}</DialogTitle>
+                    {isCompleted && <Badge variant="success">Completed</Badge>}
                 </DialogHeader>
 
-                <div className="p-4">
-                    <div className="relative rounded-lg overflow-hidden bg-black">
-                        <div
-                            className="relative"
-                            style={{ paddingTop: "56.25%" }}
-                        >
-                            <iframe
-                                src={getEmbedUrl(url)}
-                                className="absolute top-0 left-0 w-full h-full"
-                                allow="autoplay"
-                                allowFullScreen
-                            />
-                        </div>
-                    </div>
-                </div>
+                <iframe
+                    src={
+                        "https://drive.google.com/file/d/1Cm0Vx15q_4IZvarExVVjv8f1tnXYfLZr/view"
+                    }
+                    width="640"
+                    height="480"
+                ></iframe>
+
+                {/* Custom Controls */}
             </DialogContent>
         </Dialog>
     );
 };
+
+export default DrivePlayer;

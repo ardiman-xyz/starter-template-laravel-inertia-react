@@ -30,8 +30,13 @@ class Component extends Model
     }
 
     public function scopeForSchool($query, $schoolId = null)
-   {
-       return $query->where('school_id', $schoolId ?: auth()->user()->school_id);
-   }
+    {
+        return $query->where('school_id', $schoolId ?: auth()->user()->school_id);
+    }
+
+    public function getTotalMaxScoreAttribute()
+    {
+        return $this->details()->sum('max_score');
+    }
 
 }

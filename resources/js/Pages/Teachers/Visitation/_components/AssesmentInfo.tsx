@@ -79,7 +79,6 @@ export const AssesmentInfo = ({
 }: Props) => {
     const scoreStyle = getScoreStyle(final_score.evaluate);
 
-    // Progress bar color berdasarkan score
     const getProgressColor = (score: number) => {
         if (score >= 86) return "bg-green-500";
         if (score >= 70) return "bg-blue-500";
@@ -87,14 +86,13 @@ export const AssesmentInfo = ({
         return "bg-red-500";
     };
 
-    // Status visitasi badge
     const getStatusBadge = () => {
         switch (status) {
             case "schedule":
                 return <Badge variant="secondary">Dijadwalkan</Badge>;
             case "ongoing":
                 return <Badge variant="warning">Sedang Berlangsung</Badge>;
-            case "completed":
+            case "finish":
                 return <Badge variant="success">Selesai</Badge>;
         }
     };

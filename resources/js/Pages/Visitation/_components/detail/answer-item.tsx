@@ -1,8 +1,12 @@
-import { TableCell, TableRow } from "@/Components/ui/table";
-import { Component, AssessmentAnswer } from "@/types/app";
-import { Badge } from "@/Components/ui/badge";
+import axios from "axios";
 import { CalendarIcon, Link2Icon } from "lucide-react";
-import { useState } from "react";
+
+import { TableCell, TableRow } from "@/Components/ui/table";
+import { Component, AssessmentAnswer, User } from "@/types/app";
+import useVisitationContextNew from "@/Context/useVisitationContextNew";
+
+import { Badge } from "@/Components/ui/badge";
+import { useMemo, useState } from "react";
 import VideoModalPlayer from "./video-modal-player";
 
 interface AnswerItemProps {
@@ -13,9 +17,16 @@ interface AnswerItemProps {
         isEvaluated: boolean;
         score?: number;
     };
+    user: User;
 }
 
-const AnswerItem = ({ component, assessmentAnswers = [] }: AnswerItemProps) => {
+const AnswerItem = ({
+    component,
+    assessmentAnswers = [],
+    user,
+}: AnswerItemProps) => {
+    const { assessmentId } = useVisitationContextNew();
+
     const [isVideoOpen, setIsVideoOpen] = useState<boolean>(false);
 
     const answer = assessmentAnswers?.find(
@@ -24,12 +35,10 @@ const AnswerItem = ({ component, assessmentAnswers = [] }: AnswerItemProps) => {
 
     const isAnswered = Boolean(answer);
 
-    // Dapatkan indeks komponen saat ini
     const currentIndex = assessmentAnswers.findIndex(
         (a) => Number(a.component_id) === Number(component.id)
     );
 
-    // Periksa apakah video sebelumnya sudah selesai
     const canViewVideo =
         currentIndex === 0 || assessmentAnswers[currentIndex - 1]?.is_done;
 
@@ -39,6 +48,37 @@ const AnswerItem = ({ component, assessmentAnswers = [] }: AnswerItemProps) => {
             month: "short",
             year: "numeric",
         });
+    };
+
+    const url = answer?.answer!!;
+
+    const videoType = useMemo(() => {
+        if (url.includes("youtube.com") || url.includes("youtu.be")) {
+            return "youtube";
+        }
+        if (url.includes("drive.google.com")) {
+            return "drive";
+        }
+        return "unknown";
+    }, [url]);
+
+    const handleViewDrive = async () => {
+        const progressData = {
+            assessmentId,
+            componentId: component.id,
+            progress: 0,
+            percentage: 100,
+            checkpoint: 4,
+        };
+
+        try {
+            await axios.post(route("visitation.video-progress"), progressData);
+
+            window.open(url, "_blank");
+        } catch (error) {
+            console.error("Failed to update progress:", error);
+            alert("Gagal mengupdate progress. Silakan coba lagi.");
+        }
     };
 
     return (
@@ -60,23 +100,36 @@ const AnswerItem = ({ component, assessmentAnswers = [] }: AnswerItemProps) => {
                 <TableCell>
                     {isAnswered && (
                         <div className="flex flex-col items-start gap-1">
-                            <div
-                                className={`flex items-center gap-2 ${
-                                    canViewVideo
-                                        ? "cursor-pointer text-blue-600 hover:underline"
-                                        : "text-gray-400"
-                                }`}
-                                onClick={() =>
-                                    canViewVideo && setIsVideoOpen(true)
-                                }
-                            >
-                                <Link2Icon className="w-4 h-4" />
-                                <span>
-                                    {canViewVideo
-                                        ? "Lihat Video"
-                                        : "Selesaikan Video Sebelumnya"}
-                                </span>
-                            </div>
+                            {videoType === "drive" ? (
+                                <div className="flex items-center gap-2 text-blue-600">
+                                    <Link2Icon className="w-4 h-4" />
+                                    <div
+                                        onClick={handleViewDrive}
+                                        className="cursor-pointer text-blue-600 hover:underline"
+                                    >
+                                        Link video
+                                    </div>
+                                </div>
+                            ) : (
+                                <div
+                                    className={`flex items-center gap-2 ${
+                                        canViewVideo
+                                            ? "cursor-pointer text-blue-600 hover:underline"
+                                            : "text-gray-400"
+                                    }`}
+                                    onClick={() =>
+                                        canViewVideo && setIsVideoOpen(true)
+                                    }
+                                >
+                                    <Link2Icon className="w-4 h-4" />
+                                    <span>
+                                        {canViewVideo
+                                            ? "Lihat Video"
+                                            : "Selesaikan Video Sebelumnya"}
+                                    </span>
+                                </div>
+                            )}
+
                             {answer?.percentage !== undefined && (
                                 <span className="text-xs text-gray-500">
                                     Progress: {answer.percentage}%
@@ -123,6 +176,7 @@ const AnswerItem = ({ component, assessmentAnswers = [] }: AnswerItemProps) => {
                     componentId={component.id}
                     initialProgress={answer?.progress ?? 0}
                     isCompleted={answer?.is_done!!}
+                    user={user}
                 />
             )}
         </>

@@ -54,21 +54,72 @@ class DashboardService
     {
         $schoolId = $this->schoolRepository->getByUserId($this->tokenService->userId())->id;
 
-        $categories = DB::table('assessments')
-            ->where('school_id', $schoolId)
-            ->select('evaluation', DB::raw('count(*) as total'))
-            ->groupBy('evaluation')
-            ->pluck('total', 'evaluation')
-            ->toArray();
+        $assessments = DB::table('assessments as a')
+            ->join('assessment_scores as scores', 'a.id', '=', 'scores.assessment_id')
+            ->where('a.school_id', $schoolId)
+            ->select(
+                'a.id',
+                DB::raw('AVG(scores.score) as average_score')
+            )
+            ->groupBy('a.id')
+            ->get()
+            ->map(function($item) {
+                $score = ($item->average_score / 4) * 100; // Konversi ke skala 100
+                
+                // Kategorisasi berdasarkan nilai
+                $category = match(true) {
+                    $score >= 90 => 'Sangat Baik',
+                    $score >= 80 => 'Baik',
+                    $score >= 70 => 'Cukup',
+                    default => 'Kurang'
+                };
 
-        $total = array_sum($categories);
+                return [
+                    'score' => $score,
+                    'category' => $category
+                ];
+            });
 
-        return collect($categories)->map(function ($count, $name) use ($total) {
-            return [
-                'name' => $name,
-                'value' => $count,
-                'percent' => $total > 0 ? round(($count / $total) * 100, 1) : 0
-            ];
+        // Hitung distribusi kategori
+        $distribution = $assessments->groupBy('category')
+            ->map(function($items) use($assessments) {
+                $count = $items->count();
+                $total = $assessments->count();
+                
+                return [
+                    'value' => $count,
+                    'percent' => $total > 0 ? round(($count / $total) * 100, 1) : 0
+                ];
+            });
+
+        // Format final response
+        return collect([
+            [
+                'name' => 'Sangat Baik',
+                'value' => $distribution['Sangat Baik']['value'] ?? 0,
+                'percent' => $distribution['Sangat Baik']['percent'] ?? 0,
+                'color' => '#22c55e' // green
+            ],
+            [
+                'name' => 'Baik',
+                'value' => $distribution['Baik']['value'] ?? 0,
+                'percent' => $distribution['Baik']['percent'] ?? 0,
+                'color' => '#3b82f6' // blue
+            ],
+            [
+                'name' => 'Cukup',
+                'value' => $distribution['Cukup']['value'] ?? 0,
+                'percent' => $distribution['Cukup']['percent'] ?? 0,
+                'color' => '#eab308' // yellow
+            ],
+            [
+                'name' => 'Kurang',
+                'value' => $distribution['Kurang']['value'] ?? 0,
+                'percent' => $distribution['Kurang']['percent'] ?? 0,
+                'color' => '#ef4444' // red
+            ]
+        ])->filter(function($category) {
+            return $category['value'] > 0;  // Hanya tampilkan kategori yang ada nilainya
         })->values();
     }
 }

@@ -79,6 +79,7 @@ export const Answer = ({
                                     ),
                                     score: Number(assessment.final_score),
                                 }}
+                                user={assessment.teacher}
                             />
                         ))}
                     </TableBody>

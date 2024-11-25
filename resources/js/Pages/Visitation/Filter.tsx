@@ -12,6 +12,8 @@ interface FilterProps {
 }
 
 const FilterPage = ({ data, year, semester }: FilterProps) => {
+    console.info(data);
+
     return (
         <Authenticated
             breadCrumbs={[

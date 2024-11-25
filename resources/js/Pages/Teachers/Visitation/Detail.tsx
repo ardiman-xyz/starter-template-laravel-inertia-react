@@ -48,8 +48,6 @@ const DetailVisitationPageTeacher = ({ data }: DetailProps) => {
         setAssessmentId(data.assessment.id);
     }, []);
 
-    console.info(data);
-
     return (
         <Authenticated
             breadCrumbs={[

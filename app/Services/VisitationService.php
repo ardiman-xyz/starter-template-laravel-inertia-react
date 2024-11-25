@@ -11,6 +11,7 @@ use App\Entities\AssessmentScheduleEntity;
 use App\Entities\ScoredEntity;
 use App\Models\Assessment;
 use App\Models\AssessmentScore;
+use App\Models\Component;
 use App\Models\User;
 use App\Repositories\AcademicSemesterRepository;
 use App\Repositories\AssessmentAnswerRepository;
@@ -94,8 +95,13 @@ class VisitationService
 
         $assessments = $this->assessmentRepository->findBySchoolAndSemester($school->id, $yearAcademic->id);
 
-        $assessments->map(function ($assessment) {
-            $sumMaxScore = (int)$this->componentDetailRepository->sumMaxScore();
+        $assessments->map(function ($assessment) use ($school) {
+
+            $components = Component::where("school_id", $school->id)
+                        ->withSum('details', 'max_score')
+                        ->get();
+            $sumMaxScore = (int)$components->sum('details_sum_max_score');
+
             $totalScore = (int)$this->assessmentScoreRepository->totalScore($assessment->id);
 
             $assessment->final_score = $this->calculateFinalScore($totalScore, $sumMaxScore);
@@ -208,7 +214,10 @@ class VisitationService
             ];
         }
 
-        $sumMaxScore = (int)$this->componentDetailRepository->sumMaxScore();
+        $components = Component::where("school_id", $user->school->id)
+                        ->withSum('details', 'max_score')
+                        ->get();
+        $sumMaxScore = $components->sum('details_sum_max_score');
         $totalScore = (int)$this->assessmentScoreRepository->totalScore($assessment->id);
 
 
@@ -409,10 +418,26 @@ class VisitationService
      */
     public function delete(string $id): void
     {
-        $assessment = $this->assessmentRepository->getById($id);
-        if(!$assessment) throw new Exception("Assessment not found");
+        DB::beginTransaction();
 
-        $this->assessmentRepository->deleteById($id);
+        try {
+            $assessment = $this->assessmentRepository->getById($id);
+
+            if (!$assessment) {
+                throw new Exception("Assessment not found");
+            }
+
+            $assessment->assessmentAnswers()->delete();
+            $assessment->assessmentScores()->delete();
+
+            $assessment->delete();
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            throw $e;
+        }
     }
 
     /**

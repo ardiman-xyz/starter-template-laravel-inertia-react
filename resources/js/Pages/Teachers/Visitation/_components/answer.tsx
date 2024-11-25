@@ -62,16 +62,6 @@ export const Answer = ({
                     !isOpen && "hidden"
                 )}
             >
-                {/* {!defaultData?.answer && (
-                    <Alert className="mt-4 bg-yellow-100 border border-yellow-400">
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertTitle>Pemberitahuan!</AlertTitle>
-                        <AlertDescription>
-                            Anda belum mengupload link
-                        </AlertDescription>
-                    </Alert>
-                )} */}
-
                 <Table className={"border mt-3"}>
                     <TableHeader>
                         <TableRow>
