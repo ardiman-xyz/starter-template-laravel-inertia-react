@@ -98,25 +98,25 @@ class DashboardService
                 'name' => 'Sangat Baik',
                 'value' => $distribution['Sangat Baik']['value'] ?? 0,
                 'percent' => $distribution['Sangat Baik']['percent'] ?? 0,
-                'color' => '#22c55e' // green
+                'color' => '#50B88A' // green
             ],
             [
                 'name' => 'Baik',
                 'value' => $distribution['Baik']['value'] ?? 0,
                 'percent' => $distribution['Baik']['percent'] ?? 0,
-                'color' => '#3b82f6' // blue
+                'color' => '#2762D9' // blue
             ],
             [
                 'name' => 'Cukup',
                 'value' => $distribution['Cukup']['value'] ?? 0,
                 'percent' => $distribution['Cukup']['percent'] ?? 0,
-                'color' => '#eab308' // yellow
+                'color' => '#E88C31' // yellow
             ],
             [
                 'name' => 'Kurang',
                 'value' => $distribution['Kurang']['value'] ?? 0,
                 'percent' => $distribution['Kurang']['percent'] ?? 0,
-                'color' => '#ef4444' // red
+                'color' => '#E44B70' // red
             ]
         ])->filter(function($category) {
             return $category['value'] > 0;  // Hanya tampilkan kategori yang ada nilainya

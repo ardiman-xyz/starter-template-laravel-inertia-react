@@ -53,13 +53,15 @@ const AnswerItem = ({
     const url = answer?.answer!!;
 
     const videoType = useMemo(() => {
-        if (url.includes("youtube.com") || url.includes("youtu.be")) {
-            return "youtube";
+        if (url) {
+            if (url.includes("youtube.com") || url.includes("youtu.be")) {
+                return "youtube";
+            }
+            if (url.includes("drive.google.com")) {
+                return "drive";
+            }
+            return "unknown";
         }
-        if (url.includes("drive.google.com")) {
-            return "drive";
-        }
-        return "unknown";
     }, [url]);
 
     const handleViewDrive = async () => {

@@ -26,6 +26,10 @@ const VideoPlayer = ({
     isCompleted,
     user,
 }: VideoPlayerProps) => {
+    const getStorageKey = () => {
+        return `video-progress-${assessmentId}-${componentId}-${user.id}`;
+    };
+
     const { assessmentId } = useVisitationContextNew();
 
     const videoType = useMemo(() => {
@@ -39,8 +43,22 @@ const VideoPlayer = ({
     }, [url]);
 
     useEffect(() => {
-        const storageKey = `video-progress-${componentId}-${user.id}`;
+        const storageKey = getStorageKey();
         const existingProgress = localStorage.getItem(storageKey);
+
+        const clearOldStorageKeys = () => {
+            Object.keys(localStorage).forEach((key) => {
+                if (
+                    key.includes(`video-progress-`) &&
+                    key.includes(`-${componentId}-${user.id}`) &&
+                    key !== storageKey
+                ) {
+                    localStorage.removeItem(key);
+                }
+            });
+        };
+
+        clearOldStorageKeys();
 
         if (!existingProgress && initialProgress > 0) {
             const initialData = {
@@ -53,11 +71,18 @@ const VideoPlayer = ({
                 ],
                 isCompleted: isCompleted,
                 timestamp: Date.now(),
+                assessmentId,
             };
 
             localStorage.setItem(storageKey, JSON.stringify(initialData));
         }
-    }, [componentId, initialProgress, isCompleted]);
+
+        return () => {
+            if (isCompleted) {
+                localStorage.removeItem(storageKey);
+            }
+        };
+    }, [componentId, initialProgress, isCompleted, assessmentId]);
 
     const handleUpdate = async (currentTime: number, videoDuration: number) => {
         try {
@@ -80,12 +105,53 @@ const VideoPlayer = ({
                         : 0,
             };
 
+            const storageKey = getStorageKey();
+            const currentStorage = localStorage.getItem(storageKey);
+            if (currentStorage) {
+                const data = JSON.parse(currentStorage);
+                localStorage.setItem(
+                    storageKey,
+                    JSON.stringify({
+                        ...data,
+                        lastPosition: currentTime,
+                        timestamp: Date.now(),
+                    })
+                );
+            }
+
             await axios.post(route("visitation.video-progress"), progressData);
             toast(`Saved`);
+
+            if (percentage >= 99) {
+                localStorage.removeItem(storageKey);
+            }
         } catch (error) {
             console.error("Error updating progress:", error);
         }
     };
+
+    useEffect(() => {
+        const cleanupOldStorage = () => {
+            const ONE_DAY = 24 * 60 * 60 * 1000; // 24 jam dalam milliseconds
+
+            Object.keys(localStorage).forEach((key) => {
+                if (key.startsWith("video-progress-")) {
+                    try {
+                        const data = JSON.parse(
+                            localStorage.getItem(key) || ""
+                        );
+                        if (Date.now() - data.timestamp > ONE_DAY) {
+                            localStorage.removeItem(key);
+                        }
+                    } catch (e) {
+                        localStorage.removeItem(key); // Hapus jika data corrupt
+                    }
+                }
+            });
+        };
+
+        cleanupOldStorage();
+    }, []);
 
     if (videoType === "youtube") {
         return (
@@ -94,7 +160,7 @@ const VideoPlayer = ({
                 onClose={onClose}
                 url={url}
                 title={title}
-                videoId={`video-progress-${componentId}-${user.id}`}
+                videoId={getStorageKey()}
                 initialProgress={initialProgress}
                 isCompleted={isCompleted}
                 onProgressUpdate={handleUpdate}
