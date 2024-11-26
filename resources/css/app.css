@@ -98,3 +98,9 @@
         @apply bg-background text-foreground;
     }
 }
+
+/* global.css */
+.rbc-event,
+.rbc-day-slot .rbc-background-event {
+    background-color: transparent !important;
+}

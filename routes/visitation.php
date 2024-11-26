@@ -37,6 +37,7 @@ Route::middleware(["cekCookie"])->group(function () {
 
         Route::prefix("calendar")->group(function () {
             Route::get("/", [\App\Http\Controllers\CalendarController::class, "index"])->name("calendar.index");
+            Route::get("upcoming", [\App\Http\Controllers\CalendarController::class, "getUpcomingSupervisi"])->name("supervisi.calendar.upcoming");
         });
     });
 });

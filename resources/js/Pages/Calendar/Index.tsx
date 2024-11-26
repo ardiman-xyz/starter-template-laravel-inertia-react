@@ -1,16 +1,16 @@
+import SupervisiCalendar from "@/Components/CalendarEvent";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
-import {CalendarEvent} from "@/Components/CalendarEvent";
-import {Head} from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
 
 const CalendarPage = () => {
     return (
         <Authenticated>
             <Head title="Kalender agenda" />
-            <div>
-                <CalendarEvent />
+            <div className="mb-10">
+                <SupervisiCalendar />
             </div>
         </Authenticated>
-    )
-}
+    );
+};
 
 export default CalendarPage;
