@@ -1,17 +1,17 @@
 // resources/js/Pages/Calendar/partials/SupervisiCalendar.tsx
-import { format, parse, startOfWeek, getDay } from "date-fns";
+import { format, parse, startOfWeek, getDay, formatDate } from "date-fns";
 import { id } from "date-fns/locale";
 import { Calendar, DateLocalizer, dateFnsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import "./data-calendar.css";
 import { cn } from "@/lib/utils";
 import { EventStatus } from "@/types/calendar";
 import { router } from "@inertiajs/react";
+import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 const locales = {
     id: id,
@@ -36,6 +36,11 @@ type SupervisiEvent = {
     academic_year: string;
     status: EventStatusString;
     color: string;
+};
+
+type CustomToolbarProps = {
+    date: Date;
+    onNavigate: (action: "PREV" | "NEXT" | "TODAY") => void;
 };
 
 const SupervisiCalendar = () => {
@@ -91,65 +96,37 @@ const SupervisiCalendar = () => {
         </div>
     );
 
-    const CustomToolbar = (toolbar: any) => (
-        <div className="mb-4">
-            <div className="flex justify-between items-center mb-4">
-                <div className="flex gap-2">
+    const CustomToolbar = ({ date, onNavigate }: CustomToolbarProps) => {
+        return (
+            <div className="flex md:flex-row flex-col items-center justify-between">
+                <div className="flex mb-4 gap-x-2 items-center w-full lg:w-auto justify-center lg:justify-start">
                     <Button
-                        onClick={() => toolbar.onNavigate("PREV")}
-                        variant="outline"
-                        size="sm"
+                        onClick={() => onNavigate("PREV")}
+                        variant={"outline"}
+                        size={"icon"}
+                        className="flex items-center"
                     >
-                        Sebelumnya
+                        <ChevronLeftIcon className="size-4" />
                     </Button>
+                    <div className="flex items-center border border-input rounded-md px-3 py-2 h-8 justify-center w-full lg:w-auto">
+                        <CalendarIcon className="size-4 mr-2" />
+                        <p className="text-sm">
+                            {formatDate(date, "MMMM yyyy")}
+                        </p>
+                    </div>
                     <Button
-                        onClick={() => toolbar.onNavigate("NEXT")}
-                        variant="outline"
-                        size="sm"
+                        onClick={() => onNavigate("NEXT")}
+                        variant={"outline"}
+                        size={"icon"}
+                        className="flex items-center"
                     >
-                        Selanjutnya
-                    </Button>
-                    <Button
-                        onClick={() => toolbar.onNavigate("TODAY")}
-                        variant="outline"
-                        size="sm"
-                    >
-                        Hari Ini
-                    </Button>
-                </div>
-                <h2 className="text-lg font-semibold">
-                    {format(toolbar.date, "MMMM yyyy", { locale: id })}
-                </h2>
-                <div className="flex gap-2">
-                    <Button
-                        onClick={() => toolbar.onView("month")}
-                        variant={
-                            toolbar.view === "month" ? "default" : "outline"
-                        }
-                        size="sm"
-                    >
-                        Bulan
-                    </Button>
-                    <Button
-                        onClick={() => toolbar.onView("week")}
-                        variant={
-                            toolbar.view === "week" ? "default" : "outline"
-                        }
-                        size="sm"
-                    >
-                        Minggu
-                    </Button>
-                    <Button
-                        onClick={() => toolbar.onView("day")}
-                        variant={toolbar.view === "day" ? "default" : "outline"}
-                        size="sm"
-                    >
-                        Hari
+                        <ChevronRightIcon className="size-4" />
                     </Button>
                 </div>
+                <StatusLegend />
             </div>
-        </div>
-    );
+        );
+    };
 
     const StatusLegend = () => (
         <div className="flex gap-4 p-2 justify-end mb-4">
@@ -157,8 +134,8 @@ const SupervisiCalendar = () => {
                 <div className="w-3 h-3 rounded-full bg-[#22c55e]" />
                 <span className="text-sm">Selesai</span>
             </div>
-            <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-[#f97316]" />
+            <div className="flex items-center gap-2 ">
+                <div className="w-3 h-3 rounded-full bg-pink-500" />
                 <span className="text-sm">Dijadwalkan</span>
             </div>
         </div>
@@ -175,9 +152,6 @@ const SupervisiCalendar = () => {
                     <CardTitle>Jadwal Supervisi</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="mb-4">
-                        <StatusLegend />
-                    </div>
                     <div className="">
                         <Calendar
                             localizer={localizer}
@@ -189,15 +163,6 @@ const SupervisiCalendar = () => {
                             components={{
                                 event: EventComponent,
                                 toolbar: CustomToolbar,
-                            }}
-                            messages={{
-                                next: "Selanjutnya",
-                                previous: "Sebelumnya",
-                                today: "Hari Ini",
-                                month: "Bulan",
-                                week: "Minggu",
-                                day: "Hari",
-                                showMore: (total) => `+${total} lainnya`,
                             }}
                             views={["month"]}
                         />
