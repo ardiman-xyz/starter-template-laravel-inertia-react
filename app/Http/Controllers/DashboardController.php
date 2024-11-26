@@ -61,7 +61,7 @@ class DashboardController extends Controller
                 ->select(
                     'sem.academic_year',
                     'sem.semester',
-                    DB::raw('AVG(scores.score) as average_score'), // Rata-rata score (1-4)
+                    DB::raw('AVG(scores.score) as average_score'), 
                     DB::raw('COUNT(DISTINCT a.id) as total_supervisi')
                 )
                 ->where("a.school_id", $user->school->id)
@@ -73,7 +73,6 @@ class DashboardController extends Controller
                     return [
                         'academic_year' => $item->academic_year,
                         'semester' => $item->semester,
-                        // Konversi ke persentase: (score / 4) * 100
                         'average_score' => round(($item->average_score / 4) * 100, 2),
                         'total_supervisi' => $item->total_supervisi
                     ];
