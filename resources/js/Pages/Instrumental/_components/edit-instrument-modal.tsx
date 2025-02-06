@@ -4,11 +4,11 @@ import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import {router} from "@inertiajs/react";
+import { router } from "@inertiajs/react";
 
 import { AlertCircle, RotateCw } from "lucide-react";
 
-import {Button} from "@/Components/ui/button";
+import { Button } from "@/Components/ui/button";
 import Modal from "@/Components/Modal";
 import { Input } from "@/Components/ui/input";
 
@@ -28,12 +28,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/Components/ui/select";
-import {Textarea} from "@/Components/ui/textarea";
-import {Checkbox} from "@/Components/ui/checkbox";
-import {RadioGroup, RadioGroupItem} from "@/Components/ui/radio-group";
+import { Textarea } from "@/Components/ui/textarea";
+import { Checkbox } from "@/Components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/Components/ui/radio-group";
 
-import {Instrument} from "@/types/app";
-import {data} from "autoprefixer";
+import { Instrument } from "@/types/app";
+import { data } from "autoprefixer";
 
 const formSchema = z
     .object({
@@ -49,20 +49,24 @@ const formSchema = z
 
         allowed_extensions: z.array(z.string()),
         max_size: z.string().optional(),
-        is_multiple: z.enum(["yes", "no"], {
-            required_error: "You need to select a status type.",
-        }).optional(),
-    }).refine(data => {
-
-        if (data.response_type === 'upload') {
-            return data.max_size !== "" && data.is_multiple !== undefined;
-        }
-
-        return true;
-
-    }, {
-        message: 'Harus diisi jika tipe upload'
+        is_multiple: z
+            .enum(["yes", "no"], {
+                required_error: "You need to select a status type.",
+            })
+            .optional(),
     })
+    .refine(
+        (data) => {
+            if (data.response_type === "upload") {
+                return data.max_size !== "" && data.is_multiple !== undefined;
+            }
+
+            return true;
+        },
+        {
+            message: "Harus diisi jika tipe upload",
+        }
+    );
 
 const items = [
     {
@@ -84,12 +88,11 @@ const items = [
 ] as const;
 
 interface IProps {
-    onClose : () => void;
-    instrument: Instrument
+    onClose: () => void;
+    instrument: Instrument;
 }
 
-const EditInstrumentModal = ({onClose, instrument}: IProps) => {
-
+const EditInstrumentModal = ({ onClose, instrument }: IProps) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -98,24 +101,23 @@ const EditInstrumentModal = ({onClose, instrument}: IProps) => {
             name: instrument.name,
             response_type: instrument.type,
             description: instrument.description ?? "",
-            max_size: `${instrument.max_size}` ?? "",
+            max_size: `${instrument.max_size}`,
             allowed_extensions: instrument.allowed_extension ?? [],
-            is_multiple: instrument.is_multiple === 1 ? "yes" : "no"
+            is_multiple: instrument.is_multiple === 1 ? "yes" : "no",
         },
     });
-    const {watch} = form;
+    const { watch } = form;
 
     const responseType = watch("response_type");
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-
         setIsLoading(true);
         await axios
             .put(`/instrumental/${instrument.id}/instrument`, values)
             .then((data) => {
                 const { message } = data.data;
                 toast.success(`${message}`);
-                onClose()
+                onClose();
                 router.reload();
             })
             .catch((err) => {
@@ -129,7 +131,7 @@ const EditInstrumentModal = ({onClose, instrument}: IProps) => {
             });
     }
 
-    return(
+    return (
         <Modal
             onClose={onClose}
             show={true}
@@ -150,7 +152,7 @@ const EditInstrumentModal = ({onClose, instrument}: IProps) => {
                         <FormField
                             control={form.control}
                             name="name"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Nama</FormLabel>
                                     <FormControl>
@@ -160,7 +162,7 @@ const EditInstrumentModal = ({onClose, instrument}: IProps) => {
                                             disabled={isLoading}
                                         />
                                     </FormControl>
-                                    <FormMessage/>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -180,10 +182,18 @@ const EditInstrumentModal = ({onClose, instrument}: IProps) => {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="upload">Upload</SelectItem>
-                                            <SelectItem value="link">Link</SelectItem>
-                                            <SelectItem value="streaming">Streaming</SelectItem>
-                                            <SelectItem value="report">Wawancara offline</SelectItem>
+                                            <SelectItem value="upload">
+                                                Upload
+                                            </SelectItem>
+                                            <SelectItem value="link">
+                                                Link
+                                            </SelectItem>
+                                            <SelectItem value="streaming">
+                                                Streaming
+                                            </SelectItem>
+                                            <SelectItem value="report">
+                                                Wawancara offline
+                                            </SelectItem>
                                         </SelectContent>
                                     </Select>
                                     <FormDescription className="text-xs text-muted-foreground">
@@ -194,12 +204,10 @@ const EditInstrumentModal = ({onClose, instrument}: IProps) => {
                             )}
                         />
 
-
-
                         <FormField
                             control={form.control}
                             name="description"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Deskripsi</FormLabel>
                                     <FormControl>
@@ -209,130 +217,147 @@ const EditInstrumentModal = ({onClose, instrument}: IProps) => {
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage/>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
 
-                        {
-                            responseType === "upload" && (
-                                <>
-                                    <FormField
-                                        control={form.control}
-                                        name="max_size"
-                                        render={({field}) => (
-                                            <FormItem>
-                                                <FormLabel>Besar ukuran file</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        placeholder="MB..."
-                                                        {...field}
-                                                        disabled={isLoading}
-                                                        type="number"
-                                                    />
-                                                </FormControl>
-                                                <FormMessage/>
-                                                <FormDescription className="text-xs text-muted-foreground">
-                                                    contoh 1 MB
+                        {responseType === "upload" && (
+                            <>
+                                <FormField
+                                    control={form.control}
+                                    name="max_size"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>
+                                                Besar ukuran file
+                                            </FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="MB..."
+                                                    {...field}
+                                                    disabled={isLoading}
+                                                    type="number"
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                            <FormDescription className="text-xs text-muted-foreground">
+                                                contoh 1 MB
+                                            </FormDescription>
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="allowed_extensions"
+                                    render={() => (
+                                        <FormItem>
+                                            <div className="mb-4 mt-7">
+                                                <FormLabel>Validasi</FormLabel>
+                                                <FormDescription>
+                                                    Silahkan pilih validasi
+                                                    untuk dokumen
                                                 </FormDescription>
-                                            </FormItem>
-                                        )}
-                                    />
+                                            </div>
 
-                                    <FormField
-                                        control={form.control}
-                                        name="allowed_extensions"
-                                        render={() => (
-                                            <FormItem>
-                                                <div className="mb-4 mt-7">
-                                                    <FormLabel>Validasi</FormLabel>
-                                                    <FormDescription>
-                                                        Silahkan pilih validasi untuk dokumen
-                                                    </FormDescription>
-                                                </div>
+                                            <div className="flex items-center gap-x-4  border p-3 bg-gray-100">
+                                                {items.map((item) => (
+                                                    <FormField
+                                                        key={item.id}
+                                                        control={form.control}
+                                                        name="allowed_extensions"
+                                                        render={({ field }) => {
+                                                            return (
+                                                                <FormItem
+                                                                    key={
+                                                                        item.id
+                                                                    }
+                                                                    className="flex flex-row items-center  space-x-2 space-y-0"
+                                                                >
+                                                                    <FormControl>
+                                                                        <Checkbox
+                                                                            checked={field.value?.includes(
+                                                                                item.id
+                                                                            )}
+                                                                            onCheckedChange={(
+                                                                                checked
+                                                                            ) => {
+                                                                                return checked
+                                                                                    ? field.onChange(
+                                                                                          [
+                                                                                              ...field.value,
+                                                                                              item.id,
+                                                                                          ]
+                                                                                      )
+                                                                                    : field.onChange(
+                                                                                          field.value?.filter(
+                                                                                              (
+                                                                                                  value
+                                                                                              ) =>
+                                                                                                  value !==
+                                                                                                  item.id
+                                                                                          )
+                                                                                      );
+                                                                            }}
+                                                                        />
+                                                                    </FormControl>
+                                                                    <FormLabel className="text-sm font-normal">
+                                                                        {
+                                                                            item.label
+                                                                        }
+                                                                    </FormLabel>
+                                                                </FormItem>
+                                                            );
+                                                        }}
+                                                    />
+                                                ))}
+                                            </div>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
-                                                <div className="flex items-center gap-x-4  border p-3 bg-gray-100">
-                                                    {items.map((item) => (
-                                                        <FormField
-                                                            key={item.id}
-                                                            control={form.control}
-                                                            name="allowed_extensions"
-                                                            render={({ field }) => {
-                                                                return (
-                                                                    <FormItem
-                                                                        key={item.id}
-                                                                        className="flex flex-row items-center  space-x-2 space-y-0"
-                                                                    >
-                                                                        <FormControl>
-                                                                            <Checkbox
-                                                                                checked={field.value?.includes(item.id)}
-                                                                                onCheckedChange={(checked) => {
-                                                                                    return checked
-                                                                                        ? field.onChange([
-                                                                                            ...field.value,
-                                                                                            item.id,
-                                                                                        ])
-                                                                                        : field.onChange(
-                                                                                            field.value?.filter(
-                                                                                                (value) => value !== item.id
-                                                                                            )
-                                                                                        );
-                                                                                }}
-                                                                            />
-                                                                        </FormControl>
-                                                                        <FormLabel className="text-sm font-normal">
-                                                                            {item.label}
-                                                                        </FormLabel>
-                                                                    </FormItem>
-                                                                );
-                                                            }}
-                                                        />
-                                                    ))}
-                                                </div>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    <FormField
-                                        control={form.control}
-                                        name="is_multiple"
-                                        render={({ field }) => (
-                                            <FormItem className="space-y-3">
-                                                <FormLabel>Upload per instrumen</FormLabel>
-                                                <FormControl>
-                                                    <RadioGroup
-                                                        onValueChange={field.onChange}
-                                                        defaultValue={field.value}
-                                                        className="flex flex-col space-y-1"
-                                                    >
-                                                        <FormItem className="flex items-center space-x-3 space-y-0">
-                                                            <FormControl>
-                                                                <RadioGroupItem value="yes" />
-                                                            </FormControl>
-                                                            <FormLabel className="font-normal">
-                                                                Iya
-                                                            </FormLabel>
-                                                        </FormItem>
-                                                        <FormItem className="flex items-center space-x-3 space-y-0">
-                                                            <FormControl>
-                                                                <RadioGroupItem value="no" />
-                                                            </FormControl>
-                                                            <FormLabel className="font-normal">
-                                                                Tidak
-                                                            </FormLabel>
-                                                        </FormItem>
-                                                    </RadioGroup>
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                </>
-                            )
-                        }
-
-
+                                <FormField
+                                    control={form.control}
+                                    name="is_multiple"
+                                    render={({ field }) => (
+                                        <FormItem className="space-y-3">
+                                            <FormLabel>
+                                                Upload per instrumen
+                                            </FormLabel>
+                                            <FormControl>
+                                                <RadioGroup
+                                                    onValueChange={
+                                                        field.onChange
+                                                    }
+                                                    defaultValue={field.value}
+                                                    className="flex flex-col space-y-1"
+                                                >
+                                                    <FormItem className="flex items-center space-x-3 space-y-0">
+                                                        <FormControl>
+                                                            <RadioGroupItem value="yes" />
+                                                        </FormControl>
+                                                        <FormLabel className="font-normal">
+                                                            Iya
+                                                        </FormLabel>
+                                                    </FormItem>
+                                                    <FormItem className="flex items-center space-x-3 space-y-0">
+                                                        <FormControl>
+                                                            <RadioGroupItem value="no" />
+                                                        </FormControl>
+                                                        <FormLabel className="font-normal">
+                                                            Tidak
+                                                        </FormLabel>
+                                                    </FormItem>
+                                                </RadioGroup>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </>
+                        )}
 
                         <div className="w-full flex items-center gap-x-3">
                             <Button
@@ -343,7 +368,7 @@ const EditInstrumentModal = ({onClose, instrument}: IProps) => {
                                 disabled={isLoading}
                             >
                                 {isLoading && (
-                                    <RotateCw className="mr-2 h-4 w-4 animate-spin"/>
+                                    <RotateCw className="mr-2 h-4 w-4 animate-spin" />
                                 )}
                                 Batal
                             </Button>
@@ -353,7 +378,7 @@ const EditInstrumentModal = ({onClose, instrument}: IProps) => {
                                 disabled={isLoading}
                             >
                                 {isLoading && (
-                                    <RotateCw className="mr-2 h-4 w-4 animate-spin"/>
+                                    <RotateCw className="mr-2 h-4 w-4 animate-spin" />
                                 )}
                                 Simpan
                             </Button>
@@ -362,7 +387,7 @@ const EditInstrumentModal = ({onClose, instrument}: IProps) => {
                 </Form>
             </div>
         </Modal>
-    )
-}
+    );
+};
 
 export default EditInstrumentModal;

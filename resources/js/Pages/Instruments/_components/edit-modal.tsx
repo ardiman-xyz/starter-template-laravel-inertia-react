@@ -50,7 +50,7 @@ export const EditModal = ({ defaultData, isOpen, onClose }: EditModalProps) => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
         await axios
-            .put(route("instrument.update", { id: defaultData.id }), values)
+            .put(`/instruments/${defaultData.id}`, values)
             .then((data) => {
                 const { message } = data.data;
                 toast.success(`${message}`);

@@ -66,11 +66,18 @@ Route::middleware(["cekCookie"])->group(function () {
             Route::get("/", [\App\Http\Controllers\InstrumentController::class, "index"])->name("instrument.index");
             Route::post("/", [\App\Http\Controllers\InstrumentController::class, "store"]);
             Route::get("{id}", [\App\Http\Controllers\InstrumentController::class, "show"])->name("instrument.detail");
-            Route::post("{instrument_id}/item", [\App\Http\Controllers\InstrumentItemController::class, "store"]);
-            Route::put("{id}/item", [\App\Http\Controllers\InstrumentController::class, "update"])->name("instrument.update");
-            Route::put("{id}/item", [\App\Http\Controllers\InstrumentItemController::class, "edit"]);
-            Route::delete("{id}/item", [\App\Http\Controllers\InstrumentItemController::class, "destroy"]);
-            Route::post("run-migration", [\App\Http\Controllers\InstrumentController::class, "runMigration"])->name('components.run-migration');;
+            
+            // Instrument updates
+            Route::put("{id}", [\App\Http\Controllers\InstrumentController::class, "update"])->name("instrument.update");
+            
+            // Item operations
+            Route::prefix("{id}/item")->group(function () {
+                Route::post("/", [\App\Http\Controllers\InstrumentItemController::class, "store"]);
+                Route::put("/", [\App\Http\Controllers\InstrumentItemController::class, "edit"])->name("item.update");
+                Route::delete("/", [\App\Http\Controllers\InstrumentItemController::class, "destroy"]);
+            });
+        
+            Route::post("run-migration", [\App\Http\Controllers\InstrumentController::class, "runMigration"])->name('components.run-migration');
         });
     });
 

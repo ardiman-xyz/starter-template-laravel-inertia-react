@@ -65,6 +65,7 @@ class InstrumentController extends Controller
 
     public function update(Request $request, string $id)
     {
+
         $validated = $request->validate([
             'name' => 'required|string|max:255'
         ], [
