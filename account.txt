@@ -8,3 +8,17 @@ password: Selvi123_
         name : Ophi Ramadhan
         email: ophy@gmail.com
         pw: Ophy123_
+
+
+account two:
+name: Wa Rosida
+email: rosida@gmail.com
+password: Rosida123_
+
+ - teacher account
+    - teacher 1: 
+        name : Fera Fersika, S.Pd
+        email: fera.fersiska@gmail.com
+        pw: Fera123_
+
+

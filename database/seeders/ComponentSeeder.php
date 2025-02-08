@@ -17,46 +17,47 @@ class ComponentSeeder extends Seeder
      */
     public function run(): void
     {
-
         $tokenService = new TokenService();
-
         $currentUser = $tokenService->currentUser();
-
         $user = User::find($currentUser->id);
         $schoolId = $user->school->id;
 
-
         $components = [
             [
-                'title' => 'Kegiatan Pembukaan Pembelajaran',
+                'title' => 'Kegiatan Pendahuluan',
                 'details' => [
-                    'Menyiapkan peserta didik',
-                    'Melakukan Apersepsi',
-                    'Menyampaikan tujuan pembelajaran',
+                    'Menyiapkan peserta didik secara fisik dan psikis dimulai dari kedatangan dengan menyapa dan memberi salam',
+                    'Guru menyampaikan rencana kegiatan baik individual, kerja kelompok dan melakukan observasi serta menyampaikan tujuan',
+                    'Melakukan apersepsi: mengaitkan materi dengan pembelajaran sebelumnya dan mendemonstrasikan sesuatu yang terkait dengan materi pembelajaran',
                     'Penampilan guru',
                 ],
             ],
             [
-                'title' => 'Kegiatan Inti Pembelajaran',
+                'title' => 'Kegiatan inti',
                 'details' => [
-                    'Kemampuan guru merumuskan tujuan pembelajaran secara operasional',
                     'Menguasai materi pelajaran',
-                    'Melaksanakan pembelajaran sesuai dengan kompetensi yang akan dicapai',
-                    'Keterampilan dan kreativitas penggunaan APE serta media pembelajaran',
-                    'Menggunakan bahasa yang baik dan benar',
-                    'Keterampilan mengelola dan memanfaatkan alam, lingkungan sebagai alat dan sumber belajar',
-                    'Sikap dan gaya mengajar guru',
-                    'Kemampuan mengorganisir siswa dan mengelola kelas',
-                    'Menunjukkan sikap terbuka, menumbuhkan, dan merespon positif partisipasi aktif siswa',
-                    'Memahami kepribadian dan perkembangan siswa',
-                    'Melaksanakan pembelajaran aktif, inovatif, kreatif, dan menyenangkan',
+                    'Menyesuaikan materi dengan tujuan pembelajaran',
+                    'Mengaitkan materi dengan pengetahuan lain yang relevan dengan lingkungan sekitar, perkembangan iptek dan kehidupan nyata',
+                    'Menyajikan materi dengan tepat dan sistematis',
+                    'Melaksanakan pembelajaran sesuai dengan kompetensi yang akan dicapai dan bersifat kontekstual',
+                    'Melaksanakan pembelajaran yang menumbuhkan partisipasi aktif peserta didik',
+                    'Melaksanakan pembelajaran sesuai dengan alokasi waktu yang direncanakan',
+                    'Melaksanakan pembelajaran yang mengasah kemampuan Creativity peserta didik (aktifitas HOST)',
+                    'Melaksanakan pembelajaran yang mengasah kemampuan Critical Thinking peserta didik (aktifitas HOST)',
+                    'Melaksanakan pembelajaran yang mengasah kemampuan Communication peserta didik (aktifitas HOST)',
+                    'Melaksanakan pembelajaran yang mengasah kemampuan Collaboration peserta didik (Aktifitas HOST)',
+                    'Menciptakan suasana yang kondusif dan disiplin positif dalam menegakan aturan kelas yang telah disepakati bersama',
+                    'Menunjukan keterampilan dalam penggunaan sumber belajar yang bervariasi',
+                    'Menunjukan keterampilan dalam penggunaan media pembelajaran',
+                    'Menggunakan bahasa secara jelas dan benar',
                 ],
             ],
             [
-                'title' => 'Kegiatan Penutup Pembelajaran',
+                'title' => 'Kegiatan Penutup',
                 'details' => [
-                    'Mendiskusikan kegiatan yang telah dan akan dilaksanakan',
-                    'Melakukan penilaian dan refleksi terhadap kegiatan pembelajaran yang sudah dilakukan',
+                    'Menunjukkan aktivitas belajar yang bertujuan meningkatkan pengetahuan dan keterampilan mengajar',
+                    'Melaksanakan penilaian sikap, pengetahuan dan keterampalan peserta didik',
+                    'Melakukan refleksi terhadap kegiatan yang telah dilaksanakan dan menyampaikan kegiatan yang akan dilaksanakan',
                 ],
             ],
         ];
@@ -70,8 +71,8 @@ class ComponentSeeder extends Seeder
             foreach ($componentData['details'] as $detail) {
                 ComponentDetail::create([
                     'component_id' => $component->id,
-                    'name' => $detail, 
-                    'max_score' => 4, 
+                    'name' => $detail,
+                    'max_score' => 4,
                     'description' => null,
                 ]);
             }
