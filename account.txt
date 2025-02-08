@@ -1,0 +1,10 @@
+account one:
+name: Selvi Ekawati
+email: selvi.ekawati@gmail.com
+password: Selvi123_
+
+ - teacher account
+    - teacher 1: 
+        name : Ophi Ramadhan
+        email: ophy@gmail.com
+        pw: Ophy123_
