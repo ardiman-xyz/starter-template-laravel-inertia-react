@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 use Spatie\Browsershot\Browsershot;
 use Spatie\Browsershot\Exceptions\CouldNotTakeBrowsershot;
 use Spatie\LaravelPdf\Facades\Pdf;
@@ -34,6 +35,6 @@ class ReportController extends Controller
     public function preview()
     {
 
-       return view("preview");
+       return Inertia::render("Teachers/Report/Preview");
     }
 }

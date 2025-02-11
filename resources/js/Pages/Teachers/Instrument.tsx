@@ -10,6 +10,7 @@ import {
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Component } from "@/types/app";
 import { Head } from "@inertiajs/react";
+import { AlertCircle } from "lucide-react";
 import React from "react";
 
 interface Props {
@@ -17,6 +18,36 @@ interface Props {
 }
 
 const Instrument = ({ components }: Props) => {
+    if (!components?.length) {
+        return (
+            <Authenticated>
+                <Head title="Instrument" />
+
+                <div className="container mx-auto py-6">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Butir Komponen</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="flex flex-col items-center justify-center py-12 px-4">
+                                <AlertCircle className="h-12 w-12 text-muted-foreground mb-4" />
+                                <p className="text-lg font-medium text-muted-foreground mb-2">
+                                    Belum ada instrument penilaian
+                                </p>
+                                <p className="text-sm text-muted-foreground text-center max-w-md">
+                                    Sekolah Anda belum melakukan pengaturan
+                                    instrument penilaian guru. Silakan hubungi
+                                    administrator sekolah untuk melakukan
+                                    penginputan instrument penilaian.
+                                </p>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+            </Authenticated>
+        );
+    }
+
     return (
         <Authenticated>
             <Head title="Instrument" />

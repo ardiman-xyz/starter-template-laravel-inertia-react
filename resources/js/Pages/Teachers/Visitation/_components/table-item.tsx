@@ -32,7 +32,7 @@ export const TableItem = ({
 
     const handleDownload = (event: React.MouseEvent) => {
         event.stopPropagation();
-        router.visit(route("report.teacher"));
+        router.visit(route("teacher.report.preview"));
     };
 
     return (
