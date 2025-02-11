@@ -1,9 +1,4 @@
-import { AlertCircle, RotateCw } from "lucide-react";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { router } from "@inertiajs/react";
-
+import { AlertCircle, RotateCw, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
@@ -15,8 +10,12 @@ import {
     FormLabel,
     FormMessage,
 } from "@/Components/ui/form";
+import { Alert, AlertDescription } from "@/Components/ui/alert";
 import axios from "axios";
-import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
+import { router } from "@inertiajs/react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const formSchema = z.object({
     name: z.string().optional(),
@@ -40,6 +39,7 @@ interface AuthForm {
 const AuthFomAction = ({ variant }: AuthForm) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const [showPassword, setShowPassword] = useState<boolean>(false);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -73,6 +73,10 @@ const AuthFomAction = ({ variant }: AuthForm) => {
                 setIsLoading(false);
             });
     }
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
     return (
         <div className="mt-6 w-[313px]">
@@ -133,12 +137,31 @@ const AuthFomAction = ({ variant }: AuthForm) => {
                                 <FormItem>
                                     <FormLabel>Password</FormLabel>
                                     <FormControl>
-                                        <Input
-                                            placeholder="Masukkan masukkan password..."
-                                            {...field}
-                                            disabled={isLoading}
-                                            type="password"
-                                        />
+                                        <div className="relative">
+                                            <Input
+                                                placeholder="Masukkan password..."
+                                                {...field}
+                                                disabled={isLoading}
+                                                type={
+                                                    showPassword
+                                                        ? "text"
+                                                        : "password"
+                                                }
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={
+                                                    togglePasswordVisibility
+                                                }
+                                                className="absolute right-2 top-2 text-gray-500 hover:text-gray-700"
+                                            >
+                                                {showPassword ? (
+                                                    <EyeOff className="h-5 w-5" />
+                                                ) : (
+                                                    <Eye className="h-5 w-5" />
+                                                )}
+                                            </button>
+                                        </div>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -158,25 +181,6 @@ const AuthFomAction = ({ variant }: AuthForm) => {
                         </div>
                     </form>
                 </Form>
-            </div>
-            <div className="mt-6">
-                <div className="relative">
-                    <div
-                        className="
-                            absolute
-                            inset-0
-                            flex
-                            items-center
-                            "
-                    >
-                        <div className="w-full border-t border-gray-300" />
-                    </div>
-                    <div className="relative flex justify-center text-sm">
-                        <span className="bg-white px-2 text-gray-500">
-                            Or continue with
-                        </span>
-                    </div>
-                </div>
             </div>
         </div>
     );

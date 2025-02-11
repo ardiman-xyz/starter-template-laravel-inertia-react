@@ -16,7 +16,7 @@ export const SchoolProfile = () => {
                 </h1>
                 <p className="text-sm font-albert text-gray-700">
                     Selamat datang admin, di aplikasi{" "}
-                    <span className="font-semibold">sispeng-tk.id</span>
+                    <span className="font-semibold">supeng-tk.id</span>
                 </p>
             </div>
             <div className="absolute md:flex hidden -top-3 right-10">

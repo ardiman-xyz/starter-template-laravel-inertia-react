@@ -1,9 +1,7 @@
 import { TableCell, TableRow } from "@/Components/ui/table";
 import React, { useState } from "react";
 import axios from "axios";
-
 import { AssessmentAnswer, Component, ComponentDetail } from "@/types/app";
-
 import useVisitationContextNew from "@/Context/useVisitationContextNew";
 import { toast } from "sonner";
 import { router } from "@inertiajs/react";
@@ -12,7 +10,7 @@ interface IProps {
     index: number;
     data: ComponentDetail;
     instrument: Component;
-    assessmentAnswers?: AssessmentAnswer[]; // Tambahkan prop ini
+    assessmentAnswers?: AssessmentAnswer[];
 }
 
 type SelectedOption = {
@@ -28,10 +26,8 @@ export const TableItemDetail = ({
     assessmentAnswers = [],
 }: IProps) => {
     const { assessmentId } = useVisitationContextNew();
-
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    // Check apakah video untuk komponen ini sudah selesai
     const isVideoCompleted =
         assessmentAnswers?.find(
             (answer) => Number(answer.component_id) === Number(instrument.id)
@@ -47,7 +43,6 @@ export const TableItemDetail = ({
             .slice(0, currentIndex)
             .every((answer) => answer.is_done);
 
-    // Video saat ini harus selesai dan video sebelumnya juga harus selesai
     const canInputScore = isVideoCompleted && previousVideosCompleted;
 
     const handleRadioChange = (
@@ -78,17 +73,32 @@ export const TableItemDetail = ({
             });
     };
 
+    // Format the text to ensure proper alignment and indentation
+    const formatItemText = (index: number, text: string) => {
+        const letter = String.fromCharCode(97 + index);
+        return (
+            <div className="flex">
+                <span className="w-6">{letter}.</span>
+                <span className="flex-1">{text}</span>
+            </div>
+        );
+    };
+
     return (
         <TableRow className="relative">
-            <TableCell className="border">
-                {`${String.fromCharCode(97 + index)}. ${data.name}`}
-                {!canInputScore && (
-                    <span className="text-xs text-red-500 block">
-                        {!isVideoCompleted
-                            ? "Selesaikan video ini terlebih dahulu"
-                            : "Selesaikan video sebelumnya terlebih dahulu"}
-                    </span>
-                )}
+            <TableCell className="border p-2">
+                <div className="space-y-1">
+                    <div className="text-sm">
+                        {formatItemText(index, data.name)}
+                    </div>
+                    {!canInputScore && (
+                        <div className="text-xs text-red-500 ml-6">
+                            {!isVideoCompleted
+                                ? "Selesaikan video ini terlebih dahulu"
+                                : "Selesaikan video sebelumnya terlebih dahulu"}
+                        </div>
+                    )}
+                </div>
             </TableCell>
             {[1, 2, 3, 4].map((score) => (
                 <TableCell key={score} className="text-center border">

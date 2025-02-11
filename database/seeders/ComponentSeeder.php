@@ -48,7 +48,7 @@ class ComponentSeeder extends Seeder
                     'Melaksanakan pembelajaran yang mengasah kemampuan Collaboration peserta didik (Aktifitas HOST)',
                     'Menciptakan suasana yang kondusif dan disiplin positif dalam menegakan aturan kelas yang telah disepakati bersama',
                     'Menunjukan keterampilan dalam penggunaan sumber belajar yang bervariasi',
-                    'Menunjukan keterampilan dalam penggunaan media pembelajaran',
+                    'Menunjukan keterampilan dalam penggunaan media pembelajaran berbasis teknologi',
                     'Menggunakan bahasa secara jelas dan benar',
                 ],
             ],

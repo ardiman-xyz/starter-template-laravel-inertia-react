@@ -17,6 +17,8 @@ Route::middleware(["cekCookie"])->group(function () {
             Route::put("profile/account/password", [\App\Http\Controllers\Teacher\ProfileController::class, "change_password"])->name("teachers.password");
             Route::put("profile/account", [\App\Http\Controllers\Teacher\ProfileController::class, "bio"]);
 
+            Route::get("instrument", [\App\Http\Controllers\Teacher\InstrumentController::class, "index"]);
+
 
             Route::prefix("visitation")->group(function () {
                 Route::get("/", [\App\Http\Controllers\Teacher\VisitationController::class, 'index'])->name("teacher.visitation.index");

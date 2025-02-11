@@ -58,6 +58,12 @@ const Routes = [
     },
     {
         icon: ClipboardCheck,
+        label: "Instrumen",
+        href: "/teachers/instrument",
+        requiredRoles: ["Teacher"],
+    },
+    {
+        icon: ClipboardCheck,
         label: "Supervisi",
         href: "/teachers/visitation",
         requiredRoles: ["Teacher"],
