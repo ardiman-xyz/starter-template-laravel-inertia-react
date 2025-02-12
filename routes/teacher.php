@@ -28,7 +28,7 @@ Route::middleware(["cekCookie"])->group(function () {
                 Route::post("{id}/answer", [\App\Http\Controllers\Teacher\VisitationController::class, 'answer'])->name("teacher.visitation.answer");
             });
 
-            Route::get("report/preview", [ReportController::class, "preview"])->name("teacher.report.preview");
+            Route::get("report/preview/{id}", [ReportController::class, "preview"])->name("teacher.report.preview");
         });
 
     });

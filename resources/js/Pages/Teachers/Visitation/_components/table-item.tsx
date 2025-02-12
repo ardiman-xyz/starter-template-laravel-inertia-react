@@ -1,4 +1,4 @@
-import { FileDown, Info, MoreHorizontal } from "lucide-react";
+import { Eye, FileDown, Info, MoreHorizontal } from "lucide-react";
 import { router } from "@inertiajs/react";
 import { cn } from "@/lib/utils";
 
@@ -32,7 +32,7 @@ export const TableItem = ({
 
     const handleDownload = (event: React.MouseEvent) => {
         event.stopPropagation();
-        router.visit(route("teacher.report.preview"));
+        router.visit(route("teacher.report.preview", data.id));
     };
 
     return (
@@ -64,8 +64,8 @@ export const TableItem = ({
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem className="cursor-pointer">
-                            <Info className="h-4 w-4 mr-2" />
-                            Informasi
+                            <Eye className="h-4 w-4 mr-2" />
+                            Lihat
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         {data.status === "finish" && (
@@ -74,7 +74,7 @@ export const TableItem = ({
                                 className="cursor-pointer"
                             >
                                 <FileDown className="h-4 w-4 mr-2" />
-                                Report
+                                Unduh Laporan
                             </DropdownMenuItem>
                         )}
                     </DropdownMenuContent>
