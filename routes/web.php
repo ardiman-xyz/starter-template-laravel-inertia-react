@@ -19,6 +19,7 @@ Route::get('/', function () {
    return Redirect::to("/auth");
 });
 
+Route::get("verification/{id}", [\App\Http\Controllers\WebController::class, "validateReport"])->name("report.validation");
 Route::get("invitation", [\App\Http\Controllers\InvitationController::class, "validateInvitation"]);
 Route::post("invitations/reset-password", [\App\Http\Controllers\InvitationController::class, "resetPassword"]);
 

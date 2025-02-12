@@ -22,7 +22,6 @@ const TableItem = ({ id, name, index }: TableItemProps) => {
     const toggleModalEdit = () => setIsEditModalOpen(!isEditModalOpen);
     const handleDelete = async (id: string) => {
         if (!confirm("Apakah anda yakin ?")) {
-            console.info("no");
             return;
         }
 

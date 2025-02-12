@@ -30,8 +30,6 @@ const Dashboard = ({
     categories,
     averages,
 }: DashboardProps) => {
-    console.info("categories", categories);
-
     const setTrendVisitation = useDashboardStore(
         (state) => state.setTrendVisitation
     );

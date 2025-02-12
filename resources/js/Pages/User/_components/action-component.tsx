@@ -25,7 +25,7 @@ const ActionComponent = ({ id, name, email, role }: ActionComponentProps) => {
 
     const handleDelete = async () => {
         if (!confirm("Apakah anda yakin ?")) {
-            console.info("no");
+            ("no");
             return;
         }
 

@@ -1,12 +1,10 @@
 import { Head } from "@inertiajs/react";
 import { QRCodeSVG } from "qrcode.react";
-import { format } from "date-fns";
 import React, { useEffect } from "react";
 
 import Guest from "@/Layouts/GuestLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import { Assessment, Component } from "@/types/app";
-import { formatDate } from "@/helper";
 import { formatDateTime } from "@/lib/datetime";
 
 interface PreviewProps {
@@ -23,7 +21,7 @@ interface PreviewProps {
 }
 
 const Preview = ({ data }: PreviewProps) => {
-    const qrUrl = `${window.location.origin}/visitation/${data.assessment.id}`;
+    const qrUrl = `${window.location.origin}/verification/${data.assessment.id}`;
 
     useEffect(() => {
         window.print();
@@ -42,7 +40,6 @@ const Preview = ({ data }: PreviewProps) => {
                     </CardHeader>
 
                     <CardContent className="space-y-6 px-8">
-                        {/* Header dengan QR Code */}
                         <div className="relative mb-4">
                             <QRCodeSVG
                                 value={qrUrl}
@@ -52,7 +49,6 @@ const Preview = ({ data }: PreviewProps) => {
                             />
                         </div>
 
-                        {/* Informasi */}
                         <table className="w-full text-sm">
                             <tbody>
                                 <tr>

@@ -66,8 +66,6 @@ const SupervisiCalendar = () => {
                     title: `Supervisi ${event.teacher_name}`,
                 }));
                 setEvents(transformedEvents);
-
-                console.info(transformedEvents);
             } catch (error) {
                 console.error("Error fetching supervisi events:", error);
             } finally {
