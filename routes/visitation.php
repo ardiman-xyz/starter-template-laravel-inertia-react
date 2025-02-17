@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AcademicSemesterController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(["cekCookie"])->group(function () {
@@ -26,6 +27,12 @@ Route::middleware(["cekCookie"])->group(function () {
 
             // video tracking
             Route::post("video/progress", [\App\Http\Controllers\VisitationController::class, "updateProgress"])->name("visitation.video-progress");
+
+
+            Route::prefix("report")->group(function () {
+                Route::get("bulks", [ReportController::class, 'bulkReport'])->name("visitation.bulk-report");
+                Route::get("{id}", [ReportController::class, 'preview'])->name("visitation.report");
+            });
         });
 
         Route::prefix("academic-semester")->group(function () {

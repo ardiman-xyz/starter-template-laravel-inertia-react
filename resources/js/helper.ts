@@ -42,3 +42,14 @@ export const formatIndonesianDateTime = (dateTimeString: string): string => {
     const date = new Date(dateTimeString);
     return date.toLocaleDateString("id-ID", options);
 };
+
+export const formatIndonesianDate = (dateString: string): string => {
+    const options: Intl.DateTimeFormatOptions = {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+    };
+
+    const date = new Date(dateString);
+    return date.toLocaleDateString("id-ID", options);
+};

@@ -19,6 +19,8 @@ import { DeleteAction } from "@/Pages/Visitation/_components/delete-action";
 import { SharedInertiaData } from "@/types/inertia";
 import { Hint } from "@/Components/Hint";
 import { SettingDateModal } from "@/Pages/Visitation/_components/modal/setting-date-modal";
+import Checkbox from "@/Components/Checkbox";
+import { useSupervisionStore } from "@/Context/useSupervisionStore";
 
 interface IProps {
     assessment: Assessment;
@@ -28,12 +30,22 @@ interface IProps {
 const FilterDataItem = ({ assessment, index }: IProps) => {
     const { ziggy } = usePage<SharedInertiaData>().props;
 
+    const { toggleItem, isSelected, hasSelected } = useSupervisionStore();
+
     const [isModalDeleteOpen, setIsModalDeleteOpen] = useState<boolean>(false);
     const [isModalDateOpen, setIsModalDateOpen] = useState<boolean>(false);
 
     return (
         <>
             <TableRow key={index}>
+                <TableCell>
+                    <input
+                        type="checkbox"
+                        checked={isSelected(assessment.id)}
+                        onChange={() => toggleItem(assessment.id)}
+                        className="w-4 h-4"
+                    />
+                </TableCell>
                 <TableCell className="font-medium">{index + 1}</TableCell>
                 <TableCell className="flex items-center gap-x-3">
                     <Avatar className="w-6 h-6">
@@ -110,7 +122,11 @@ const FilterDataItem = ({ assessment, index }: IProps) => {
                 <TableCell className="text-center">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
+                            <Button
+                                variant="ghost"
+                                className="h-8 w-8 p-0"
+                                disabled={hasSelected()}
+                            >
                                 <span className="sr-only">Open menu</span>
                                 <MoreHorizontal className="h-4 w-4" />
                             </Button>
@@ -124,9 +140,19 @@ const FilterDataItem = ({ assessment, index }: IProps) => {
                                     Detail
                                 </DropdownMenuItem>
                             </Link>
-                            <DropdownMenuItem className="cursor-pointer">
+                            <DropdownMenuItem
+                                className="cursor-pointer"
+                                onClick={() =>
+                                    router.get(
+                                        route(
+                                            "visitation.report",
+                                            assessment.id
+                                        )
+                                    )
+                                }
+                            >
                                 <FileDown className="h-4 w-4 mr-2" />
-                                Donwload report
+                                Unduh Hasil
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem

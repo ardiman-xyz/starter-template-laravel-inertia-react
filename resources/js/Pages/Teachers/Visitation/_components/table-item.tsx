@@ -74,7 +74,7 @@ export const TableItem = ({
                                 className="cursor-pointer"
                             >
                                 <FileDown className="h-4 w-4 mr-2" />
-                                Unduh Laporan
+                                Unduh Hasil
                             </DropdownMenuItem>
                         )}
                     </DropdownMenuContent>

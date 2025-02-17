@@ -4,6 +4,7 @@ import Heading from "@/Components/Heading";
 import FilterDataTable from "@/Pages/Visitation/_components/filter-data-table";
 import { CreateFormAssessment } from "@/Pages/Visitation/_components/create-form-assessment";
 import { Assessment } from "@/types/app";
+import { AdvanceAction } from "./_components/AdvanceAction";
 
 interface FilterProps {
     data: Assessment[];
@@ -33,7 +34,8 @@ const FilterPage = ({ data, year, semester }: FilterProps) => {
                     title={`Supervisi tahun ${year} - ${semester}`}
                     description="Laporan Supervisi anda"
                 />
-                <div className="hidden md:flex md:flex-row flex-col  items-center md:gap-x-4 gap-x-0 gap-y-2 md:gap-y-0">
+                <div className="hidden md:flex md:flex-row flex-col gap-x-5 items-center md:gap-x-4  gap-y-2 md:gap-y-0">
+                    <AdvanceAction />
                     <CreateFormAssessment semester={semester} year={year} />
                 </div>
             </div>

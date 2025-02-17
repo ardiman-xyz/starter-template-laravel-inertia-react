@@ -80,6 +80,8 @@ Route::middleware(["cekCookie"])->group(function () {
         
             Route::post("run-migration", [\App\Http\Controllers\InstrumentController::class, "runMigration"])->name('components.run-migration');
         });
+
+      
     });
 
     Route::prefix("/information")->group(function () {
