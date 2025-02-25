@@ -1,8 +1,43 @@
-import { PropsWithChildren } from 'react';
+import ApplicationLogo from "@/Components/ApplicationLogo";
+import { PropsWithChildren } from "react";
 
-export default function Guest({ children }: PropsWithChildren) {
+interface GuestProps extends PropsWithChildren {
+    showNavbar?: boolean;
+}
+
+export default function Guest({ children, showNavbar = true }: GuestProps) {
     return (
-        <div className="min-h-screen w-full font-jakarta ">
+        <div className="min-h-screen w-full font-sans">
+            {showNavbar && (
+                <div className="border-b bg-white">
+                    <div className="container flex items-center justify-between h-14 px-4 md:px-6 max-w-6xl mx-auto">
+                        <div className="flex items-center gap-x-3">
+                            <ApplicationLogo width={40} height={40} />
+                            <h1 className="text-xl font-semibold">Supervisi</h1>
+                        </div>
+                        <nav className="flex items-center gap-4">
+                            <a
+                                href="/"
+                                className="text-sm text-slate-600 hover:text-slate-900"
+                            >
+                                Home
+                            </a>
+                            <a
+                                href="/tutorial"
+                                className="text-sm text-slate-600 hover:text-slate-900"
+                            >
+                                Tutorial
+                            </a>
+                            <a
+                                href="/auth"
+                                className="text-sm text-slate-600 hover:text-slate-900 border rounded-sm px-5 py-1"
+                            >
+                                Login
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+            )}
             <main>{children}</main>
         </div>
     );

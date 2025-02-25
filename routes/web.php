@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Cookie;
@@ -7,17 +8,14 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 
 
-Route::get('/pw-hash', function() {
-    $pw = "Ardiman123_";
 
-    $result = Hash::make($pw);
 
-    echo $result;
-});
+Route::get('/', [HomeController::class, "index"])->name("home");
+Route::get('/tutorial', [HomeController::class, "tutorial"])->name("home.tutorial");
 
-Route::get('/', function () {
-   return Redirect::to("/auth");
-});
+Route::get('/auth', function () {
+    return Redirect::to("/auth");
+ })->name("auth.login.get");
 
 Route::get("verification/{id}", [\App\Http\Controllers\WebController::class, "validateReport"])->name("report.validation");
 Route::get("invitation", [\App\Http\Controllers\InvitationController::class, "validateInvitation"]);

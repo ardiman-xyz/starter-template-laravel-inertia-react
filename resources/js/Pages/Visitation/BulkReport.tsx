@@ -74,7 +74,9 @@ const BulkReport = ({ data }: Props) => {
                                 </td>
                                 <td className="py-2 text-center">
                                     {item.total_score} /{" "}
-                                    {item.component_max_score}
+                                    <span className="text-muted-foreground">
+                                        {item.component_max_score}
+                                    </span>
                                 </td>
                                 <td className="py-2 text-center">
                                     {item.final_score.final_score}%

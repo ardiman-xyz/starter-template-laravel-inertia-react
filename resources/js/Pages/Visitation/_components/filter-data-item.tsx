@@ -21,6 +21,7 @@ import { Hint } from "@/Components/Hint";
 import { SettingDateModal } from "@/Pages/Visitation/_components/modal/setting-date-modal";
 import Checkbox from "@/Components/Checkbox";
 import { useSupervisionStore } from "@/Context/useSupervisionStore";
+import { formatDateTime } from "@/lib/datetime";
 
 interface IProps {
     assessment: Assessment;
@@ -84,19 +85,19 @@ const FilterDataItem = ({ assessment, index }: IProps) => {
                                 className="font-sans underline text-gray-800"
                                 onClick={() => setIsModalDateOpen(true)}
                             >
-                                {formatDate(assessment.started_at)}
+                                {formatDateTime(assessment.started_at)}
                                 <span className="text-orange-800 mx-3">
                                     s/d
                                 </span>
-                                {formatDate(assessment.finished_at)}
+                                {formatDateTime(assessment.finished_at)}
                             </span>
                         </Hint>
                     )}
                     {assessment.status === "finish" && (
                         <span className="font-sans text-gray-600">
-                            {formatDate(assessment.started_at)}
+                            {formatDateTime(assessment.started_at)}
                             <span className="mx-3">s/d</span>
-                            {formatDate(assessment.finished_at)}
+                            {formatDateTime(assessment.finished_at)}
                         </span>
                     )}
                 </TableHead>

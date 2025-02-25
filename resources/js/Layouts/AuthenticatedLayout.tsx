@@ -20,7 +20,7 @@ type IProps = {
 
 export default function Authenticated({ children, breadCrumbs }: IProps) {
     return (
-        <div className="min-h-screen font-inter bg-white">
+        <div className="min-h-screen font-sans bg-white">
             <Toaster richColors />
             <div className="w-full h-[80px] md:pl-64 fixed inset-y-0 bg-white z-50">
                 <div className="w-full p-4 border-b h-full flex items-center bg-white z-50">

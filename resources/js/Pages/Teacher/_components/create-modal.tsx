@@ -19,7 +19,7 @@ import {
     FormMessage,
 } from "@/Components/ui/form";
 import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
-import {AlertCircle, PlusCircle, RotateCw} from "lucide-react";
+import { AlertCircle, Eye, EyeOff, PlusCircle, RotateCw } from "lucide-react";
 import { router } from "@inertiajs/react";
 
 const formSchema = z
@@ -41,19 +41,20 @@ const formSchema = z
         confirm_password: z.string().min(4, {
             message: "konfirmasi password baru wajib di isi!",
         }),
-
     })
     .refine((data) => data.password === data.confirm_password, {
         message: "Password baru dan konfirmasi password harus sama!",
         path: ["confirm_password"],
     });
 
-
-
 const CreateModal = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isOpenModalAdd, setIsOpenModalAdd] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+
+    const toggleShowPassword = () => setShowPassword(!showPassword);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -97,7 +98,8 @@ const CreateModal = () => {
         <div>
             <Button onClick={toggleModalAdd}>
                 <PlusCircle className="h-4 w-4 mr-2" />
-                Tambah</Button>
+                Tambah
+            </Button>
             <Modal
                 onClose={toggleModalAdd}
                 show={isOpenModalAdd}
@@ -138,7 +140,8 @@ const CreateModal = () => {
                                                 />
                                             </FormControl>
                                             <FormDescription className="text-xs text-gray-500">
-                                               Sertakan title pendidikan. ex: john, S.Pd
+                                                Sertakan title pendidikan. ex:
+                                                john, S.Pd
                                             </FormDescription>
                                             <FormMessage />
                                         </FormItem>
@@ -173,12 +176,32 @@ const CreateModal = () => {
                                         <FormItem>
                                             <FormLabel>Password</FormLabel>
                                             <FormControl>
-                                                <Input
-                                                    placeholder="Masukkan password..."
-                                                    type="password"
-                                                    {...field}
-                                                    disabled={isLoading}
-                                                />
+                                                <div className="relative">
+                                                    <Input
+                                                        placeholder="Masukkan password..."
+                                                        type={
+                                                            showPassword
+                                                                ? "text"
+                                                                : "password"
+                                                        }
+                                                        {...field}
+                                                        disabled={isLoading}
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={
+                                                            toggleShowPassword
+                                                        }
+                                                        className="absolute right-3 top-2.5 text-gray-500 hover:text-gray-700"
+                                                        disabled={isLoading}
+                                                    >
+                                                        {showPassword ? (
+                                                            <EyeOff className="h-4 w-4" />
+                                                        ) : (
+                                                            <Eye className="h-4 w-4" />
+                                                        )}
+                                                    </button>
+                                                </div>
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -193,12 +216,32 @@ const CreateModal = () => {
                                                 Konfirmasi password
                                             </FormLabel>
                                             <FormControl>
-                                                <Input
-                                                    placeholder="Konfirmasi password..."
-                                                    {...field}
-                                                    type="password"
-                                                    disabled={isLoading}
-                                                />
+                                                <div className="relative">
+                                                    <Input
+                                                        placeholder="Konfirmasi password..."
+                                                        type={
+                                                            showPassword
+                                                                ? "text"
+                                                                : "password"
+                                                        }
+                                                        {...field}
+                                                        disabled={isLoading}
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={
+                                                            toggleShowPassword
+                                                        }
+                                                        className="absolute right-3 top-2.5 text-gray-500 hover:text-gray-700"
+                                                        disabled={isLoading}
+                                                    >
+                                                        {showPassword ? (
+                                                            <EyeOff className="h-4 w-4" />
+                                                        ) : (
+                                                            <Eye className="h-4 w-4" />
+                                                        )}
+                                                    </button>
+                                                </div>
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>

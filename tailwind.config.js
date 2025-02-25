@@ -78,6 +78,7 @@ module.exports = {
                 albert: ["Albert Sans", "sans-serif"],
                 jakarta: ["Plus Jakarta Sans", "sans-serif"],
                 inter: ["Inter", "sans-serif"],
+                sans: ["Instrument Sans", "sans-serif"],
             },
         },
     },
