@@ -34,8 +34,8 @@ const Preview = ({ data }: PreviewProps) => {
             <div className="container mx-auto py-6 max-w-[210mm] bg-white">
                 <Card className="border-none shadow-none">
                     <CardHeader className="flex flex-row justify-between items-center px-8 pt-6 pb-4">
-                        <CardTitle className="text-xl">
-                            Lembar Instrumen Supervisi Pembelajaran
+                        <CardTitle className="text-xl capitalize">
+                            Hasil supervisi pengajaran
                         </CardTitle>
                     </CardHeader>
 

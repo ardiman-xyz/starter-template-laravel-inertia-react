@@ -18,19 +18,19 @@ export default function Guest({ children, showNavbar = true }: GuestProps) {
                         <nav className="flex items-center gap-4">
                             <a
                                 href="/"
-                                className="text-sm text-slate-600 hover:text-slate-900"
+                                className="text-sm text-slate-600 hover:text-slate-900 print:hidden"
                             >
                                 Home
                             </a>
                             <a
                                 href="/tutorial"
-                                className="text-sm text-slate-600 hover:text-slate-900"
+                                className="text-sm text-slate-600 hover:text-slate-900 print:hidden"
                             >
                                 Tutorial
                             </a>
                             <a
                                 href="/auth"
-                                className="text-sm text-slate-600 hover:text-slate-900 border rounded-sm px-5 py-1"
+                                className="text-sm text-slate-600 hover:text-slate-900 print:hidden border rounded-sm px-5 py-1"
                             >
                                 Login
                             </a>

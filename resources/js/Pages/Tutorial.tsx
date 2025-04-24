@@ -49,9 +49,9 @@ const Tutorial = () => {
             description:
                 "Tutorial lengkap penggunaan sistem supervisi dari awal hingga akhir, mencakup pendaftaran, pengaturan, penilaian, hingga pembuatan laporan.",
             duration: "12:05",
-            thumbnail: "/images/thumb-v-yt.webp",
-            youtubeId: "dQw4w9WgXcQ",
-            youtubeLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+            thumbnail: "/images/thumb-v-yt2.webp",
+            youtubeId: "v2hh0uJ-wGY",
+            youtubeLink: "https://youtu.be/v2hh0uJ-wGY",
         },
     ];
 
@@ -64,7 +64,7 @@ const Tutorial = () => {
             pages: 24,
             fileSize: "2.5 MB",
             thumbnail: "/api/placeholder/100/140",
-            downloadLink: "/files/Tutorial_supervisi_ks.pdf.pdf", // Ganti dengan link PDF yang sebenarnya
+            downloadLink: "/files/Tutorial_supervisi_ks.pdf", // Ganti dengan link PDF yang sebenarnya
         },
         {
             id: 2,
@@ -74,7 +74,7 @@ const Tutorial = () => {
             pages: 18,
             fileSize: "1.8 MB",
             thumbnail: "/api/placeholder/100/140",
-            downloadLink: "/files/Tutorial supervisi_guru.pdf", // Ganti dengan link PDF yang sebenarnya
+            downloadLink: "/files/Tutorial_supervisi_guru.pdf", // Ganti dengan link PDF yang sebenarnya
         },
     ];
 
@@ -125,7 +125,7 @@ const Tutorial = () => {
                                     </CardHeader>
                                     <CardFooter className="pt-0 flex flex-col gap-2">
                                         <a
-                                            href={`https://youtu.be/z9kjWG_1wEI`}
+                                            href={video.youtubeLink}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="w-full"
