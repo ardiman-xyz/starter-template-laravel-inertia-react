@@ -51,7 +51,7 @@ const Tutorial = () => {
             duration: "12:05",
             thumbnail: "/images/thumb-v-yt2.webp",
             youtubeId: "v2hh0uJ-wGY",
-            youtubeLink: "https://youtu.be/v2hh0uJ-wGY",
+            youtubeLink: "https://youtu.be/bR_5iiH2gFE",
         },
     ];
 
