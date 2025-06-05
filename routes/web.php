@@ -6,12 +6,13 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
-
-
-
+use Inertia\Inertia;
 
 Route::get('/', [HomeController::class, "index"])->name("home");
 Route::get('/tutorial', [HomeController::class, "tutorial"])->name("home.tutorial");
+Route::get('/kontak', function() {
+    return Inertia::render("Contact");
+});
 
 Route::get('/auth', function () {
     return Redirect::to("/auth");

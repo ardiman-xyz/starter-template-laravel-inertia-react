@@ -11,7 +11,7 @@ import {
 } from "@/Components/ui/card";
 import { Input } from "@/Components/ui/input";
 import { Copy, Download, FileText, PlayCircle } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface VideoTutorial {
     id: number;
@@ -35,6 +35,8 @@ interface PdfDocument {
 
 const Tutorial = () => {
     const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+    const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+    const [playingVideoId, setPlayingVideoId] = useState<number | null>(null);
 
     const copyToClipboard = (text: string, index: number): void => {
         navigator.clipboard.writeText(text);
@@ -50,7 +52,7 @@ const Tutorial = () => {
                 "Tutorial lengkap penggunaan sistem supervisi dari awal hingga akhir, mencakup pendaftaran, pengaturan, penilaian, hingga pembuatan laporan.",
             duration: "12:05",
             thumbnail: "/images/thumb-v-yt2.webp",
-            youtubeId: "v2hh0uJ-wGY",
+            youtubeId: "bR_5iiH2gFE",
             youtubeLink: "https://youtu.be/bR_5iiH2gFE",
         },
     ];
@@ -64,7 +66,7 @@ const Tutorial = () => {
             pages: 24,
             fileSize: "2.5 MB",
             thumbnail: "/api/placeholder/100/140",
-            downloadLink: "/files/Tutorial_supervisi_ks.pdf", // Ganti dengan link PDF yang sebenarnya
+            downloadLink: "/files/Tutorial_supervisi_ks.pdf",
         },
         {
             id: 2,
@@ -74,9 +76,44 @@ const Tutorial = () => {
             pages: 18,
             fileSize: "1.8 MB",
             thumbnail: "/api/placeholder/100/140",
-            downloadLink: "/files/Tutorial_supervisi_guru.pdf", // Ganti dengan link PDF yang sebenarnya
+            downloadLink: "/files/Tutorial_supervisi_guru.pdf",
         },
     ];
+
+    // Auto-play video pertama saat page load
+    useEffect(() => {
+        const hasSeenAutoplay = localStorage.getItem("tutorial-autoplay-seen");
+
+        if (!hasSeenAutoplay) {
+            setIsVideoPlaying(true);
+            setPlayingVideoId(videos[0].id);
+            localStorage.setItem("tutorial-autoplay-seen", "true");
+        }
+    }, []);
+
+    const handleVideoClick = (video: VideoTutorial) => {
+        if (playingVideoId === video.id) {
+            setIsVideoPlaying(false);
+            setPlayingVideoId(null);
+        } else {
+            setIsVideoPlaying(true);
+            setPlayingVideoId(video.id);
+        }
+    };
+
+    const getYouTubeEmbedUrl = (
+        youtubeId: string,
+        autoplay: boolean = false
+    ) => {
+        const baseUrl = `https://www.youtube.com/embed/${youtubeId}?autoplay=1`;
+        const params = new URLSearchParams({
+            rel: "0",
+            modestbranding: "1",
+            showinfo: "0",
+            ...(autoplay && { autoplay: "1" }),
+        });
+        return `${baseUrl}?${params.toString()}`;
+    };
 
     return (
         <Guest showNavbar={true}>
@@ -88,9 +125,11 @@ const Tutorial = () => {
                         <h1 className="text-2xl font-bold tracking-tight text-slate-900">
                             Tutorial Sistem Supervisi
                         </h1>
+                        <p className="text-slate-600 mt-2">
+                            Pelajari cara menggunakan sistem supervisi dengan
+                            panduan video dan dokumen lengkap
+                        </p>
                     </div>
-
-                    {/* Video Tutorial Section */}
                     <div className="mb-12">
                         <div className="flex items-center mb-6">
                             <PlayCircle className="mr-2 h-5 w-5 text-blue-600" />
@@ -99,74 +138,16 @@ const Tutorial = () => {
                             </h2>
                         </div>
 
-                        <div className="flex flex-col items-center">
-                            {videos.map((video, index) => (
-                                <Card
-                                    key={video.id}
-                                    className="overflow-hidden hover:shadow-md transition-shadow max-w-3xl w-full mb-6"
-                                >
-                                    <div className="relative p-2 rounded overflow-hidden">
-                                        <img
-                                            src={video.thumbnail}
-                                            alt={video.title}
-                                            className="w-full aspect-video object-cover"
-                                        />
-                                        <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
-                                            {video.duration}
-                                        </div>
-                                    </div>
-                                    <CardHeader className="pb-2">
-                                        <CardTitle className="text-xl">
-                                            {video.title}
-                                        </CardTitle>
-                                        <CardDescription>
-                                            {video.description}
-                                        </CardDescription>
-                                    </CardHeader>
-                                    <CardFooter className="pt-0 flex flex-col gap-2">
-                                        <a
-                                            href={video.youtubeLink}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="w-full"
-                                        >
-                                            <Button className="w-full bg-red-600 hover:bg-red-700">
-                                                <PlayCircle className="mr-2 h-4 w-4" />
-                                                Tonton Video
-                                            </Button>
-                                        </a>
-                                        <div className="flex w-full">
-                                            <Input
-                                                value={video.youtubeLink}
-                                                readOnly
-                                                className="text-xs rounded-r-none"
-                                            />
-                                            <Button
-                                                variant="outline"
-                                                size="icon"
-                                                className="rounded-l-none border-l-0"
-                                                onClick={() =>
-                                                    copyToClipboard(
-                                                        video.youtubeLink,
-                                                        index
-                                                    )
-                                                }
-                                            >
-                                                {copiedIndex === index ? (
-                                                    <span className="text-xs px-2 text-green-600">
-                                                        Copied!
-                                                    </span>
-                                                ) : (
-                                                    <Copy className="h-4 w-4" />
-                                                )}
-                                            </Button>
-                                        </div>
-                                    </CardFooter>
-                                </Card>
-                            ))}
+                        <div className="flex flex-col items-center wf">
+                            <div className="w-full aspect-video">
+                                <iframe
+                                    className="w-full h-full rounded"
+                                    src="http://www.youtube.com/embed/bR_5iiH2gFE?rel=0&amp;autoplay=1&mute=1"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                ></iframe>
+                            </div>
                         </div>
                     </div>
-
                     {/* PDF Documents Section */}
                     <div>
                         <div className="flex items-center mb-6">
@@ -219,6 +200,8 @@ const Tutorial = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Modal dihapus sesuai permintaan */}
         </Guest>
     );
 };

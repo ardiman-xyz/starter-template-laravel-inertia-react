@@ -10,12 +10,19 @@ import {
 } from "@/Components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
-import { Info, Users, FileText, BarChart } from "lucide-react";
+import {
+    Info,
+    Users,
+    FileText,
+    BarChart,
+    ClipboardCheck,
+    AreaChart,
+} from "lucide-react";
 
 const Welcome = () => {
     const features = [
         {
-            icon: <BarChart className="h-6 w-6" />,
+            icon: <ClipboardCheck className="h-6 w-6" />,
             title: "Penilaian Terstandar",
             description:
                 "Sistem evaluasi objektif berdasarkan kriteria pendidikan nasional.",
@@ -36,7 +43,7 @@ const Welcome = () => {
             color: "bg-emerald-50 text-emerald-700 border-emerald-200",
         },
         {
-            icon: <Info className="h-6 w-6" />,
+            icon: <AreaChart className="h-6 w-6" />,
             title: "Analisis Performa",
             description:
                 "Visualisasi data untuk memahami tren dan area pengembangan.",
@@ -99,7 +106,7 @@ const Welcome = () => {
                 <div className="container px-4 md:px-6 py-10 max-w-6xl">
                     <div className="text-center mb-10">
                         <h2 className="text-2xl font-bold tracking-tight text-slate-800">
-                            Alur Kerja Sistem Supervisi
+                            Tahapan Kerja Sistem Supervisi
                         </h2>
                         <p className="text-slate-500 mt-2">
                             Proses supervisi yang terstruktur dan efisien

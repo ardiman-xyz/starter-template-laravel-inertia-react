@@ -7,7 +7,7 @@ interface GuestProps extends PropsWithChildren {
 
 export default function Guest({ children, showNavbar = true }: GuestProps) {
     return (
-        <div className="min-h-screen w-full font-sans">
+        <div className="min-h-screen w-full font-inter">
             {showNavbar && (
                 <div className="border-b bg-white">
                     <div className="container flex items-center justify-between h-14 px-4 md:px-6 max-w-6xl mx-auto">
@@ -27,6 +27,12 @@ export default function Guest({ children, showNavbar = true }: GuestProps) {
                                 className="text-sm text-slate-600 hover:text-slate-900 print:hidden"
                             >
                                 Tutorial
+                            </a>
+                            <a
+                                href="/kontak"
+                                className="text-sm text-slate-600 hover:text-slate-900 print:hidden"
+                            >
+                                Kontak
                             </a>
                             <a
                                 href="/auth"
