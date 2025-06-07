@@ -26,10 +26,10 @@ class ComponentSeeder extends Seeder
             [
                 'title' => 'Kegiatan Pendahuluan',
                 'details' => [
-                    'Menyiapkan peserta didik secara fisik dan psikis dimulai dari kedatangan dengan menyapa dan memberi salam',
-                    'Guru menyampaikan rencana kegiatan baik individual, kerja kelompok dan melakukan observasi serta menyampaikan tujuan',
-                    'Melakukan apersepsi: mengaitkan materi dengan pembelajaran sebelumnya dan mendemonstrasikan sesuatu yang terkait dengan materi pembelajaran',
-                    'Penampilan guru',
+                    'Menyiapkan peserta didik secara fisik dan psikis dimulai dari kedatangan dengan menyapa dan memberi salam.',
+                    'Guru menyampaikan rencana kegiatan, baik individual, kerja kelompok dan menyampaikan tujuan pembelajaran.',
+                    'Melakukan apersepsi: mengaitkan materi dengan pembelajaran sebelumnya dan mendemonstrasikan sesuatu yang terkait dengan materi pembelajaran.',
+                    'Memotivasi peserta didik',
                 ],
             ],
             [
@@ -50,14 +50,15 @@ class ComponentSeeder extends Seeder
                     'Menunjukan keterampilan dalam penggunaan sumber belajar yang bervariasi',
                     'Menunjukan keterampilan dalam penggunaan media pembelajaran berbasis teknologi',
                     'Menggunakan bahasa secara jelas dan benar',
+                    'Menyesuaikan gaya belajar (learning style) dengan potensi peserta didik',
                 ],
             ],
             [
                 'title' => 'Kegiatan Penutup',
                 'details' => [
-                    'Menunjukkan aktivitas belajar yang bertujuan meningkatkan pengetahuan dan keterampilan mengajar',
-                    'Melaksanakan penilaian sikap, pengetahuan dan keterampalan peserta didik',
-                    'Melakukan refleksi terhadap kegiatan yang telah dilaksanakan dan menyampaikan kegiatan yang akan dilaksanakan',
+                    'Menyimpulkan kegiatan pembelajaran yang telah dilaksanakan.',
+                    'Melaksanakan penilaian sikap, pengetahuan dan keterampalan peserta didik.',
+                    'Menyampaikan kegiatan pembelajaran selanjutnya.',
                 ],
             ],
         ];

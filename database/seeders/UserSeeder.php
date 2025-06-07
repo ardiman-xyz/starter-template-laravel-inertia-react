@@ -16,15 +16,15 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $role = Role::firstOrCreate(['name' => 'Admin']);
-       Role::firstOrCreate(['name' => 'Headmaster']);
-       Role::firstOrCreate(['name' => 'Teacher']);
+        Role::firstOrCreate(['name' => 'Headmaster']);
+        Role::firstOrCreate(['name' => 'Teacher']);
 
-        $user = new User();
-        $user->name = 'Ardiman';
-        $user->email = 'ardiman@umkendari.ac.id';
-        $user->password = Hash::make('Ardiman123_');
+            $user = new User();
+            $user->name = 'Ardiman';
+            $user->email = 'ardiman@umkendari.ac.id';
+            $user->password = Hash::make('Ardiman123_');
 
-        $user->save();
-        $user->roles()->attach($role);
-    }
+            $user->save();
+            $user->roles()->attach($role);
+        }
 }
