@@ -55,49 +55,9 @@ const Welcome = () => {
         <Guest>
             <Head title="Home" />
 
-            <div className="bg-gradient-to-b from-blue-50 to-slate-50">
-                <div className="container px-4 md:px-6 py-10 md:py-14 max-w-6xl">
-                    <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
-                        <div className="space-y-4">
-                            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                                Sistem Supervisi
-                                <span className="text-blue-600 block">
-                                    untuk Peningkatan Kualitas Guru
-                                </span>
-                            </h1>
-                            <p className="max-w-[600px] text-slate-600 md:text-xl">
-                                Platform digital untuk membantu proses supervisi
-                                guru menjadi lebih efektif, terstruktur, dan
-                                berbasis data.
-                            </p>
-                            <div className="flex flex-col sm:flex-row gap-3">
-                                <a href="/auth">
-                                    <Button
-                                        size="lg"
-                                        className="bg-blue-600 hover:bg-blue-700"
-                                    >
-                                        Masuk Sistem
-                                    </Button>
-                                </a>
-                                <a href="/tutorial">
-                                    <Button
-                                        size="lg"
-                                        variant="outline"
-                                        className="border-blue-300 text-blue-700 hover:bg-blue-50"
-                                    >
-                                        Lihat Tutorial
-                                    </Button>
-                                </a>
-                            </div>
-                        </div>
-                        <div className="mx-auto lg:mx-0 relative w-full max-w-full">
-                            <img
-                                alt="Supervisi Guru"
-                                className="aspect-video object-cover rounded-lg "
-                                src="/images/bg3.svg"
-                            />
-                        </div>
-                    </div>
+            <div className="">
+                <div className="container  max-w-6xl bg-white">
+                    <img src="/images/Supervisi.png" alt="Banner" />
                 </div>
             </div>
 

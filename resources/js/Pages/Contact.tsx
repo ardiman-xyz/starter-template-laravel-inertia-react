@@ -26,7 +26,7 @@ const ContactPage = () => {
         emails: [
             {
                 label: "Support Umum",
-                email: "srosida@umkendari.ac.id",
+                email: "rosida@umkendari.ac.id",
                 description: "Untuk bantuan umum dan pertanyaan seputar sistem",
                 primary: true,
             },
