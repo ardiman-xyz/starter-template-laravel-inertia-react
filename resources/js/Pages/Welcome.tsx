@@ -79,13 +79,13 @@ const Welcome = () => {
                                 value="supervisor"
                                 className="data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700"
                             >
-                                Alur Supervisor
+                                Tahapan Supervisor
                             </TabsTrigger>
                             <TabsTrigger
                                 value="guru"
-                                className="data-[state=active]:bg-green-50 data-[state=active]:text-green-700"
+                                className="data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700"
                             >
-                                Alur Guru
+                                Tahapan Guru
                             </TabsTrigger>
                         </TabsList>
                         <TabsContent value="supervisor">
@@ -168,9 +168,9 @@ const Welcome = () => {
                                 ].map((step, index) => (
                                     <Card
                                         key={index}
-                                        className="flex flex-col items-center text-center p-4 bg-green-50 border-green-100"
+                                        className="flex flex-col items-center text-center p-4 bg-blue-50 border-blue-100"
                                     >
-                                        <div className="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-sm font-medium mb-2">
+                                        <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-medium mb-2">
                                             {index + 1}
                                         </div>
                                         <span className="text-sm text-slate-600">
