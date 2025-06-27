@@ -21,6 +21,8 @@ interface PreviewProps {
 }
 
 const Preview = ({ data }: PreviewProps) => {
+    console.info(data);
+
     const qrUrl = `${window.location.origin}/verification/${data.assessment.id}`;
 
     useEffect(() => {

@@ -260,9 +260,9 @@ class VisitationService
         } elseif($finalScore >= 70) {
             return 'Baik';
         } elseif($finalScore >= 55) {
-            return 'Cukup';
+            return 'Kurang Baik';
         } else {
-            return 'Kurang';
+            return 'Tidak Baik';
         }
     }
 
