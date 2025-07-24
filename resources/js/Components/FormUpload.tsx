@@ -1,5 +1,5 @@
 import React, { useRef, useState, ChangeEvent, useEffect } from "react";
-import {FormError} from "@/Components/FormError";
+import { FormError } from "@/Components/FormError";
 
 interface FormUploadProps {
     onFileChange: (file: File | undefined) => void;
@@ -10,12 +10,12 @@ interface FormUploadProps {
 }
 
 export const FormUpload: React.FC<FormUploadProps> = ({
-      onFileChange,
-      acceptedFileTypes = "image/*",
-      maxFileSize = 2 * 1024 * 1024, // 2MB
-      isLoading = false,
-      error,
-  }) => {
+    onFileChange,
+    acceptedFileTypes = "image/*",
+    maxFileSize = 2 * 1024 * 1024, // 2MB
+    isLoading = false,
+    error,
+}) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [file, setFile] = useState<File | undefined>(undefined);
     const [preview, setPreview] = useState<string | undefined>(undefined);
