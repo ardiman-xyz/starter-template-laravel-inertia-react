@@ -5,6 +5,7 @@ namespace App\Services\Teachers;
 use App\Entities\AssessmentAnswerEntity;
 use App\Models\AssessmentAnswer;
 use App\Models\Component;
+use App\Models\TeachingDevice;
 use App\Models\User;
 use App\Repositories\AssessmentAnswerRepository;
 use App\Repositories\AssessmentRepository;
@@ -69,6 +70,12 @@ class VisitationService
 
         $userSchoollId = $this->tokenService->getCurrentSchoolId();
 
+         $teachingDevice = $assessment->teachingDevice;
+        
+        // NOTED: Jika tidak ada teaching device, buat secara otomatis (backward compatibility)
+        if (!$teachingDevice) {
+            $teachingDevice = $this->createTeachingDeviceForAssessment($assessment);
+        }
         
         
         $components = $this->componentRepository->findAllBySchoolId($userSchoollId);
@@ -117,14 +124,59 @@ class VisitationService
             "assessment" => $assessment,
             "component_max_score" => $sumMaxScore,
             "total_score" => $totalScore,
-            "final_score" => $final_score
+            "final_score" => $final_score,
+             "teaching_device" => $this->formatTeachingDeviceForFrontend($teachingDevice)
         ];
     }
 
-    public function calculateFinalScore(int $score, int $max_score): array
+     private function createTeachingDeviceForAssessment($assessment): TeachingDevice
     {
-        $final_score = ($score / $max_score) * 100;
-        $final_score = ceil($final_score);
+        return TeachingDevice::create([
+            'assessment_id' => $assessment->id,
+            'name' => 'Perangkat Pembelajaran',
+            'description' => 'Upload dokumen perangkat pembelajaran seperti RPS, Silabus, RPP, atau dokumen pendukung lainnya',
+            'is_required' => true,
+            'is_uploaded' => false,
+            'file_name' => null,
+            'file_path' => null,
+            'file_size' => null,
+            'file_type' => null,
+            'uploaded_at' => null,
+            'created_at' => $assessment->created_at,
+            'updated_at' => $assessment->updated_at,
+        ]);
+    }
+
+     private function formatTeachingDeviceForFrontend(?TeachingDevice $teachingDevice): array
+    {
+        if (!$teachingDevice) {
+            return [
+                'uploaded' => false,
+                'file_name' => null,
+                'file_size' => null,
+                'file_url' => null,
+                'uploaded_at' => null
+            ];
+        }
+
+        return [
+            'uploaded' => $teachingDevice->is_uploaded,
+            'file_name' => $teachingDevice->file_name,
+            'file_size' => $teachingDevice->file_size,
+            'file_url' => $teachingDevice->file_url, // Menggunakan accessor dari model
+            'uploaded_at' => $teachingDevice->uploaded_at?->format('Y-m-d H:i:s')
+        ];
+    }
+
+  public function calculateFinalScore(int $score, int $max_score): array
+    {
+        // Cek apakah max_score adalah 0 untuk menghindari division by zero
+        if ($max_score == 0 || $max_score === null) {
+            $final_score = 0; // atau sesuai logika bisnis Anda
+        } else {
+            $final_score = ($score / $max_score) * 100;
+            $final_score = ceil($final_score);
+        }
 
         return [
             "final_score" => $final_score,

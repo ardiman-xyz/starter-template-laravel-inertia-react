@@ -12,6 +12,7 @@ use App\Entities\ScoredEntity;
 use App\Models\Assessment;
 use App\Models\AssessmentScore;
 use App\Models\Component;
+use App\Models\TeachingDevice;
 use App\Models\User;
 use App\Repositories\AcademicSemesterRepository;
 use App\Repositories\AssessmentAnswerRepository;
@@ -148,7 +149,14 @@ class VisitationService
             $createEntity->finalScore = 0;
             $createEntity->evaluation = null;
 
-            return $this->assessmentRepository->create($createEntity);
+              $assessment = $this->assessmentRepository->create($createEntity);
+
+            // Create default teaching device record
+            $this->createDefaultTeachingDevice($assessment->id);
+
+            DB::commit();
+
+            return $assessment;
 
         }catch (Exception $exception)
         {
@@ -157,9 +165,28 @@ class VisitationService
     }
 
     /**
+     * Create default teaching device record when assessment is created
+     */
+    private function createDefaultTeachingDevice(string $assessmentId): void
+    {
+        TeachingDevice::create([
+            'assessment_id' => $assessmentId,
+            'name' => 'Perangkat Pembelajaran',
+            'description' => 'Upload dokumen perangkat pembelajaran seperti RPS, Silabus, RPP, atau dokumen pendukung lainnya',
+            'is_required' => true,
+            'is_uploaded' => false,
+            'file_name' => null,
+            'file_path' => null,
+            'file_size' => null,
+            'file_type' => null,
+            'uploaded_at' => null
+        ]);
+    }
+
+    /**
      * @throws Exception
      */
-    public function getById(string $id): array
+    public function getById(string $id)
     {
 
         $currentUser = $this->tokenService->currentUser();
@@ -233,25 +260,21 @@ class VisitationService
 
     }
 
-    public function calculateFinalScore(int $score, int $max_score): array
+   public function calculateFinalScore(int $score, int $max_score): array
     {
+        // Cek apakah max_score adalah 0 untuk menghindari division by zero
         if ($max_score == 0) {
-            return [
-                "final_score" => 0,
-                "evaluate" => "N/A",
-            ];
+            $final_score = 0; // atau nilai default lainnya
+        } else {
+            $final_score = ($score / $max_score) * 100;
+            $final_score = ceil($final_score);
         }
-
-
-        $final_score = ($score / $max_score) * 100;
-        $final_score = ceil($final_score);
 
         return [
             "final_score" => $final_score,
             "evaluate" => $this->evaluateAchievement($final_score),
         ];
     }
-
     private function evaluateAchievement(int $finalScore): string
     {
 

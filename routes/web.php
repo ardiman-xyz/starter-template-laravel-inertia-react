@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
+
+
 Route::get('/', [HomeController::class, "index"])->name("home");
 Route::get('/tutorial', [HomeController::class, "tutorial"])->name("home.tutorial");
 Route::get('/kontak', function() {

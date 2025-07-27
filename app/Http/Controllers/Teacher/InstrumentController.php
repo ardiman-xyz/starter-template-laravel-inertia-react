@@ -20,6 +20,7 @@ class InstrumentController extends Controller
     public function index()
     {
         $schoolId = $this->tokenService->getCurrentSchoolId();
+
         
         $components = Component::forSchool($schoolId)
             ->with('details')

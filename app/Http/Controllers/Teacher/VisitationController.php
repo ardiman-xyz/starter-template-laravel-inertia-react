@@ -44,6 +44,7 @@ class VisitationController
     {
         $assessments = $this->visitationService->getAssessments();
 
+
         return Inertia::render("Teachers/Visitation/Page", [
             "assessments" => $assessments
         ]);
@@ -51,8 +52,10 @@ class VisitationController
 
     public function show(string $id)
     {
+
         try {
             $response = $this->visitationService->getById($id);
+
             return Inertia::render("Teachers/Visitation/Detail", [
                 "data" => $response
             ]);

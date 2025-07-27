@@ -24,6 +24,7 @@ class InstrumentController extends Controller
     {
         $instruments = $this->componentService->getAll();
 
+
         return Inertia::render("Instruments/Index", [
             "instruments"    => $instruments
         ]);

@@ -21,6 +21,7 @@ import { InstrumentItem } from "./_components/instrument-item";
 import useAssessmentStore from "@/Context/teacher/useAssessmentStore";
 import { Score } from "./_components/score";
 import { AssesmentInfo } from "./_components/AssesmentInfo";
+import TeachingDeviceUpload from "./_components/TeachingDeviceUpload";
 
 interface DetailProps {
     data: {
@@ -31,6 +32,14 @@ interface DetailProps {
         final_score: {
             evaluate: string;
             final_score: number;
+        };
+        teaching_device: {
+            // NOTED: Data teaching device dari backend
+            uploaded: boolean;
+            file_name?: string;
+            file_size?: string;
+            file_url?: string;
+            uploaded_at?: string;
         };
     };
 }
@@ -78,6 +87,13 @@ const DetailVisitationPageTeacher = ({ data }: DetailProps) => {
                     </div>
                 </div>
                 <div className="md:w-3/4 w-full space-y-10">
+                    <div>
+                        <TeachingDeviceUpload
+                            status={data.assessment.status}
+                            assessmentId={data.assessment.id}
+                            initialData={data.teaching_device}
+                        />
+                    </div>
                     <div>
                         <Answer
                             status={data.assessment.status}

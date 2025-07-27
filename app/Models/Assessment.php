@@ -52,4 +52,17 @@ class Assessment extends Model
     {
         return $this->hasMany(AssessmentScore::class, 'assessment_id', 'id');
     }
+
+     // NEW: Relationship to Teaching Devices
+    public function teachingDevices(): HasMany
+    {
+        return $this->hasMany(TeachingDevice::class, 'assessment_id', 'id');
+    }
+
+    // NEW: Get main teaching device (Perangkat Pembelajaran)
+    public function teachingDevice(): HasOne
+    {
+        return $this->hasOne(TeachingDevice::class, 'assessment_id', 'id')
+                    ->where('name', 'Perangkat Pembelajaran');
+    }
 }

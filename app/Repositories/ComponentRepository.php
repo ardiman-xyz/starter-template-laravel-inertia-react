@@ -14,7 +14,7 @@ class ComponentRepository
 
     public function findAllBySchoolId(string $id)
     {
-        return Model::where("school_id", $id)->with("details")->get();
+        return Model::where("school_id", $id)->with("details")->orderBy("created_at", "asc")->get();
     }
 
     public function create(string $name, string $schoolId)

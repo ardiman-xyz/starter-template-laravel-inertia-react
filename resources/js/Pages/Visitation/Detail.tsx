@@ -23,6 +23,7 @@ import { Score } from "./_components/detail/Score";
 import { ScrollArea } from "@/Components/ui/scroll-area";
 
 import { UserInfo } from "./_components/detail/user-info";
+import TeachingDeviceUpload from "./_components/TeachingDeviceUpload";
 
 interface DetailProps {
     data: {
@@ -89,6 +90,11 @@ const DetailVisitationPage = ({ data }: DetailProps) => {
                 </div>
                 <div className="md:w-3/4 w-full space-y-10">
                     <ScrollArea className="h-[700px] w-full px-4">
+                        <div>
+                            <TeachingDeviceUpload
+                                initialData={data.assessment.teaching_device}
+                            />
+                        </div>
                         <div className="">
                             <Answer
                                 status={data.assessment.status}

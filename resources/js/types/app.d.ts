@@ -1,3 +1,5 @@
+import { BackendTeachingDeviceData } from "@/Pages/Visitation/_components/TeachingDeviceUpload";
+
 export type VisitationTrend = {
     year: number;
     ganjil: number;
@@ -100,6 +102,7 @@ export type Assessment = {
         final_score: number;
         evaluate: string;
     };
+    teaching_device: BackendTeachingDeviceData;
 };
 
 export type AssessmentAnswer = {

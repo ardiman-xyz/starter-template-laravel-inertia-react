@@ -34,13 +34,13 @@ class AssessmentRepository
 
     public function getById(string $id)
     {
-        return Model::with(['school', 'teacher', 'academicSemester', 'assessmentAnswers'])->find($id);
+        return Model::with(['school', 'teacher', 'academicSemester', 'assessmentAnswers', 'teachingDevice'])->find($id);
 
     }
 
     public function getByIdForSchool(string $id, string $userId)
     {
-        return Model::with(['school', 'teacher', 'academicSemester', 'assessmentAnswers'])
+        return Model::with(['school', 'teacher', 'academicSemester', 'assessmentAnswers', 'teachingDevice'])
             ->where('school_id', $userId)
             ->find($id);
     }
@@ -52,7 +52,7 @@ class AssessmentRepository
 
     public function findBySchoolAndTeacher(string $schoolId, string $teacherId)
     {
-        return Model::with('academicSemester')->where("school_id", $schoolId)->where("teacher_id", $teacherId)->get();
+        return Model::with(['academicSemester', 'teachingDevice'])->where("school_id", $schoolId)->where("teacher_id", $teacherId)->get();
     }
 
     public function deleteById(string $id)

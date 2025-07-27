@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Teacher\ReportController;
+use App\Http\Controllers\Teacher\TeachingDeviceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get("report", [\App\Http\Controllers\Teacher\ReportController::class, "preview"])->name("report.teacher");
@@ -27,6 +28,12 @@ Route::middleware(["cekCookie"])->group(function () {
                 Route::get("{id}", [\App\Http\Controllers\Teacher\VisitationController::class, 'show'])->name("teacher.visitation.show");
                 Route::post("{id}/answer", [\App\Http\Controllers\Teacher\VisitationController::class, 'answer'])->name("teacher.visitation.answer");
             });
+
+
+            // Teaching Device routes
+            Route::get('/visitation/{assessmentId}/teaching-device', [TeachingDeviceController::class, 'show']);
+            Route::post('/visitation/{assessmentId}/teaching-device/upload', [TeachingDeviceController::class, 'upload']);
+            Route::delete('/visitation/{assessmentId}/teaching-device/remove', [TeachingDeviceController::class, 'remove']);
 
             Route::get("report/preview/{id}", [ReportController::class, "preview"])->name("teacher.report.preview");
         });
